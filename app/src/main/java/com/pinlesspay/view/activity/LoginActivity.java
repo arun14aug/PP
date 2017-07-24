@@ -1,7 +1,9 @@
-package com.pinlesspay;
+package com.pinlesspay.view.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.pinlesspay.R;
 
 /*
  * Created by arun.sharma on 7/17/2017.
