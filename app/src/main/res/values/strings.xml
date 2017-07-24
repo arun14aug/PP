@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PinlessPay</string>
+    <string name="login_text">Enter your mobile number to activate PinlessPay on your device</string>
+    <string name="login_phone_hint">(201) 777–7777</string>
+</resources>
