@@ -35,5 +35,5 @@ dependencies {
 //    compile 'com.google.android.gms:play-services-gcm:10.2.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.mcxiaoke.volley:library:1.0.5'
-
+    compile 'com.pkmmte.view:circularimageview:1.1'
 }

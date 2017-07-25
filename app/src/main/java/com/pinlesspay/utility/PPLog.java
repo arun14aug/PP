@@ -61,6 +61,19 @@ public class PPLog {
         }
     }
 
+    public static void d(String tag, String msg) {
+        if (enableLogging) {
+            Log.d("" + tag, "" + msg);
+        }
+    }
+
+    public static void d(String tag, Throwable e) {
+        if (enableLogging) {
+            Log.d("" + tag, "" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     private static void log(int priority, boolean ignoreLimit, String message, Object... args) {
         String print;
         if (args != null && args.length > 0 && args[args.length-1] instanceof Throwable) {

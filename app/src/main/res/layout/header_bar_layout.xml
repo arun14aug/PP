@@ -17,7 +17,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <com.buyer.steelhub.customUi.MyTextView
+        <com.pinlesspay.customUi.MyTextView
             android:id="@+id/header_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

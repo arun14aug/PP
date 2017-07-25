@@ -55,6 +55,10 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         NavDrawerItem current = data.get(position);
         holder.title.setText(current.getTitle());
         holder.ic_option.setImageResource(icons[position]);
+        if (position == 1 && position ==4)
+            holder.line_view.setVisibility(View.VISIBLE);
+        else
+            holder.line_view.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -65,11 +69,13 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         ImageView ic_option;
+        View line_view;
 
         MyViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             ic_option = (ImageView) itemView.findViewById(R.id.icon_menu_option);
+            line_view = itemView.findViewById(R.id.line_view);
         }
     }
 }
