@@ -1,4 +1,4 @@
-package com.pinlesspay.model;
+package delusion.achievers.pinlesspay.model;
 
 
 /*
@@ -6,18 +6,21 @@ package com.pinlesspay.model;
  */
 public class ModelManager {
 
-    private static ModelManager modelMgr = null;
+    public static ModelManager modelMgr = null;
 
     private AuthManager authMgr;
+    private ScheduleManager scheduleManager;
 
     private ModelManager() {
 
         authMgr = new AuthManager();
+        scheduleManager = new ScheduleManager();
     }
 
     public void clearManagerInstance() {
 
         this.authMgr = null;
+        this.scheduleManager = null;
     }
 
     public static ModelManager getInstance() {
@@ -40,4 +43,7 @@ public class ModelManager {
         return this.authMgr;
     }
 
+    public ScheduleManager getScheduleManager() {
+        return scheduleManager;
+    }
 }
