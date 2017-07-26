@@ -1,4 +1,4 @@
-package delusion.achievers.pinlesspay.model;
+package com.pinlesspay.model;
 
 
 /*

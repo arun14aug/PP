@@ -29,4 +29,11 @@
     <string name="please_wait">Please Wait....</string>
 
     <string name="lock_alert">Are you sure, you want to Lock it?</string>
+    <string name="about">About</string>
+    <string name="next">Next</string>
+
+    <string name="verify_screen_text">Enter 4-digits security code sent to</string>
+    <string name="resend_code_within">Resend code within</string>
+    <string name="resend_code">Resend code?</string>
+    <string name="please_enter_code">Please enter code field</string>
 </resources>

@@ -16,7 +16,7 @@
         android:padding="@dimen/padding_5"
         android:src="@mipmap/ic_launcher" />
 
-    <TextView
+    <com.pinlesspay.customUi.MyTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -32,40 +32,122 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/padding_15"
-        android:background="@color/white"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="@dimen/padding_10">
 
         <com.hbb20.CountryCodePicker
+            android:id="@+id/txt_country_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/padding_7"
             android:paddingTop="@dimen/padding_7"
-            app:ccp_showPhoneCode="true"
+            app:ccpSearchBox_showPhoneCode="false"
+            app:ccp_showPhoneCode="false"
             app:contentColor="@color/login_text_color"
             app:hideNameCode="true"
             app:showFlag="false"
-            app:textSize="@dimen/text_size_xlarge" />
+            app:showFullName="true"
+            app:textSize="@dimen/text_size_large" />
 
         <View
-            android:layout_width="@dimen/padding_0.5"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_0.5"
             android:background="@color/login_line_color" />
 
-
-        <EditText
-            android:id="@+id/et_phone_number"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding_10"
-            android:layout_marginRight="@dimen/padding_10"
-            android:background="@android:color/transparent"
-            android:enabled="false"
-            android:hint="@string/login_phone_hint"
-            android:inputType="phone"
-            android:maxLines="1"
-            android:padding="@dimen/padding_7"
-            android:textSize="@dimen/text_size_large" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/padding_15"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/bottom_bar_height"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".20"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <!--<com.hbb20.CountryCodePicker-->
+                <!--android:id="@+id/txt_country_code"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="@dimen/padding_7"-->
+                <!--android:paddingTop="@dimen/padding_7"-->
+                <!--app:ccp_showPhoneCode="true"-->
+                <!--app:contentColor="@color/login_text_color"-->
+                <!--app:hideNameCode="true"-->
+                <!--app:showFlag="false"-->
+                <!--app:textSize="@dimen/text_size_large" />-->
+
+                <com.pinlesspay.customUi.MyTextView
+                    android:id="@+id/txt_country_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/padding_7"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/login_text_color"
+                    app:textSize="@dimen/text_size_large" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_0.5"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/login_line_color" />
+            </RelativeLayout>
+
+            <com.pinlesspay.customUi.MyTextView
+                android:layout_width="@dimen/padding_10"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/bottom_bar_height"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".80"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/et_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/padding_10"
+                    android:layout_marginRight="@dimen/padding_10"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/login_phone_hint"
+                    android:inputType="phone"
+                    android:maxLength="15"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textSize="@dimen/text_size_large" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_0.5"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/login_line_color" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <com.pinlesspay.customUi.MyButton
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_marginBottom="@dimen/padding_10"
+            android:layout_marginTop="@dimen/padding_40"
+            android:background="@drawable/button_disable_bg"
+            android:gravity="center"
+            android:padding="@dimen/padding_5"
+            android:text="@string/next"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/medium_large_text_size" />
     </LinearLayout>
+
 </LinearLayout>

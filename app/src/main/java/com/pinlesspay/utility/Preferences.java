@@ -15,6 +15,7 @@ public class Preferences {
     //User Details
     public static final String LOGIN = "login";
     public static final String EMAIL = "email";
+    public static final String OTP_SENT = "otp_sent";
 
     public static final String REGISTRATION = "registration";
     public static final String USER_ID = "user_id";
@@ -24,8 +25,9 @@ public class Preferences {
     public static final String PASSWORD = "password";
     public static final String DEVICE_ID = "device_id";
     public static final String USER_TOKEN = "user_token";
-    public static final String BILLING_ID = "billing_id";
-    public static final String SHIPPING_ID = "shipping_id";
+    public static final String UUID = "uuid";
+    public static final String MAC_ADDRESS = "mac_address";
+    public static final String DEVICE_NAME = "device_name";
 
     //  GpPreferences.writeString(getApplicationContext(), Preferences.NAME, "dev");
     // GpPreferences.readString(getApplicationContext(), Preferences.NAME, "");
@@ -88,12 +90,14 @@ public class Preferences {
         getEditor(context).putString(LOGIN, null).commit();
         getEditor(context).putString(REGISTRATION, null).commit();
         getEditor(context).putString(USER_ID, null).commit();
-        getEditor(context).putString(BILLING_ID, null).commit();
+        getEditor(context).putString(UUID, null).commit();
         getEditor(context).putString(PASSWORD, null).commit();
         getEditor(context).putString(DEVICE_ID, null).commit();
-        getEditor(context).putString(SHIPPING_ID, null).commit();
+        getEditor(context).putString(MAC_ADDRESS, null).commit();
         getEditor(context).putString(EMAIL, null).commit();
         getEditor(context).putString(USER_TOKEN, null).commit();
+        getEditor(context).putString(DEVICE_NAME, null).commit();
+        getEditor(context).putString(OTP_SENT, null).commit();
     }
 
 

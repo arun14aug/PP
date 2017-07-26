@@ -1,4 +1,4 @@
-package delusion.achievers.pinlesspay.model;
+package com.pinlesspay.model;
 
 import android.app.Activity;
 import android.util.Log;
@@ -8,6 +8,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.pinlesspay.utility.PPLog;
+import com.pinlesspay.utility.ServiceApi;
+import com.pinlesspay.utility.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,9 +19,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
-import delusion.achievers.pinlesspay.utility.PPLog;
-import delusion.achievers.pinlesspay.utility.ServiceApi;
-import delusion.achievers.pinlesspay.utility.Utils;
 
 /**
  * Created by HP on 22-07-2017.

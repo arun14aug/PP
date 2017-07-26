@@ -1,4 +1,4 @@
-package delusion.achievers.pinlesspay.model;
+package com.pinlesspay.model;
 
 /**
  * Created by HP on 22-07-2017.

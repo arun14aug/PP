@@ -36,5 +36,11 @@
     <color name="login_text_color">#FF030303</color>
     <color name="login_line_color">#FFC8C7CC</color>
     <color name="bg_color">#FFF0F2F4</color>
+
     <color name="bottom_bar_bg">#F9F9F9</color>
+    <color name="blue">#1E88E5</color>
+    <color name="light_blue">#4eaafa</color>
+
+    <color name="shadow_color_light">#55dedfd1</color>
+    <color name="shadow_color">#559f9fa2</color>
 </resources>

@@ -22,7 +22,7 @@ public class ScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         Activity activity = super.getActivity();
         Intent intent = new Intent("Header");
-        intent.putExtra("message", activity.getString(R.string.title_settings));
+        intent.putExtra("message", activity.getString(R.string.title_schedules));
 
         LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);

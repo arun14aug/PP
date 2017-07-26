@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_gravity="center_vertical"
+        android:background="@color/blue"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/header_image_width"
+            android:layout_height="@dimen/header_image_width"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/app_name"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="visible" />
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/header_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/large_text_size" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_5"
+        android:background="@drawable/shadow" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/padding_10"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_10">
+
+        <com.pinlesspay.customUi.MyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/verify_screen_text"
+            android:textColor="@color/login_text_color"
+            android:textSize="@dimen/text_size_large" />
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/login_phone_hint"
+            android:textColor="@color/login_text_color"
+            android:textSize="@dimen/text_size_large" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="@dimen/padding_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/edt_code_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textColor="@color/login_text_color"
+                    app:textSize="@dimen/text_size_medium" />
+
+                <View
+                    android:id="@+id/vw_code_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_1"
+                    android:background="@color/login_line_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/padding_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/padding_7"
+                android:layout_marginLeft="@dimen/padding_15"
+                android:layout_marginRight="@dimen/padding_7"
+                android:layout_marginStart="@dimen/padding_15"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/edt_code_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textColor="@color/login_text_color"
+                    app:textSize="@dimen/text_size_medium" />
+
+                <View
+                    android:id="@+id/vw_code_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_1"
+                    android:background="@color/login_line_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/padding_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding_7"
+                android:layout_marginRight="@dimen/padding_7"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/edt_code_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textColor="@color/login_text_color"
+                    app:textSize="@dimen/text_size_medium" />
+
+                <View
+                    android:id="@+id/vw_code_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_1"
+                    android:background="@color/login_line_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/padding_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding_7"
+                android:layout_marginRight="@dimen/padding_7"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/edt_code_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textColor="@color/login_text_color"
+                    app:textSize="@dimen/text_size_medium" />
+
+                <View
+                    android:id="@+id/vw_code_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_1"
+                    android:background="@color/login_line_color" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_resend_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/padding_20"
+            android:gravity="center_vertical"
+            android:text="@string/resend_code"
+            android:textColor="@color/light_blue"
+            android:textSize="@dimen/text_size_small" />
+
+    </LinearLayout>
+
+</LinearLayout>

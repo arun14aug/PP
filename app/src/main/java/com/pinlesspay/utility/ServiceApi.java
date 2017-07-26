@@ -1,16 +1,17 @@
-package delusion.achievers.pinlesspay.utility;
+package com.pinlesspay.utility;
 
 /*
  * Created by arun on 5/3/15.
  */
 public class ServiceApi {
 
-    public static final String baseurl = "http://mysteelhub.com/"; //staging..
+    private static final String baseurl = "http://pinlesspay.edu360.guru/api/DonorAuth/"; //staging..
 
+    public static final String ORGANISATION_KEY = "vlskdgvshdklgshfgklsdfhgsldkfbhdf"; //staging..
 
     // Users Family
 //    public static final String LOGIN = baseurl + "auth/securelogin";
-    public static final String LOGIN = baseurl + "VerifyOrganizationDonor";
+    public static final String LOGIN = baseurl + "createorganizationdonor";
     public static final String REGISTER = baseurl + "createorganizationdonor";
     public static final String VERIFY_USER = baseurl + "VerifyOrganizationDonor";
     public static final String FORGOT_PASSWORD = baseurl + "recoverpassword";
