@@ -11,8 +11,14 @@ import android.view.View;
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyEditText;
 import com.pinlesspay.customUi.MyTextView;
+import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.utility.PPLog;
+import com.pinlesspay.utility.Preferences;
+import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -145,8 +151,26 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
-                    if (validate())
-                        Utils.showMessage(activity, getString(R.string.please_wait));
+                    if (validate()) {
+                        String code = et_code_1.getText().toString() +
+                                et_code_2.getText().toString() +
+                                et_code_3.getText().toString() +
+                                et_code_4.getText().toString();
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+                            jsonObject.put("RegisterMobile", Preferences.readString(activity, Preferences.MOBILE_NUMBER, ""));
+                            jsonObject.put("DeviceIdentifier", Preferences.readString(activity, Preferences.MAC_ADDRESS, ""));
+                            jsonObject.put("DeviceName", Preferences.readString(activity, Preferences.DEVICE_NAME, ""));
+                            jsonObject.put("DeviceType", "Mobile");
+                            jsonObject.put("Appkey", Preferences.readString(activity, Preferences.UUID, ""));
+                            jsonObject.put("OTPCode", code);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Utils.showLoading(activity);
+                        ModelManager.getInstance().getAuthManager().verifyUser(activity, jsonObject);
+                    }
                 } else
                     et_code_3.requestFocus();
             }
@@ -230,6 +254,8 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
         if (message.equalsIgnoreCase("Verify True")) {
             Utils.dismissLoading();
             PPLog.e(TAG, "Verify True");
+            Preferences.writeString(activity, Preferences.OTP_SENT, "");
+            Preferences.writeString(activity, Preferences.LOGIN, "true");
             startActivity(new Intent(activity, MainActivity.class));
             finish();
         } else if (message.contains("Verify False")) {

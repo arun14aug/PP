@@ -32,8 +32,10 @@
             android:id="@+id/layoutBottomBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_bar_height"
+            android:layout_gravity="center_vertical"
             android:background="@color/bottom_bar_bg"
             android:baselineAligned="false"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="@dimen/padding_5"
             android:weightSum="4">
@@ -44,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_launcher_round" />
+                android:src="@drawable/bottom_icon_donate_active" />
 
 
             <ImageView
@@ -53,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/bottom_icon_schedule_normal" />
 
 
             <ImageView
@@ -62,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/bottom_icon_recurring_normal" />
 
 
             <ImageView
@@ -71,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/bottom_icon_transaction_normal" />
 
 
         </LinearLayout>

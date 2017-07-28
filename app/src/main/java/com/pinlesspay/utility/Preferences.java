@@ -24,10 +24,11 @@ public class Preferences {
     public static final String FORGET_PASS = "forget_pass";
     public static final String PASSWORD = "password";
     public static final String DEVICE_ID = "device_id";
-    public static final String USER_TOKEN = "user_token";
+    public static final String AUTH_TOKEN = "auth_token";
     public static final String UUID = "uuid";
     public static final String MAC_ADDRESS = "mac_address";
     public static final String DEVICE_NAME = "device_name";
+    public static final String MOBILE_NUMBER = "mobile_number";
 
     //  GpPreferences.writeString(getApplicationContext(), Preferences.NAME, "dev");
     // GpPreferences.readString(getApplicationContext(), Preferences.NAME, "");
@@ -95,7 +96,7 @@ public class Preferences {
         getEditor(context).putString(DEVICE_ID, null).commit();
         getEditor(context).putString(MAC_ADDRESS, null).commit();
         getEditor(context).putString(EMAIL, null).commit();
-        getEditor(context).putString(USER_TOKEN, null).commit();
+        getEditor(context).putString(AUTH_TOKEN, null).commit();
         getEditor(context).putString(DEVICE_NAME, null).commit();
         getEditor(context).putString(OTP_SENT, null).commit();
     }

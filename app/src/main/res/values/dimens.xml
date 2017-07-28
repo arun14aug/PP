@@ -5,20 +5,21 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="nav_drawer_width">300dp</dimen>
 
-    <dimen name="edit_text_size">15sp</dimen>
-    <dimen name="new_req_edit_text_height">35dp</dimen>
-    <dimen name="new_req_edit_text_size">14sp</dimen>
 
+    <dimen name="toolbar_height">45dp</dimen>
+    <dimen name="header_image_width">35dp</dimen>
+    <dimen name="profile_layout_margin">20dp</dimen>
     <dimen name="button_height">38dp</dimen>
+    <dimen name="new_req_edit_text_height">35dp</dimen>
+
+    <dimen name="new_req_edit_text_size">14sp</dimen>
+    <dimen name="edit_text_size">15sp</dimen>
     <dimen name="button_text_size">16sp</dimen>
 
-    <dimen name="profile_layout_margin">20dp</dimen>
     <dimen name="large_text_size">18sp</dimen>
     <dimen name="medium_large_text_size">16sp</dimen>
     <dimen name="medium_text_size">13sp</dimen>
     <dimen name="small_text_size">12sp</dimen>
-    <dimen name="toolbar_height">45dp</dimen>
-    <dimen name="header_image_width">35dp</dimen>
     <dimen name="about_large_text_size">22sp</dimen>
 
     <dimen name="text_size_normal">13sp</dimen>
@@ -27,6 +28,9 @@
     <dimen name="text_size_large">16sp</dimen>
     <dimen name="text_size_xlarge">18sp</dimen>
     <dimen name="app_name_text_size">20sp</dimen>
+    <dimen name="schedule_date_text">24sp</dimen>
+    <dimen name="recurring_detail_large_text">32sp</dimen>
+
     <dimen name="padding_0.5">0.5dp</dimen>
     <dimen name="padding_1">1dp</dimen>
     <dimen name="padding_5">5dp</dimen>

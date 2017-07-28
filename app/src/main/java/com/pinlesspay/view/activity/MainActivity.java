@@ -89,31 +89,31 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_donation:
-                img_donation.setImageResource(R.mipmap.ic_launcher_round);
-                img_schedule.setImageResource(R.mipmap.ic_launcher);
-                img_recurring.setImageResource(R.mipmap.ic_launcher);
-                img_transactions.setImageResource(R.mipmap.ic_launcher);
+                img_donation.setImageResource(R.drawable.bottom_icon_donate_active);
+                img_schedule.setImageResource(R.drawable.bottom_icon_schedule_normal);
+                img_recurring.setImageResource(R.drawable.bottom_icon_recurring_normal);
+                img_transactions.setImageResource(R.drawable.bottom_icon_transaction_normal);
                 bottomBarFragments(0);
                 break;
             case R.id.img_schedule:
-                img_schedule.setImageResource(R.mipmap.ic_launcher_round);
-                img_donation.setImageResource(R.mipmap.ic_launcher);
-                img_recurring.setImageResource(R.mipmap.ic_launcher);
-                img_transactions.setImageResource(R.mipmap.ic_launcher);
+                img_schedule.setImageResource(R.drawable.bottom_icon_schedule_active);
+                img_donation.setImageResource(R.drawable.bottom_icon_donate_normal);
+                img_recurring.setImageResource(R.drawable.bottom_icon_recurring_normal);
+                img_transactions.setImageResource(R.drawable.bottom_icon_transaction_normal);
                 bottomBarFragments(1);
                 break;
             case R.id.img_recurring:
-                img_recurring.setImageResource(R.mipmap.ic_launcher_round);
-                img_schedule.setImageResource(R.mipmap.ic_launcher);
-                img_donation.setImageResource(R.mipmap.ic_launcher);
-                img_transactions.setImageResource(R.mipmap.ic_launcher);
+                img_recurring.setImageResource(R.drawable.bottom_icon_recurring_active);
+                img_schedule.setImageResource(R.drawable.bottom_icon_schedule_normal);
+                img_donation.setImageResource(R.drawable.bottom_icon_donate_normal);
+                img_transactions.setImageResource(R.drawable.bottom_icon_transaction_normal);
                 bottomBarFragments(2);
                 break;
             case R.id.img_transactions:
-                img_transactions.setImageResource(R.mipmap.ic_launcher_round);
-                img_schedule.setImageResource(R.mipmap.ic_launcher);
-                img_recurring.setImageResource(R.mipmap.ic_launcher);
-                img_donation.setImageResource(R.mipmap.ic_launcher);
+                img_transactions.setImageResource(R.drawable.bottom_icon_transactions_active);
+                img_schedule.setImageResource(R.drawable.bottom_icon_schedule_normal);
+                img_recurring.setImageResource(R.drawable.bottom_icon_recurring_normal);
+                img_donation.setImageResource(R.drawable.bottom_icon_donate_normal);
                 bottomBarFragments(3);
                 break;
         }

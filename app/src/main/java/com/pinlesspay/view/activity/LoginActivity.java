@@ -3,6 +3,7 @@ package com.pinlesspay.view.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -17,6 +18,7 @@ import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
 import com.pinlesspay.customUi.MyEditText;
 import com.pinlesspay.customUi.MyTextView;
+import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.ServiceApi;
@@ -27,12 +29,15 @@ import org.json.JSONObject;
 
 import java.util.UUID;
 
+import de.greenrobot.event.EventBus;
+
 /*
  * Created by arun.sharma on 7/17/2017.
  */
 
 public class LoginActivity extends Activity {
 
+    private String TAG = LoginActivity.this.getClass().getName();
     private MyEditText edt_phone_number;
     private MyButton btn_next;
     private boolean isBtnEnable = false;
@@ -158,7 +163,8 @@ public class LoginActivity extends Activity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-//                    Utils.defaultLoader(activity);
+                    Utils.showLoading(activity);
+                    ModelManager.getInstance().getAuthManager().logIn(activity, jsonObject);
                 }
             }
         });
@@ -212,4 +218,36 @@ public class LoginActivity extends Activity {
             codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    public void onEventMainThread(String message) {
+        if (message.equalsIgnoreCase("Login True")) {
+            Utils.dismissLoading();
+            PPLog.e(TAG, "Login True");
+            startActivity(new Intent(activity, VerifyActivity.class));
+            finish();
+        } else if (message.contains("Login False")) {
+            // showMatchHistoryList();
+            Utils.showMessage(activity, "Please check your credentials!");
+            PPLog.e(TAG, "Login False");
+            Utils.dismissLoading();
+        } else if (message.equalsIgnoreCase("Login Network Error")) {
+            Utils.showMessage(activity, "Network Error! Please try again");
+            PPLog.e(TAG, "Login Network Error");
+            Utils.dismissLoading();
+        }
+
+    }
 }

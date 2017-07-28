@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-/**
+/*
  * Created by arun on 16/12/15.
  */
 public class Utils {
@@ -41,10 +41,14 @@ public class Utils {
     public static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
 
 
-    public static void showLoading(Activity act, String msg) {
+    public static void showLoading(Activity act/*, String msg*/) {
+//        progressDialog = ProgressDialog
+//                .show(act, "", msg, true);
         progressDialog = ProgressDialog
-                .show(act, "", msg, true);
-    }
+                .show(act,
+                        "",
+                        act.getString(R.string.please_wait),
+                        true);    }
 
     public static void dismissLoading() {
         if (progressDialog != null) {
@@ -126,19 +130,19 @@ public class Utils {
     }
 
 
-    public static void defaultLoader(Activity act) {
-        progressDialog = ProgressDialog
-                .show(act,
-                        "",
-                        act.getString(R.string.please_wait),
-                        true);
-    }
-
-    public static void dismissDefaultLoader() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
-    }
+//    public static void defaultLoader(Activity act) {
+//        progressDialog = ProgressDialog
+//                .show(act,
+//                        "",
+//                        act.getString(R.string.please_wait),
+//                        true);
+//    }
+//
+//    public static void dismissDefaultLoader() {
+//        if (progressDialog != null) {
+//            progressDialog.dismiss();
+//        }
+//    }
 
     public static int setColor(Activity activity, int color) {
         if (Build.VERSION.SDK_INT < 23) {

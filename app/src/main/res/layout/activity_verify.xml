@@ -19,16 +19,16 @@
 
         <ImageView
             android:id="@+id/img_back"
-            android:layout_width="@dimen/header_image_width"
-            android:layout_height="@dimen/header_image_width"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:contentDescription="@string/app_name"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="5dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/toolbar_icon_back"
             android:visibility="visible" />
 
         <com.pinlesspay.customUi.MyTextView

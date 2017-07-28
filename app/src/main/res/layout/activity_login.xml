@@ -14,7 +14,7 @@
         android:contentDescription="@string/app_name"
         android:gravity="center"
         android:padding="@dimen/padding_5"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/logo" />
 
     <com.pinlesspay.customUi.MyTextView
         android:layout_width="match_parent"

@@ -38,7 +38,7 @@ public class AuthManager {
                             if (response.has("Status"))
                                 state = response.getBoolean("Status");
                             if (state) {
-                                Preferences.writeBoolean(activity, Preferences.OTP_SENT, true);
+                                Preferences.writeString(activity, Preferences.OTP_SENT, "true");
                                 EventBus.getDefault().postSticky("Login True");
                             } else {
                                 EventBus.getDefault().postSticky("Login False@#@" + response.getString("msg"));
@@ -72,7 +72,7 @@ public class AuthManager {
                         try {
                             boolean state = response.getBoolean("success");
                             if (state) {
-                                Preferences.writeBoolean(activity, Preferences.OTP_SENT, true);
+                                Preferences.writeString(activity, Preferences.OTP_SENT, "true");
 
                                 EventBus.getDefault().postSticky("Register True");
                             } else {
@@ -106,12 +106,12 @@ public class AuthManager {
                         try {
                             boolean state = response.getBoolean("success");
                             if (state) {
-                                Preferences.writeBoolean(activity, Preferences.LOGIN, true);
-                                Preferences.writeString(activity, Preferences.USER_TOKEN, response.getString("data"));
+                                Preferences.writeString(activity, Preferences.LOGIN, "true");
+                                Preferences.writeString(activity, Preferences.AUTH_TOKEN, response.getString("data"));
                                 EventBus.getDefault().postSticky("Verify True");
                             } else if (response.has("token")) {
                                 Preferences.writeBoolean(activity, Preferences.LOGIN, true);
-                                Preferences.writeString(activity, Preferences.USER_TOKEN, response.getString("token"));
+                                Preferences.writeString(activity, Preferences.AUTH_TOKEN, response.getString("token"));
                                 EventBus.getDefault().postSticky("Verify True");
                             } else
                                 EventBus.getDefault().postSticky("Verify False@#@" + response.getString("msg"));

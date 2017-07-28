@@ -18,8 +18,10 @@
             android:id="@+id/icon_menu_option"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="start|center_vertical"
             android:layout_weight="0.25"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:layout_marginRight="@dimen/padding_10"
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_launcher_round" />
 

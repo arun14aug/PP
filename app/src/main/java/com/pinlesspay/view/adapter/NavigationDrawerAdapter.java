@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.pinlesspay.R;
 import com.pinlesspay.model.NavDrawerItem;
 
@@ -24,14 +23,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     private List<NavDrawerItem> data = Collections.emptyList();
     private LayoutInflater inflater;
     //    private Context context;
-    private Integer[] icons = /*{R.drawable.home_icon, R.drawable.new_requirement,
-            R.drawable.new_orders, R.drawable.manage_address,
-            R.drawable.contact_us, R.drawable.change_psd,
-            R.drawable.contact_us, R.drawable.logout_icon}*/
-            {R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+    private Integer[] icons = {R.drawable.icon_payment,
+            R.drawable.icon_security, R.drawable.icon_share,
+            R.drawable.icon_support, R.drawable.icon_suggestion,
+            R.drawable.icon_logout};
+
 
     public NavigationDrawerAdapter(Context context, List<NavDrawerItem> data) {
 //        this.context = context;
@@ -55,7 +51,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         NavDrawerItem current = data.get(position);
         holder.title.setText(current.getTitle());
         holder.ic_option.setImageResource(icons[position]);
-        if (position == 1 && position ==4)
+        if (position == 1 && position == 4)
             holder.line_view.setVisibility(View.VISIBLE);
         else
             holder.line_view.setVisibility(View.INVISIBLE);

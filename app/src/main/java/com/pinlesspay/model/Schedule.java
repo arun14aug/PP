@@ -1,6 +1,6 @@
 package com.pinlesspay.model;
 
-/**
+/*
  * Created by HP on 22-07-2017.
  */
 public class Schedule {
@@ -19,16 +19,8 @@ public class Schedule {
 //            "OrganizationID": 8,
 //            "IsActive": "Y"
 
-    private String type, ServiceName, EntityName, Id, DataBaseAction, RowNum, TaskId, TaskTitle, TaskDescription, TaskDate,
+    private String ServiceName, EntityName, Id, DataBaseAction, RowNum, TaskId, TaskTitle, TaskDescription, TaskDate,
             CreatedOn, CreatedBy, OrganizationID, IsActive;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getServiceName() {
         return ServiceName;

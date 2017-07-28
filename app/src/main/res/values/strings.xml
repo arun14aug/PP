@@ -13,6 +13,7 @@
     </string-array>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="ok">OK</string>
 
     <string name="title_payment_method">Payment Methods</string>
     <string name="title_security">Security</string>
@@ -36,4 +37,9 @@
     <string name="resend_code_within">Resend code within</string>
     <string name="resend_code">Resend code?</string>
     <string name="please_enter_code">Please enter code field</string>
+    <string name="make_donation">Make Donation</string>
+
+    <string name="no_recurring">No recurring</string>
+    <string name="no_events">No events</string>
+    <string name="no_transactions">No transaction</string>
 </resources>

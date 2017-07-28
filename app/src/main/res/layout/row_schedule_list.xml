@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_10">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@color/transparent"
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ok"
+            android:textColor="@color/schedule_date_text_color"
+            android:textSize="@dimen/schedule_date_text" />
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ok"
+            android:textColor="@color/schedule_date_text_color"
+            android:textSize="@dimen/text_size_medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@color/transparent"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_schedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textColor="@color/schedule_heading_color"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="normal" />
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/app_name"
+            android:textColor="@color/schedule_subheading_color"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+</LinearLayout>
