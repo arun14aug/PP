@@ -42,7 +42,7 @@ public class LoginActivity extends Activity {
     private MyButton btn_next;
     private boolean isBtnEnable = false;
     private Activity activity;
-    private String mobile = "";
+    private String mobile = "", countryCode = "";
     private CountryCodePicker namePicker;
     private MyTextView codePicker;
 
@@ -155,7 +155,7 @@ public class LoginActivity extends Activity {
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
-                        jsonObject.put("RegisterMobile", codePicker.getText().toString() + mobile);
+                        jsonObject.put("RegisterMobile", countryCode + mobile);
                         jsonObject.put("DeviceIdentifier", Preferences.readString(activity, Preferences.MAC_ADDRESS, ""));
                         jsonObject.put("DeviceName", Preferences.readString(activity, Preferences.DEVICE_NAME, ""));
                         jsonObject.put("DeviceType", "Mobile");
@@ -163,6 +163,7 @@ public class LoginActivity extends Activity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    PPLog.e("JSON Data : ", jsonObject.toString());
                     Utils.showLoading(activity);
                     ModelManager.getInstance().getAuthManager().logIn(activity, jsonObject);
                 }
@@ -216,6 +217,7 @@ public class LoginActivity extends Activity {
         @Override
         public void onCountrySelected() {
             codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());
+            countryCode = namePicker.getSelectedCountryCode();
         }
     };
 

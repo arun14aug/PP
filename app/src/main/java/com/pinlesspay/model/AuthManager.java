@@ -41,7 +41,7 @@ public class AuthManager {
                                 Preferences.writeString(activity, Preferences.OTP_SENT, "true");
                                 EventBus.getDefault().postSticky("Login True");
                             } else {
-                                EventBus.getDefault().postSticky("Login False@#@" + response.getString("msg"));
+                                EventBus.getDefault().postSticky("Login False@#@" + response.getString("Message"));
                             }
 
 
@@ -76,7 +76,7 @@ public class AuthManager {
 
                                 EventBus.getDefault().postSticky("Register True");
                             } else {
-                                EventBus.getDefault().postSticky("Register False@#@" + response.getString("msg"));
+                                EventBus.getDefault().postSticky("Register False@#@" + response.getString("Message"));
                             }
                         } catch (JSONException e) {
                             EventBus.getDefault().postSticky("Register False");
@@ -114,7 +114,7 @@ public class AuthManager {
                                 Preferences.writeString(activity, Preferences.AUTH_TOKEN, response.getString("token"));
                                 EventBus.getDefault().postSticky("Verify True");
                             } else
-                                EventBus.getDefault().postSticky("Verify False@#@" + response.getString("msg"));
+                                EventBus.getDefault().postSticky("Verify False@#@" + response.getString("Message"));
                         } catch (JSONException e) {
                             EventBus.getDefault().postSticky("Verify False");
                         }
