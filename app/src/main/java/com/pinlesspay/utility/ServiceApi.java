@@ -5,9 +5,9 @@ package com.pinlesspay.utility;
  */
 public class ServiceApi {
 
-    private static final String baseurl = "http://pinlesspay.edu360.guru/api/DonorAuth/"; //staging..
+    private static final String baseurl = "http://pinlesspay.edu360.guru/api/DonorAuth/"; //live..
 
-    public static final String ORGANISATION_KEY = "17CB139A-341C-4D29-BC01-32CE06D445F4"; //staging..
+    public static final String ORGANISATION_KEY = "17CB139A-341C-4D29-BC01-32CE06D445F4"; //live..
     public static final String PAGE_SIZE = "50";
 
     // Users Family

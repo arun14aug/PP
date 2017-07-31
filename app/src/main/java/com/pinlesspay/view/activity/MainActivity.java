@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Utils.showLoading(MainActivity.this, getString(R.string.please_wait));
+                        Utils.showLoading(MainActivity.this);
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("device_type", "android");

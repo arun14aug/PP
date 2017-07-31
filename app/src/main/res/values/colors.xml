@@ -53,4 +53,6 @@
     <color name="schedule_subheading_color">#8B000000</color>
     <color name="schedule_detail_heading_color">#FF030303</color>
     <color name="transaction_detail_bg">#FF4CAF50</color>
+    <color name="new_bank_acc_text">#FF141414</color>
+
 </resources>

@@ -2,13 +2,18 @@ package com.pinlesspay.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,6 +36,9 @@ import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.READ_PHONE_STATE;
+
 /*
  * Created by arun.sharma on 7/17/2017.
  */
@@ -42,9 +50,10 @@ public class LoginActivity extends Activity {
     private MyButton btn_next;
     private boolean isBtnEnable = false;
     private Activity activity;
-    private String mobile = "";
+    private String mobile = "", countryCode = "";
     private CountryCodePicker namePicker;
     private MyTextView codePicker;
+    private final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0x01;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +72,22 @@ public class LoginActivity extends Activity {
         namePicker.setOnCountryChangeListener(countryChangeListener);
         codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());
 
-        if (!Utils.isEmptyString(Preferences.readString(activity, Preferences.UUID, ""))) {
-            Preferences.writeString(activity, Preferences.UUID, UUID.randomUUID().toString());
-        }
+        if (!checkPermission())
+            requestPermission();
+        else {
+            if (Utils.isEmptyString(Preferences.readString(activity, Preferences.UUID, ""))) {
+                Preferences.writeString(activity, Preferences.UUID, UUID.randomUUID().toString());
+            }
 
-        // get mac address
-        if (!Utils.isEmptyString(Preferences.readString(activity, Preferences.MAC_ADDRESS, ""))) {
-            Preferences.writeString(activity, Preferences.MAC_ADDRESS, getMacAddress());
-        }
+            // get mac address
+            if (Utils.isEmptyString(Preferences.readString(activity, Preferences.MAC_ADDRESS, ""))) {
+                Preferences.writeString(activity, Preferences.MAC_ADDRESS, getMacAddress());
+            }
 
-        // get device name
-        if (!Utils.isEmptyString(Preferences.readString(activity, Preferences.DEVICE_NAME, ""))) {
-            Preferences.writeString(activity, Preferences.DEVICE_NAME, getDeviceName());
+            // get device name
+            if (Utils.isEmptyString(Preferences.readString(activity, Preferences.DEVICE_NAME, ""))) {
+                Preferences.writeString(activity, Preferences.DEVICE_NAME, getDeviceName());
+            }
         }
 
         edt_phone_number.addTextChangedListener(new PhoneNumberFormattingTextWatcher() {
@@ -155,7 +168,7 @@ public class LoginActivity extends Activity {
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
-                        jsonObject.put("RegisterMobile", codePicker.getText().toString() + mobile);
+                        jsonObject.put("RegisterMobile", countryCode + mobile);
                         jsonObject.put("DeviceIdentifier", Preferences.readString(activity, Preferences.MAC_ADDRESS, ""));
                         jsonObject.put("DeviceName", Preferences.readString(activity, Preferences.DEVICE_NAME, ""));
                         jsonObject.put("DeviceType", "Mobile");
@@ -163,6 +176,7 @@ public class LoginActivity extends Activity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    PPLog.e("JSON Data : ", jsonObject.toString());
                     Utils.showLoading(activity);
                     ModelManager.getInstance().getAuthManager().logIn(activity, jsonObject);
                 }
@@ -170,13 +184,89 @@ public class LoginActivity extends Activity {
         });
     }
 
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(), READ_PHONE_STATE);
+
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        String[] permissions = new String[]{READ_PHONE_STATE};
+        ActivityCompat.requestPermissions(this, permissions, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case ASK_MULTIPLE_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0) {
+                    final String[] perm = new String[]{READ_PHONE_STATE};
+                    boolean phoneState = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (!(phoneState))
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
+                                showMessageOKCancel(getString(R.string.permission_alert),
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                    requestPermissions(perm,
+                                                            ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+                                                }
+                                            }
+                                        });
+                                return;
+                            } else {
+                                if (Utils.isEmptyString(Preferences.readString(activity, Preferences.UUID, ""))) {
+                                    Preferences.writeString(activity, Preferences.UUID, UUID.randomUUID().toString());
+                                }
+
+                                // get mac address
+                                if (Utils.isEmptyString(Preferences.readString(activity, Preferences.MAC_ADDRESS, ""))) {
+                                    Preferences.writeString(activity, Preferences.MAC_ADDRESS, getMacAddress());
+                                }
+
+                                // get device name
+                                if (Utils.isEmptyString(Preferences.readString(activity, Preferences.DEVICE_NAME, ""))) {
+                                    Preferences.writeString(activity, Preferences.DEVICE_NAME, getDeviceName());
+                                }
+                            }
+                        }
+                }
+                break;
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(activity)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
     @SuppressLint("WifiManagerLeak")
     private String getMacAddress() {
-        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = manager.getConnectionInfo();
-        @SuppressLint("HardwareIds") String address = info.getMacAddress();
-//        Preferences.writeString(activity, Preferences.MAC_ADDRESS, address);
-        return address;
+        TelephonyManager telephonyManager;
+
+        telephonyManager = (TelephonyManager) getSystemService(Context.
+                TELEPHONY_SERVICE);
+
+/*
+* getDeviceId() returns the unique device ID.
+* For example,the IMEI for GSM and the MEID or ESN for CDMA phones.
+*/
+        @SuppressLint("HardwareIds") String deviceId = telephonyManager.getDeviceId();
+
+
+//        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+//
+//        PPLog.e("androidId ID : ", androidId);
+        PPLog.e("Device ID : ", deviceId);
+
+        return deviceId;
     }
 
     /**
@@ -216,6 +306,7 @@ public class LoginActivity extends Activity {
         @Override
         public void onCountrySelected() {
             codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());
+            countryCode = namePicker.getSelectedCountryCode();
         }
     };
 
@@ -236,6 +327,7 @@ public class LoginActivity extends Activity {
         if (message.equalsIgnoreCase("Login True")) {
             Utils.dismissLoading();
             PPLog.e(TAG, "Login True");
+            Preferences.writeString(activity, Preferences.MOBILE_NUMBER, countryCode + mobile);
             startActivity(new Intent(activity, VerifyActivity.class));
             finish();
         } else if (message.contains("Login False")) {

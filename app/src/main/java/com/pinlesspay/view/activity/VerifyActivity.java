@@ -168,6 +168,7 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        PPLog.e("JSON DATA : ", jsonObject.toString());
                         Utils.showLoading(activity);
                         ModelManager.getInstance().getAuthManager().verifyUser(activity, jsonObject);
                     }

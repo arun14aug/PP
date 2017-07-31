@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="nav_drawer_width">300dp</dimen>
+    <dimen name="nav_drawer_width">310dp</dimen>
 
 
     <dimen name="toolbar_height">45dp</dimen>
@@ -33,6 +33,8 @@
 
     <dimen name="padding_0.5">0.5dp</dimen>
     <dimen name="padding_1">1dp</dimen>
+    <dimen name="padding_2">2dp</dimen>
+    <dimen name="padding_3">3dp</dimen>
     <dimen name="padding_5">5dp</dimen>
     <dimen name="padding_7">7dp</dimen>
     <dimen name="padding_8">8dp</dimen>
