@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.Html;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Utils;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
@@ -57,7 +58,8 @@ public class DonationFragment extends Fragment {
     }
 
     private void setData() {
-        txt_description.setText(Html.fromHtml(charityArrayList.get(0).getDescription()));
+        byte[] desc = Base64.encode(Charset.forName("UTF-8").encode(charityArrayList.get(0).getDescription()).array(), 0);
+        txt_description.setText(Base64.decode(desc, 0).toString());
     }
 
     @Override

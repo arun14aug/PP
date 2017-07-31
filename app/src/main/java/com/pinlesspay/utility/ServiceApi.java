@@ -17,7 +17,7 @@ public class ServiceApi {
     public static final String VERIFY_USER = baseurl + "VerifyOrganizationDonor";
     public static final String FORGOT_PASSWORD = baseurl + "recoverpassword";
     public static final String CHANGE_PASSWORD = baseurl + "auth/changepassword";
-    public static final String SCHEDULES = "Execute";
+    public static final String SCHEDULES = baseurl + "Execute";
     public static final String PROFILE = baseurl + "Process";
     public static final String LOGOUT = baseurl + "auth/logout";
 

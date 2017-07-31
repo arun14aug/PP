@@ -12,10 +12,9 @@ import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.Schedule;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ScheduleAdapter_Loading extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ITEM = 0;
     private static final int LOADING = 1;
@@ -25,7 +24,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private boolean isLoadingAdded = false;
 
-    public ScheduleAdapter(Context context, ArrayList<Schedule> scheduleList) {
+    public ScheduleAdapter_Loading(Context context, ArrayList<Schedule> scheduleList) {
         this.context = context;
         this.scheduleList = scheduleList;
     }
@@ -59,13 +58,13 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        Schedule movie = scheduleList.get(position);
+        Schedule schedule = scheduleList.get(position);
 
         switch (getItemViewType(position)) {
             case ITEM:
-                HolderClass movieVH = (HolderClass) holder;
+                HolderClass scheduleVH = (HolderClass) holder;
 
-                movieVH.txt_day.setText(movie.getServiceName());
+                scheduleVH.txt_day.setText(schedule.getServiceName());
                 break;
             case LOADING:
 //                Do nothing
@@ -94,7 +93,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemInserted(scheduleList.size() - 1);
     }
 
-    public void addAll(List<Schedule> scList) {
+    public void addAll(ArrayList<Schedule> scList) {
         for (Schedule schedule : scList) {
             add(schedule);
         }
