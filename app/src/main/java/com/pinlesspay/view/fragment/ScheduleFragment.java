@@ -59,10 +59,10 @@ public class ScheduleFragment extends Fragment {
         LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
         View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
 
-        rv = (RecyclerView) activity.findViewById(R.id.schedule_list);
-        progressBar = (ProgressBar) activity.findViewById(R.id.main_progress);
-        list_layout = (FrameLayout) activity.findViewById(R.id.list_layout);
-        waterfall_layout = (LinearLayout) activity.findViewById(R.id.waterfall_layout);
+        rv = (RecyclerView) rootView.findViewById(R.id.schedule_list);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.main_progress);
+        list_layout = (FrameLayout) rootView.findViewById(R.id.list_layout);
+        waterfall_layout = (LinearLayout) rootView.findViewById(R.id.waterfall_layout);
 
         linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
@@ -100,6 +100,7 @@ public class ScheduleFragment extends Fragment {
             }
         });
 
+        loadFirstPage();
 
         // Inflate the layout for this fragment
         return rootView;

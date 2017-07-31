@@ -51,7 +51,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         NavDrawerItem current = data.get(position);
         holder.title.setText(current.getTitle());
         holder.ic_option.setImageResource(icons[position]);
-        if (position == 1 && position == 4)
+        if (position == 1 || position == 4)
             holder.line_view.setVisibility(View.VISIBLE);
         else
             holder.line_view.setVisibility(View.INVISIBLE);

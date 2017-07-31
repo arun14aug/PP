@@ -48,7 +48,9 @@ public class ScheduleManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, ServiceApi.SCHEDULES, jsonObject,
+
+        PPLog.e("json data : ", jsonObject.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SCHEDULES, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -123,7 +125,8 @@ public class ScheduleManager {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, ServiceApi.SCHEDULES, jsonObject,
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SCHEDULES, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
