@@ -17,7 +17,7 @@
 
         <com.pinlesspay.customUi.MyTextView
             android:id="@+id/txt_day"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ok"
             android:textColor="@color/schedule_date_text_color"
@@ -25,9 +25,10 @@
 
         <com.pinlesspay.customUi.MyTextView
             android:id="@+id/txt_month"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ok"
+            android:gravity="end"
             android:textColor="@color/schedule_date_text_color"
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
@@ -44,7 +45,7 @@
 
         <com.pinlesspay.customUi.MyTextView
             android:id="@+id/txt_schedule"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
@@ -55,7 +56,7 @@
 
         <com.pinlesspay.customUi.MyTextView
             android:id="@+id/txt_description"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"

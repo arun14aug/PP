@@ -47,12 +47,14 @@
     <color name="text_color_grey">#8B000000</color>
     <color name="recurring_detail_bg">#FFEF6C00</color>
 
-    <color name="waterfall_text_color">#45505A</color>
+    <color name="waterfall_text_color">#FF45505A</color>
     <color name="schedule_date_text_color">#FF212121</color>
     <color name="schedule_heading_color">#DE000000</color>
     <color name="schedule_subheading_color">#8B000000</color>
     <color name="schedule_detail_heading_color">#FF030303</color>
     <color name="transaction_detail_bg">#FF4CAF50</color>
     <color name="new_bank_acc_text">#FF141414</color>
+    <color name="support_new_text">#FF1E88E5</color>
+
 
 </resources>

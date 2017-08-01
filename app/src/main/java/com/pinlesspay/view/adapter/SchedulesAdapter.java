@@ -4,22 +4,21 @@ package com.pinlesspay.view.adapter;
  * Created by Ravi on 29/07/15.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.pinlesspay.R;
+import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.Schedule;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 
 public class SchedulesAdapter extends RecyclerView.Adapter<SchedulesAdapter.MyViewHolder> {
@@ -44,23 +43,27 @@ public class SchedulesAdapter extends RecyclerView.Adapter<SchedulesAdapter.MyVi
         return new MyViewHolder(view);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Schedule current = data.get(position);
 
-        DateFormat format = new SimpleDateFormat("mm-dd-yyyy", Locale.ENGLISH);
+
+        SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat format2 = new SimpleDateFormat("dd");
+        SimpleDateFormat format3 = new SimpleDateFormat("MMM");
         Date date = null;
         try {
-            date = format.parse(current.getTaskDate());
-
+            date = format1.parse(current.getTaskDate());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+        System.out.println(format2.format(date));
 
-        holder.txt_day.setText(current.getTaskDate());
+
+        holder.txt_day.setText(format2.format(date));
         holder.txt_description.setText(current.getTaskDescription());
-        holder.txt_month.setText(current.getTaskDescription());
+        holder.txt_month.setText(format3.format(date));
         holder.txt_schedule.setText(current.getTaskTitle());
 
     }
@@ -71,14 +74,14 @@ public class SchedulesAdapter extends RecyclerView.Adapter<SchedulesAdapter.MyVi
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txt_day, txt_month, txt_description, txt_schedule;
+        MyTextView txt_day, txt_month, txt_description, txt_schedule;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            txt_day = (TextView) itemView.findViewById(R.id.txt_day);
-            txt_month = (TextView) itemView.findViewById(R.id.txt_month);
-            txt_description = (TextView) itemView.findViewById(R.id.txt_description);
-            txt_schedule = (TextView) itemView.findViewById(R.id.txt_schedule);
+            txt_day = (MyTextView) itemView.findViewById(R.id.txt_day);
+            txt_month = (MyTextView) itemView.findViewById(R.id.txt_month);
+            txt_description = (MyTextView) itemView.findViewById(R.id.txt_description);
+            txt_schedule = (MyTextView) itemView.findViewById(R.id.txt_schedule);
         }
     }
 }

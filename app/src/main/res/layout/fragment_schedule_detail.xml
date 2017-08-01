@@ -5,6 +5,41 @@
     android:background="@color/bg_color"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_gravity="center_vertical"
+        android:background="@color/blue"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/app_name"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:src="@drawable/toolbar_icon_back" />
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_schedule_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/app_name_text_size" />
+
+    </LinearLayout>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,7 +53,7 @@
             android:orientation="vertical">
 
             <com.pinlesspay.customUi.MyTextView
-                android:id="@+id/txt_about"
+                android:id="@+id/txt_heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_10"

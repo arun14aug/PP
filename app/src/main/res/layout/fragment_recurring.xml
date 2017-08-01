@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/padding_30"
         android:background="@color/bg_color"
         android:gravity="center"
         android:orientation="vertical"
@@ -33,6 +34,7 @@
         <com.pinlesspay.customUi.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_5"
             android:text="@string/no_recurring"
             android:textColor="@color/waterfall_text_color"
             android:textSize="@dimen/text_size_xlarge"

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Utils;
 
-import java.nio.charset.Charset;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
@@ -43,7 +42,7 @@ public class DonationFragment extends Fragment {
         LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
         View rootView = inflater.inflate(R.layout.fragment_donation, container, false);
 
-        txt_description = (MyTextView) activity.findViewById(R.id.txt_description);
+        txt_description = (MyTextView) rootView.findViewById(R.id.txt_description);
 
 
         charityArrayList = ModelManager.getInstance().getScheduleManager().getCharity(activity, false, 1);
@@ -58,8 +57,20 @@ public class DonationFragment extends Fragment {
     }
 
     private void setData() {
-        byte[] desc = Base64.encode(Charset.forName("UTF-8").encode(charityArrayList.get(0).getDescription()).array(), 0);
-        txt_description.setText(Base64.decode(desc, 0).toString());
+        byte[] bytes = new byte[0]; // Charset to encode into
+        String s2 = "";
+        try {
+            bytes = charityArrayList.get(0).getDescription().getBytes("UTF-8");
+            s2 = new String(bytes, "UTF-8"); // Charset with which bytes were encoded
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+//        try {
+//            s2 = URLDecoder.decode(charityArrayList.get(0).getDescription(), "ISO-8859-1");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+        txt_description.setText(s2);
     }
 
     @Override
@@ -76,21 +87,21 @@ public class DonationFragment extends Fragment {
     }
 
     public void onEventMainThread(String message) {
-        if (message.equalsIgnoreCase("Charity True")) {
+        if (message.equalsIgnoreCase("GetCharity True")) {
             Utils.dismissLoading();
-            PPLog.e(TAG, "Charity True");
+            PPLog.e(TAG, "GetCharity True");
             charityArrayList = ModelManager.getInstance().getScheduleManager().getCharity(activity, false, 1);
             if (charityArrayList != null)
                 if (charityArrayList.size() > 0)
                     setData();
-        } else if (message.contains("Charity False")) {
+        } else if (message.contains("GetCharity False")) {
             // showMatchHistoryList();
             Utils.showMessage(activity, activity.getString(R.string.please_wait));
-            PPLog.e(TAG, "Charity False");
+            PPLog.e(TAG, "GetCharity False");
             Utils.dismissLoading();
-        } else if (message.equalsIgnoreCase("Charity Network Error")) {
+        } else if (message.equalsIgnoreCase("GetCharity Network Error")) {
             Utils.showMessage(activity, "Network Error! Please try again");
-            PPLog.e(TAG, "Charity Network Error");
+            PPLog.e(TAG, "GetCharity Network Error");
             Utils.dismissLoading();
         }
 

@@ -203,7 +203,7 @@ public class LoginActivity extends Activity {
                 if (grantResults.length > 0) {
                     final String[] perm = new String[]{READ_PHONE_STATE};
                     boolean phoneState = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (!(phoneState))
+                    if (!(phoneState)) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
                                 showMessageOKCancel(getString(R.string.permission_alert),
@@ -233,10 +233,26 @@ public class LoginActivity extends Activity {
                                 }
                             }
                         }
+                    } else {
+                        if (Utils.isEmptyString(Preferences.readString(activity, Preferences.UUID, ""))) {
+                            Preferences.writeString(activity, Preferences.UUID, UUID.randomUUID().toString());
+                        }
+
+                        // get mac address
+                        if (Utils.isEmptyString(Preferences.readString(activity, Preferences.MAC_ADDRESS, ""))) {
+                            Preferences.writeString(activity, Preferences.MAC_ADDRESS, getMacAddress());
+                        }
+
+                        // get device name
+                        if (Utils.isEmptyString(Preferences.readString(activity, Preferences.DEVICE_NAME, ""))) {
+                            Preferences.writeString(activity, Preferences.DEVICE_NAME, getDeviceName());
+                        }
+                    }
                 }
                 break;
         }
     }
+
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(activity)
@@ -328,6 +344,7 @@ public class LoginActivity extends Activity {
             Utils.dismissLoading();
             PPLog.e(TAG, "Login True");
             Preferences.writeString(activity, Preferences.MOBILE_NUMBER, countryCode + mobile);
+            Preferences.writeString(activity, Preferences.FORMATTED_MOBILE_NUMBER, edt_phone_number.getText().toString());
             startActivity(new Intent(activity, VerifyActivity.class));
             finish();
         } else if (message.contains("Login False")) {

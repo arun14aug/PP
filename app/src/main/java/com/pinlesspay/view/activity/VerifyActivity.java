@@ -20,8 +20,6 @@ import com.pinlesspay.utility.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.TimeUnit;
-
 import de.greenrobot.event.EventBus;
 
 /*
@@ -58,6 +56,8 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
         txt_resend = (MyTextView) findViewById(R.id.txt_resend_code);
         txt_phone_number = (MyTextView) findViewById(R.id.txt_phone_number);
 
+        txt_phone_number.setText(Preferences.readString(activity, Preferences.FORMATTED_MOBILE_NUMBER, ""));
+
         et_code_1.setOnFocusChangeListener(this);
         et_code_2.setOnFocusChangeListener(this);
         et_code_3.setOnFocusChangeListener(this);
@@ -66,16 +66,32 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
         new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                String time = String.format("%d:%d",
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))
-                );
+
+
+                int secondsUntilFinished = (int) (millisUntilFinished / 1000);
+
+                int seconds = secondsUntilFinished % 60;
+                int mins = secondsUntilFinished / 60;
+
+//                String time = String.format(Locale.getDefault(),"%d:%d",
+//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60,
+//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60);
+                String time = "", min = "", sec = "";
+                if (seconds < 10)
+                    sec = "0" + seconds;
+                else
+                    sec = "" + seconds;
+                if (mins < 10)
+                    min = "0" + mins;
+                else
+                    min = "" + mins;
+                time = min + ":" + sec;
                 txt_resend.setText(getString(R.string.resend_code_within) + " " + time);
             }
 
             public void onFinish() {
                 txt_resend.setText(getString(R.string.resend_code));
+                txt_resend.setTextColor(Utils.setColor(activity, R.color.light_blue));
             }
         }.start();
 

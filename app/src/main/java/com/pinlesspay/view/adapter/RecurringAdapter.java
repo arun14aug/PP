@@ -14,14 +14,8 @@ import android.widget.TextView;
 
 import com.pinlesspay.R;
 import com.pinlesspay.model.Recurring;
-import com.pinlesspay.model.Schedule;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 
 public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyViewHolder> {
@@ -48,7 +42,7 @@ public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyVi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Recurring current = data.get(position);
+        Recurring recurring = data.get(position);
 
 //        DateFormat format = new SimpleDateFormat("mm-dd-yyyy", Locale.ENGLISH);
 //        Date date = null;
@@ -60,10 +54,10 @@ public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyVi
 //        }
 //        System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
 //
-//        holder.txt_day.setText(current.getTaskDate());
-//        holder.txt_description.setText(current.getTaskDescription());
-//        holder.txt_month.setText(current.getTaskDescription());
-//        holder.txt_schedule.setText(current.getTaskTitle());
+        holder.txt_recurring_time.setText(recurring.getScheduleStartDate());
+        holder.txt_next_date.setText(recurring.getNextScheduleRunDate());
+        holder.txt_recurring_heading.setText(recurring.getDonationName());
+        holder.txt_amount.setText(recurring.getPaymentFrom());
 
     }
 

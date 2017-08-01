@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_10">
+
+
+    <com.pinlesspay.customUi.MyTextView
+        android:id="@+id/txt_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/app_name"
+        android:textColor="@color/support_new_text"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="normal" />
+
+    <com.pinlesspay.customUi.MyTextView
+        android:id="@+id/txt_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/app_name"
+        android:textColor="@color/schedule_heading_color"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="normal" />
+
+</LinearLayout>

@@ -29,6 +29,7 @@ public class Preferences {
     public static final String MAC_ADDRESS = "mac_address";
     public static final String DEVICE_NAME = "device_name";
     public static final String MOBILE_NUMBER = "mobile_number";
+    public static final String FORMATTED_MOBILE_NUMBER = "formatted_mobile_number";
 
     //  GpPreferences.writeString(getApplicationContext(), Preferences.NAME, "dev");
     // GpPreferences.readString(getApplicationContext(), Preferences.NAME, "");

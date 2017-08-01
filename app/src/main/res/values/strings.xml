@@ -58,4 +58,20 @@
     <string name="account_number">Account Number</string>
     <string name="account_type">Account Type</string>
     <string name="add">Add</string>
+    <string name="date">Date</string>
+    <string name="id">ID</string>
+    <string name="category">Category</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="hash_tag">#</string>
+    <string name="next_run">Next run</string>
+    <string name="turn_passcode_on">Turn Passcode On</string>
+    <string name="authenticated_devices">Authenticated Devices</string>
+    <string name="confirm_passcode">Confirm Passcode</string>
+    <string name="enter_new_passcode">Enter new Passcode</string>
+    <string name="place_your_text">Place your text</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="sms">SMS</string>
+    <string name="tell_a_friend">Tell a friend</string>
+    <string name="no_tickets">No tickets</string>
 </resources>

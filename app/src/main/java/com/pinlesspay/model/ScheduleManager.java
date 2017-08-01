@@ -30,6 +30,7 @@ public class ScheduleManager {
     private ArrayList<Schedule> scheduleArrayList;
     private ArrayList<Charity> charityArrayList;
     private ArrayList<Recurring> recurringArrayList;
+    private ArrayList<Transaction> transactionArrayList;
 
     public ArrayList<Schedule> getSchedules(Activity activity, boolean shouldRefresh, int pageNumber) {
         if (shouldRefresh)
@@ -70,15 +71,6 @@ public class ScheduleManager {
                                     if (count > 0)
                                         for (int i = 0; i < count; i++) {
                                             Schedule schedule = new Schedule();
-//                                            "ServiceName": "TaskService",
-//                                                    "EntityName": "OrganizationSchedule",
-//                                                    "Id": 4,
-//                                                    "DataBaseAction": 2,
-//                                                    "RowNum": 1,
-//                                                    "TaskId": 4,
-//                                                    "TaskTitle": "Don't miss your last chance to grab the Best Deals!",
-//                                                    "TaskDescription": "Don't miss your last chance to grab the Best Deals!\nAs a customer of YES BANK, you are requested to register your GST Registration Number with YES BANK. Updation of correct GST Registration Number with the Bank is important to ensure compliance of GST Input Tax Credit (ITC). In case, GST Registration number is not updated with the Bank, GST deducted will not be eligible for Input Tax Credit (ITC).\nPlease note:\n\n    In case of multiple GST, please ensure to update the \"Default\" GST number.\n    Status of updation (success/failure) will be informed by the Bank with an email to your registered Email ID.",
-//                                                    "TaskDate": "07-13-2017"
                                             schedule.setId(jsonArray.getJSONObject(i).getString("ServiceName"));
                                             schedule.setEntityName(jsonArray.getJSONObject(i).getString("EntityName"));
                                             schedule.setId(jsonArray.getJSONObject(i).getString("Id"));
@@ -147,27 +139,29 @@ public class ScheduleManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                JSONArray jsonArray = response.getJSONArray("data");
-                                if (jsonArray == null)
-                                    jsonArray = new JSONArray();
-                                int count = jsonArray.length();
-                                charityArrayList = new ArrayList<>();
-                                if (count > 0)
-                                    for (int i = 0; i < count; i++) {
-                                        Charity charity = new Charity();
-                                        charity.setServiceName(jsonArray.getJSONObject(i).getString("ServiceName"));
-                                        charity.setEntityName(jsonArray.getJSONObject(i).getString("EntityName"));
-                                        charity.setId(jsonArray.getJSONObject(i).getString("Id"));
-                                        charity.setDataBaseAction(jsonArray.getJSONObject(i).getString("DataBaseAction"));
-                                        charity.setAboutUsId(jsonArray.getJSONObject(i).getString("AboutUsId"));
-                                        charity.setDescription(jsonArray.getJSONObject(i).getString("Description"));
-                                        charity.setCreatedOn(jsonArray.getJSONObject(i).getString("CreatedOn"));
-                                        charity.setCreatedBy(jsonArray.getJSONObject(i).getString("CreatedBy"));
-                                        charity.setIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
+                                if (response.getJSONObject("data").has("Entities")) {
+                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
+                                    if (jsonArray == null)
+                                        jsonArray = new JSONArray();
+                                    int count = jsonArray.length();
+                                    charityArrayList = new ArrayList<>();
+                                    if (count > 0)
+                                        for (int i = 0; i < count; i++) {
+                                            Charity charity = new Charity();
+                                            charity.setServiceName(jsonArray.getJSONObject(i).getString("ServiceName"));
+                                            charity.setEntityName(jsonArray.getJSONObject(i).getString("EntityName"));
+                                            charity.setId(jsonArray.getJSONObject(i).getString("Id"));
+                                            charity.setDataBaseAction(jsonArray.getJSONObject(i).getString("DataBaseAction"));
+                                            charity.setAboutUsId(jsonArray.getJSONObject(i).getString("AboutUsId"));
+                                            charity.setDescription(jsonArray.getJSONObject(i).getString("Description"));
+                                            charity.setCreatedOn(jsonArray.getJSONObject(i).getString("CreatedOn"));
+                                            charity.setCreatedBy(jsonArray.getJSONObject(i).getString("CreatedBy"));
+                                            charity.setIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
 
-                                        charityArrayList.add(charity);
-                                    }
-                                EventBus.getDefault().post("GetCharity True");
+                                            charityArrayList.add(charity);
+                                        }
+                                    EventBus.getDefault().post("GetCharity True");
+                                }
                             }
 
                         } catch (JSONException e) {
@@ -190,7 +184,7 @@ public class ScheduleManager {
 
     public ArrayList<Recurring> getRecurring(Activity activity, boolean shouldRefresh, int pageNumber) {
         if (shouldRefresh)
-            getScheduleList(activity, pageNumber);
+            getRecurringList(activity, pageNumber);
         return recurringArrayList;
     }
 
@@ -259,6 +253,165 @@ public class ScheduleManager {
             public void onErrorResponse(VolleyError error) {
                 PPLog.e("Error Response : ", "Error: " + error.getMessage());
                 EventBus.getDefault().post("Recurring False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public ArrayList<Transaction> getTransactions(Activity activity, boolean shouldRefresh, int pageNumber) {
+        if (shouldRefresh)
+            getTransactionList(activity, pageNumber);
+        return transactionArrayList;
+    }
+
+    private void getTransactionList(Activity activity, int pageNumber) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+            jsonObject.put("PageSize", ServiceApi.PAGE_SIZE);
+            jsonObject.put("PageNumber", pageNumber);
+            jsonObject.put("Action", "getrecurring");
+            jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        PPLog.e("json data : ", jsonObject.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SCHEDULES, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "onSuccess  --> " + response.toString());
+
+                        try {
+
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                if (response.getJSONObject("data").has("Entities")) {
+                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
+                                    if (jsonArray == null)
+                                        jsonArray = new JSONArray();
+                                    int count = jsonArray.length();
+                                    transactionArrayList = new ArrayList<>();
+                                    if (count > 0)
+                                        for (int i = 0; i < count; i++) {
+                                            Transaction transaction = new Transaction();
+//                                            InvoiceNo: ""
+//                                                    ,TranDate: ""
+//                                                    ,DonorID: ""
+//                                                    ,RegisterMobile: ""
+//                                                    ,OrganizationID: ""
+//                                                    ,DonationID: ""
+//                                                    ,DonationName: ""
+//                                                    ,TranSource: ""
+//                                                    ,SourceIP: ""
+//                                                    ,TranAmount: ""
+//                                                    ,TransactionType: ""
+//                                                    ,PaymentType: ""
+//                                                    ,AgentID: ""
+//                                                    ,CommissionPercent: ""
+//                                                    ,Fees: ""
+//                                                    ,CardTypeCode: ""
+//                                                    ,CardNumber: ""
+//                                                    ,CardShort: ""
+//                                                    ,CCardExpMM: ""
+//                                                    ,CCardExpYYYY: ""
+//                                                    ,CCProcessorID: ""
+//                                                    ,CCTranApproved: ""
+//                                                    ,NameOnCard: ""
+//                                                    ,Address1: ""
+//                                                    ,Address2: ""
+//                                                    ,City: ""
+//                                                    ,State: ""
+//                                                    ,Zip: ""
+//                                                    ,CountryISO3: ""
+//                                                    ,EmailAddress: ""
+//                                                    ,PhoneNumber: ""
+//                                                    ,ProcessorTransID: ""
+//                                                    ,ProcessorAuthCode: ""
+//                                                    ,ProcessorAuthMsg: ""
+//                                                    ,ProcessorAVSCode: ""
+//                                                    ,ProcessorCVVCode: ""
+//                                                    ,ProcessorResponseCode: ""
+//                                                    ,ProcessorErrorCode: ""
+//                                                    ,RequestID: ""
+//                                                    ,RequestTokenID: ""
+//                                                    ,IsVoided: ""
+//                                                    ,IsFraud: ""
+//                                                    ,BankRoutingNum: ""
+//                                                    ,BankAccountNum: ""
+//                                                    ,BankAccountLastNum: ""
+//                                                    ,BankAccountType
+
+
+                                            transaction.setInvoiceNo(jsonArray.getJSONObject(i).getString("InvoiceNo"));
+                                            transaction.setTranDate(jsonArray.getJSONObject(i).getString("TranDate"));
+                                            transaction.setDonorID(jsonArray.getJSONObject(i).getString("DonorID"));
+                                            transaction.setRegisterMobile(jsonArray.getJSONObject(i).getString("RegisterMobile"));
+                                            transaction.setOrganizationID(jsonArray.getJSONObject(i).getString("OrganizationID"));
+                                            transaction.setDonationID(jsonArray.getJSONObject(i).getString("DonationID"));
+                                            transaction.setDonationName(jsonArray.getJSONObject(i).getString("DonationName"));
+                                            transaction.setTranSource(jsonArray.getJSONObject(i).getString("TranSource"));
+                                            transaction.setSourceIP(jsonArray.getJSONObject(i).getString("SourceIP"));
+                                            transaction.setTranAmount(jsonArray.getJSONObject(i).getString("TranAmount"));
+                                            transaction.setTransactionType(jsonArray.getJSONObject(i).getString("TransactionType"));
+                                            transaction.setPaymentType(jsonArray.getJSONObject(i).getString("PaymentType"));
+
+                                            transaction.setAgentID(jsonArray.getJSONObject(i).getString("AgentID"));
+                                            transaction.setCommissionPercent(jsonArray.getJSONObject(i).getString("CommissionPercent"));
+                                            transaction.setFees(jsonArray.getJSONObject(i).getString("Fees"));
+                                            transaction.setCardTypeCode(jsonArray.getJSONObject(i).getString("CardTypeCode"));
+                                            transaction.setCardNumber(jsonArray.getJSONObject(i).getString("CardNumber"));
+                                            transaction.setCardShort(jsonArray.getJSONObject(i).getString("CardShort"));
+                                            transaction.setCCardExpMM(jsonArray.getJSONObject(i).getString("CCardExpMM"));
+                                            transaction.setCCardExpYYYY(jsonArray.getJSONObject(i).getString("CCardExpYYYY"));
+                                            transaction.setCCProcessorID(jsonArray.getJSONObject(i).getString("CCProcessorID"));
+                                            transaction.setCCTranApproved(jsonArray.getJSONObject(i).getString("CCTranApproved"));
+                                            transaction.setNameOnCard(jsonArray.getJSONObject(i).getString("NameOnCard"));
+                                            transaction.setAddress1(jsonArray.getJSONObject(i).getString("Address1"));
+                                            transaction.setAddress2(jsonArray.getJSONObject(i).getString("Address2"));
+                                            transaction.setCity(jsonArray.getJSONObject(i).getString("City"));
+                                            transaction.setState(jsonArray.getJSONObject(i).getString("State"));
+                                            transaction.setZip(jsonArray.getJSONObject(i).getString("Zip"));
+                                            transaction.setCountryISO3(jsonArray.getJSONObject(i).getString("CountryISO3"));
+                                            transaction.setEmailAddress(jsonArray.getJSONObject(i).getString("EmailAddress"));
+                                            transaction.setPhoneNumber(jsonArray.getJSONObject(i).getString("PhoneNumber"));
+                                            transaction.setProcessorTransID(jsonArray.getJSONObject(i).getString("ProcessorTransID"));
+                                            transaction.setProcessorAuthCode(jsonArray.getJSONObject(i).getString("ProcessorAuthCode"));
+                                            transaction.setProcessorAuthMsg(jsonArray.getJSONObject(i).getString("ProcessorAuthMsg"));
+                                            transaction.setProcessorAVSCode(jsonArray.getJSONObject(i).getString("ProcessorAVSCode"));
+                                            transaction.setProcessorCVVCode(jsonArray.getJSONObject(i).getString("ProcessorCVVCode"));
+                                            transaction.setProcessorResponseCode(jsonArray.getJSONObject(i).getString("ProcessorResponseCode"));
+                                            transaction.setProcessorErrorCode(jsonArray.getJSONObject(i).getString("ProcessorErrorCode"));
+                                            transaction.setRequestID(jsonArray.getJSONObject(i).getString("RequestID"));
+                                            transaction.setRequestTokenID(jsonArray.getJSONObject(i).getString("RequestTokenID"));
+                                            transaction.setIsVoided(jsonArray.getJSONObject(i).getString("IsVoided"));
+                                            transaction.setIsFraud(jsonArray.getJSONObject(i).getString("IsFraud"));
+                                            transaction.setBankRoutingNum(jsonArray.getJSONObject(i).getString("BankRoutingNum"));
+                                            transaction.setBankAccountNum(jsonArray.getJSONObject(i).getString("BankAccountNum"));
+                                            transaction.setBankAccountLastNum(jsonArray.getJSONObject(i).getString("BankAccountLastNum"));
+                                            transaction.setBankAccountType(jsonArray.getJSONObject(i).getString("BankAccountType"));
+
+                                            transactionArrayList.add(transaction);
+                                        }
+                                    EventBus.getDefault().post("Transactions True");
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post("Transactions False");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().post("Transactions False");
             }
         });
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);

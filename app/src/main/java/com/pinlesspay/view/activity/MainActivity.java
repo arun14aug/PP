@@ -32,7 +32,6 @@ import com.pinlesspay.view.fragment.ScheduleFragment;
 import com.pinlesspay.view.fragment.SecurityFragment;
 import com.pinlesspay.view.fragment.SuggestionsFragment;
 import com.pinlesspay.view.fragment.SupportFragment;
-import com.pinlesspay.view.fragment.TellYourFriendsFragment;
 import com.pinlesspay.view.fragment.TransactionsFragment;
 
 import org.json.JSONException;
@@ -185,8 +184,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_security);
                 break;
             case 2:
-                fragment = new TellYourFriendsFragment();
-                title = getString(R.string.title_tell_your);
+//                fragment = new TellYourFriendsFragment();
+//                title = getString(R.string.title_tell_your);
+                Intent intent = new Intent(MainActivity.this, TellFriendActivity.class);
+                startActivity(intent);
                 break;
             case 3:
                 fragment = new SupportFragment();
@@ -250,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public void onBackPressed() {
         Fragment f = fragmentManager.findFragmentById(R.id.container_body);
         try {
-            if (f instanceof ScheduleFragment) {
+            if (f instanceof DonationFragment) {
                 if (backer)
                     finish();
                 else {

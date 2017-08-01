@@ -5,6 +5,7 @@ package com.pinlesspay.view.activity;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.RelativeLayout;
 
 import com.pinlesspay.R;
 import com.pinlesspay.model.NavDrawerItem;
@@ -72,6 +73,16 @@ public class FragmentDrawer extends Fragment {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         RecyclerView recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
+
+        RelativeLayout nav_header_container = (RelativeLayout) layout.findViewById(R.id.nav_header_container);
+
+        nav_header_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(getActivity(), getData());
         recyclerView.setAdapter(adapter);
