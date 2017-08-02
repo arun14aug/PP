@@ -4,14 +4,69 @@ package com.pinlesspay.model;
  * Created by HP on 22-07-2017.
  */
 public class Recurring {
-    private String DonorScheduleId, DonationName, AccountType, PaymentFrom, CardType, MaskCardNumber, ScheduleStartDate, DonationScheduleId, NextScheduleRunDate, LastScheduleRunDate, LastRunStatus, IsActive;
 
-    public String getDonorScheduleId() {
-        return DonorScheduleId;
+    //    "ServiceName": "RecurringService",
+    //                                                    "EntityName": "DonationSchedule",
+//                                                    "Id": 8,
+//                                                    "DataBaseAction": 2,
+//                                                    "RowNum": 1,
+//                                                    "DonationName": "Self-enabling attitude-oriented systemengine",
+//                                                    "AccountType": "CARD",
+//                                                    "PaymentFrom": "5454XXXXXXXX5454",
+//                                                    "CardType": "MasterCard",
+//                                                    "NextScheduleRunDate": "09 Aug 2017",
+//                                                    "ScheduleName": "Every 2 Week",
+//                                                    "DonationAmount": 19.99,
+//                                                    "DonorID": 39
+    private String ServiceName, EntityName, Id, DataBaseAction, RowNum, DonationName, AccountType, PaymentFrom,
+            NextScheduleRunDate, ScheduleName, DonationAmount, DonorID, CardType;
+
+    public String getCardType() {
+        return CardType;
     }
 
-    public void setDonorScheduleId(String donorScheduleId) {
-        DonorScheduleId = donorScheduleId;
+    public void setCardType(String cardType) {
+        CardType = cardType;
+    }
+
+    public String getServiceName() {
+        return ServiceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        ServiceName = serviceName;
+    }
+
+    public String getEntityName() {
+        return EntityName;
+    }
+
+    public void setEntityName(String entityName) {
+        EntityName = entityName;
+    }
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
+
+    public String getDataBaseAction() {
+        return DataBaseAction;
+    }
+
+    public void setDataBaseAction(String dataBaseAction) {
+        DataBaseAction = dataBaseAction;
+    }
+
+    public String getRowNum() {
+        return RowNum;
+    }
+
+    public void setRowNum(String rowNum) {
+        RowNum = rowNum;
     }
 
     public String getDonationName() {
@@ -38,38 +93,6 @@ public class Recurring {
         PaymentFrom = paymentFrom;
     }
 
-    public String getCardType() {
-        return CardType;
-    }
-
-    public void setCardType(String cardType) {
-        CardType = cardType;
-    }
-
-    public String getMaskCardNumber() {
-        return MaskCardNumber;
-    }
-
-    public void setMaskCardNumber(String maskCardNumber) {
-        MaskCardNumber = maskCardNumber;
-    }
-
-    public String getScheduleStartDate() {
-        return ScheduleStartDate;
-    }
-
-    public void setScheduleStartDate(String scheduleStartDate) {
-        ScheduleStartDate = scheduleStartDate;
-    }
-
-    public String getDonationScheduleId() {
-        return DonationScheduleId;
-    }
-
-    public void setDonationScheduleId(String donationScheduleId) {
-        DonationScheduleId = donationScheduleId;
-    }
-
     public String getNextScheduleRunDate() {
         return NextScheduleRunDate;
     }
@@ -78,27 +101,27 @@ public class Recurring {
         NextScheduleRunDate = nextScheduleRunDate;
     }
 
-    public String getLastScheduleRunDate() {
-        return LastScheduleRunDate;
+    public String getScheduleName() {
+        return ScheduleName;
     }
 
-    public void setLastScheduleRunDate(String lastScheduleRunDate) {
-        LastScheduleRunDate = lastScheduleRunDate;
+    public void setScheduleName(String scheduleName) {
+        ScheduleName = scheduleName;
     }
 
-    public String getLastRunStatus() {
-        return LastRunStatus;
+    public String getDonationAmount() {
+        return DonationAmount;
     }
 
-    public void setLastRunStatus(String lastRunStatus) {
-        LastRunStatus = lastRunStatus;
+    public void setDonationAmount(String donationAmount) {
+        DonationAmount = donationAmount;
     }
 
-    public String getIsActive() {
-        return IsActive;
+    public String getDonorID() {
+        return DonorID;
     }
 
-    public void setIsActive(String isActive) {
-        IsActive = isActive;
+    public void setDonorID(String donorID) {
+        DonorID = donorID;
     }
 }

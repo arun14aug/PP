@@ -54,11 +54,22 @@ public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyVi
 //        }
 //        System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
 //
-        holder.txt_recurring_time.setText(recurring.getScheduleStartDate());
+        holder.txt_recurring_time.setText(recurring.getScheduleName());
         holder.txt_next_date.setText(recurring.getNextScheduleRunDate());
         holder.txt_recurring_heading.setText(recurring.getDonationName());
-        holder.txt_amount.setText(recurring.getPaymentFrom());
+        holder.txt_amount.setText(recurring.getDonationAmount());
 
+        if (recurring.getAccountType().equalsIgnoreCase("Card")) {
+            if (recurring.getCardType().equalsIgnoreCase("MasterCard"))
+                holder.icon_account.setImageResource(R.drawable.mastercard_round);
+            else if (recurring.getCardType().equalsIgnoreCase("AMEX"))
+                holder.icon_account.setImageResource(R.drawable.american_round);
+            else if (recurring.getCardType().equalsIgnoreCase("DiscoverCard"))
+                holder.icon_account.setImageResource(R.drawable.discover_round);
+            else if (recurring.getCardType().equalsIgnoreCase("AmericanCan"))
+                holder.icon_account.setImageResource(R.drawable.visa_round);
+        } else if (recurring.getAccountType().equalsIgnoreCase("Bank"))
+            holder.icon_account.setImageResource(R.drawable.bank_round);
     }
 
     @Override
@@ -76,6 +87,8 @@ public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyVi
             txt_next_date = (TextView) itemView.findViewById(R.id.txt_next_date);
             txt_recurring_heading = (TextView) itemView.findViewById(R.id.txt_recurring_heading);
             txt_amount = (TextView) itemView.findViewById(R.id.txt_amount);
+
+            icon_account = (ImageView)itemView.findViewById(R.id.icon_account);
         }
     }
 }

@@ -62,7 +62,7 @@ public class RecurringFragment extends Fragment {
             public void onClick(View view, int position) {
                 Fragment fragment = new RecurringDetailFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", recurringArrayList.get(position).getDonationScheduleId());
+                bundle.putString("id", recurringArrayList.get(position).getId());
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity) activity)
                         .getSupportFragmentManager();

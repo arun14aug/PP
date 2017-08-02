@@ -221,19 +221,35 @@ public class ScheduleManager {
                                     if (count > 0)
                                         for (int i = 0; i < count; i++) {
                                             Recurring recurring = new Recurring();
+//                                            "ServiceName": "RecurringService",
+//                                                    "EntityName": "DonationSchedule",
+//                                                    "Id": 8,
+//                                                    "DataBaseAction": 2,
+//                                                    "RowNum": 1,
+//                                                    "DonationName": "Self-enabling attitude-oriented systemengine",
+//                                                    "AccountType": "CARD",
+//                                                    "PaymentFrom": "5454XXXXXXXX5454",
+//                                                    "CardType": "MasterCard",
+//                                                    "NextScheduleRunDate": "09 Aug 2017",
+//                                                    "ScheduleName": "Every 2 Week",
+//                                                    "DonationAmount": 19.99,
+//                                                    "DonorID": 39
 
-                                            recurring.setDonorScheduleId(jsonArray.getJSONObject(i).getString("DonorScheduleId"));
+
                                             recurring.setDonationName(jsonArray.getJSONObject(i).getString("DonationName"));
+                                            recurring.setDonorID(jsonArray.getJSONObject(i).getString("DonorID"));
+                                            recurring.setDonationAmount(jsonArray.getJSONObject(i).getString("DonationAmount"));
+                                            recurring.setAccountType(jsonArray.getJSONObject(i).getString("AccountType"));
+                                            recurring.setPaymentFrom(jsonArray.getJSONObject(i).getString("PaymentFrom"));
+                                            recurring.setServiceName(jsonArray.getJSONObject(i).getString("ServiceName"));
+                                            recurring.setEntityName(jsonArray.getJSONObject(i).getString("EntityName"));
+                                            recurring.setId(jsonArray.getJSONObject(i).getString("Id"));
+                                            recurring.setDataBaseAction(jsonArray.getJSONObject(i).getString("DataBaseAction"));
+                                            recurring.setNextScheduleRunDate(jsonArray.getJSONObject(i).getString("NextScheduleRunDate"));
                                             recurring.setAccountType(jsonArray.getJSONObject(i).getString("AccountType"));
                                             recurring.setPaymentFrom(jsonArray.getJSONObject(i).getString("PaymentFrom"));
                                             recurring.setCardType(jsonArray.getJSONObject(i).getString("CardType"));
-                                            recurring.setMaskCardNumber(jsonArray.getJSONObject(i).getString("MaskCardNumber"));
-                                            recurring.setScheduleStartDate(jsonArray.getJSONObject(i).getString("ScheduleStartDate"));
-                                            recurring.setDonationScheduleId(jsonArray.getJSONObject(i).getString("DonationScheduleId"));
-                                            recurring.setNextScheduleRunDate(jsonArray.getJSONObject(i).getString("NextScheduleRunDate"));
-                                            recurring.setLastScheduleRunDate(jsonArray.getJSONObject(i).getString("LastScheduleRunDate"));
-                                            recurring.setLastRunStatus(jsonArray.getJSONObject(i).getString("LastRunStatus"));
-                                            recurring.setIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
+                                            recurring.setScheduleName(jsonArray.getJSONObject(i).getString("ScheduleName"));
 
                                             recurringArrayList.add(recurring);
                                         }
@@ -272,7 +288,7 @@ public class ScheduleManager {
             jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
             jsonObject.put("PageSize", ServiceApi.PAGE_SIZE);
             jsonObject.put("PageNumber", pageNumber);
-            jsonObject.put("Action", "getrecurring");
+            jsonObject.put("Action", "gettransactions");
             jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -298,101 +314,38 @@ public class ScheduleManager {
                                     if (count > 0)
                                         for (int i = 0; i < count; i++) {
                                             Transaction transaction = new Transaction();
-//                                            InvoiceNo: ""
-//                                                    ,TranDate: ""
-//                                                    ,DonorID: ""
-//                                                    ,RegisterMobile: ""
-//                                                    ,OrganizationID: ""
-//                                                    ,DonationID: ""
-//                                                    ,DonationName: ""
-//                                                    ,TranSource: ""
-//                                                    ,SourceIP: ""
-//                                                    ,TranAmount: ""
-//                                                    ,TransactionType: ""
-//                                                    ,PaymentType: ""
-//                                                    ,AgentID: ""
-//                                                    ,CommissionPercent: ""
-//                                                    ,Fees: ""
-//                                                    ,CardTypeCode: ""
-//                                                    ,CardNumber: ""
-//                                                    ,CardShort: ""
-//                                                    ,CCardExpMM: ""
-//                                                    ,CCardExpYYYY: ""
-//                                                    ,CCProcessorID: ""
-//                                                    ,CCTranApproved: ""
-//                                                    ,NameOnCard: ""
-//                                                    ,Address1: ""
-//                                                    ,Address2: ""
-//                                                    ,City: ""
-//                                                    ,State: ""
-//                                                    ,Zip: ""
-//                                                    ,CountryISO3: ""
-//                                                    ,EmailAddress: ""
-//                                                    ,PhoneNumber: ""
-//                                                    ,ProcessorTransID: ""
-//                                                    ,ProcessorAuthCode: ""
-//                                                    ,ProcessorAuthMsg: ""
-//                                                    ,ProcessorAVSCode: ""
-//                                                    ,ProcessorCVVCode: ""
-//                                                    ,ProcessorResponseCode: ""
-//                                                    ,ProcessorErrorCode: ""
-//                                                    ,RequestID: ""
-//                                                    ,RequestTokenID: ""
-//                                                    ,IsVoided: ""
-//                                                    ,IsFraud: ""
-//                                                    ,BankRoutingNum: ""
-//                                                    ,BankAccountNum: ""
-//                                                    ,BankAccountLastNum: ""
-//                                                    ,BankAccountType
+//                                            "ServiceName": "TransactionService",
+//                                                    "EntityName": "TransactionLog",
+//                                                    "Id": null,
+//                                                    "DataBaseAction": 2,
+//                                                    "RowNum": 1,
+//                                                    "InvoiceNo": "3P1003",
+//                                                    "TranDate": "02 Aug 2017",
+//                                                    "DonationName": "Blind Child Support",
+//                                                    "TranAmount": 5.55,
+//                                                    "PaymentType": "CARD",
+//                                                    "CardTypeCode": "MasterCard",
+//                                                    "PaymentFrom": "5454XXXXXXXX5454",
+//                                                    "NameOnCard": null,
+//                                                    "DeviceName": "Virtual Terminal"
+                                            transaction.setId(jsonArray.getJSONObject(i).getString("Id"));
+                                            transaction.setDataBaseAction(jsonArray.getJSONObject(i).getString("DataBaseAction"));
+                                            transaction.setRowNum(jsonArray.getJSONObject(i).getString("RowNum"));
+                                            transaction.setPaymentFrom(jsonArray.getJSONObject(i).getString("PaymentFrom"));
+                                            transaction.setDeviceName(jsonArray.getJSONObject(i).getString("DeviceName"));
 
+                                            transaction.setStatus(jsonArray.getJSONObject(i).getString("TranStatus"));
 
                                             transaction.setInvoiceNo(jsonArray.getJSONObject(i).getString("InvoiceNo"));
                                             transaction.setTranDate(jsonArray.getJSONObject(i).getString("TranDate"));
-                                            transaction.setDonorID(jsonArray.getJSONObject(i).getString("DonorID"));
-                                            transaction.setRegisterMobile(jsonArray.getJSONObject(i).getString("RegisterMobile"));
-                                            transaction.setOrganizationID(jsonArray.getJSONObject(i).getString("OrganizationID"));
-                                            transaction.setDonationID(jsonArray.getJSONObject(i).getString("DonationID"));
                                             transaction.setDonationName(jsonArray.getJSONObject(i).getString("DonationName"));
-                                            transaction.setTranSource(jsonArray.getJSONObject(i).getString("TranSource"));
-                                            transaction.setSourceIP(jsonArray.getJSONObject(i).getString("SourceIP"));
                                             transaction.setTranAmount(jsonArray.getJSONObject(i).getString("TranAmount"));
-                                            transaction.setTransactionType(jsonArray.getJSONObject(i).getString("TransactionType"));
                                             transaction.setPaymentType(jsonArray.getJSONObject(i).getString("PaymentType"));
+                                            transaction.setServiceName(jsonArray.getJSONObject(i).getString("ServiceName"));
+                                            transaction.setEntityName(jsonArray.getJSONObject(i).getString("EntityName"));
 
-                                            transaction.setAgentID(jsonArray.getJSONObject(i).getString("AgentID"));
-                                            transaction.setCommissionPercent(jsonArray.getJSONObject(i).getString("CommissionPercent"));
-                                            transaction.setFees(jsonArray.getJSONObject(i).getString("Fees"));
                                             transaction.setCardTypeCode(jsonArray.getJSONObject(i).getString("CardTypeCode"));
-                                            transaction.setCardNumber(jsonArray.getJSONObject(i).getString("CardNumber"));
-                                            transaction.setCardShort(jsonArray.getJSONObject(i).getString("CardShort"));
-                                            transaction.setCCardExpMM(jsonArray.getJSONObject(i).getString("CCardExpMM"));
-                                            transaction.setCCardExpYYYY(jsonArray.getJSONObject(i).getString("CCardExpYYYY"));
-                                            transaction.setCCProcessorID(jsonArray.getJSONObject(i).getString("CCProcessorID"));
-                                            transaction.setCCTranApproved(jsonArray.getJSONObject(i).getString("CCTranApproved"));
                                             transaction.setNameOnCard(jsonArray.getJSONObject(i).getString("NameOnCard"));
-                                            transaction.setAddress1(jsonArray.getJSONObject(i).getString("Address1"));
-                                            transaction.setAddress2(jsonArray.getJSONObject(i).getString("Address2"));
-                                            transaction.setCity(jsonArray.getJSONObject(i).getString("City"));
-                                            transaction.setState(jsonArray.getJSONObject(i).getString("State"));
-                                            transaction.setZip(jsonArray.getJSONObject(i).getString("Zip"));
-                                            transaction.setCountryISO3(jsonArray.getJSONObject(i).getString("CountryISO3"));
-                                            transaction.setEmailAddress(jsonArray.getJSONObject(i).getString("EmailAddress"));
-                                            transaction.setPhoneNumber(jsonArray.getJSONObject(i).getString("PhoneNumber"));
-                                            transaction.setProcessorTransID(jsonArray.getJSONObject(i).getString("ProcessorTransID"));
-                                            transaction.setProcessorAuthCode(jsonArray.getJSONObject(i).getString("ProcessorAuthCode"));
-                                            transaction.setProcessorAuthMsg(jsonArray.getJSONObject(i).getString("ProcessorAuthMsg"));
-                                            transaction.setProcessorAVSCode(jsonArray.getJSONObject(i).getString("ProcessorAVSCode"));
-                                            transaction.setProcessorCVVCode(jsonArray.getJSONObject(i).getString("ProcessorCVVCode"));
-                                            transaction.setProcessorResponseCode(jsonArray.getJSONObject(i).getString("ProcessorResponseCode"));
-                                            transaction.setProcessorErrorCode(jsonArray.getJSONObject(i).getString("ProcessorErrorCode"));
-                                            transaction.setRequestID(jsonArray.getJSONObject(i).getString("RequestID"));
-                                            transaction.setRequestTokenID(jsonArray.getJSONObject(i).getString("RequestTokenID"));
-                                            transaction.setIsVoided(jsonArray.getJSONObject(i).getString("IsVoided"));
-                                            transaction.setIsFraud(jsonArray.getJSONObject(i).getString("IsFraud"));
-                                            transaction.setBankRoutingNum(jsonArray.getJSONObject(i).getString("BankRoutingNum"));
-                                            transaction.setBankAccountNum(jsonArray.getJSONObject(i).getString("BankAccountNum"));
-                                            transaction.setBankAccountLastNum(jsonArray.getJSONObject(i).getString("BankAccountLastNum"));
-                                            transaction.setBankAccountType(jsonArray.getJSONObject(i).getString("BankAccountType"));
 
                                             transactionArrayList.add(transaction);
                                         }

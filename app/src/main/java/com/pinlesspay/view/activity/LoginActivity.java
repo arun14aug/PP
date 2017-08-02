@@ -72,6 +72,7 @@ public class LoginActivity extends Activity {
 
         namePicker.setOnCountryChangeListener(countryChangeListener);
         codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());
+        countryCode = namePicker.getSelectedCountryCode();
 
         if (!checkPermission())
             requestPermission();
@@ -329,6 +330,7 @@ public class LoginActivity extends Activity {
         public void onCountrySelected() {
             codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());
             countryCode = namePicker.getSelectedCountryCode();
+            PPLog.e("Country code : ", countryCode);
         }
     };
 

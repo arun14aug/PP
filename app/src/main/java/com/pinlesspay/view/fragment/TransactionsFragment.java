@@ -62,7 +62,7 @@ public class TransactionsFragment extends Fragment {
             public void onClick(View view, int position) {
                 Fragment fragment = new TransactionDetailFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", transactionArrayList.get(position).getDonationID());
+                bundle.putString("id", transactionArrayList.get(position).getInvoiceNo());
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity) activity)
                         .getSupportFragmentManager();

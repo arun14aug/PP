@@ -27,6 +27,7 @@ public class RecurringDetailFragment extends Fragment implements View.OnClickLis
 
     private Activity activity;
     //    private ImageView img_back, img_menu, img_transaction_status;
+    private ImageView icon_account;
     private MyTextView txt_amount, txt_recurring_time, txt_date, txt_category, txt_card_name, txt_card_number;
     private Toolbar mToolbar;
 
@@ -66,6 +67,8 @@ public class RecurringDetailFragment extends Fragment implements View.OnClickLis
         ImageView img_menu = (ImageView) rootView.findViewById(R.id.img_menu);
         ImageView img_transaction_status = (ImageView) rootView.findViewById(R.id.img_transaction_status);
 
+        icon_account = (ImageView) rootView.findViewById(R.id.icon_account);
+
         img_back.setOnClickListener(this);
         img_menu.setOnClickListener(this);
 
@@ -79,13 +82,24 @@ public class RecurringDetailFragment extends Fragment implements View.OnClickLis
         ArrayList<Recurring> recurringArrayList = ModelManager.getInstance().getScheduleManager().getRecurring(activity, false, 1);
         for (int i = 0; i < recurringArrayList.size(); i++) {
             Recurring recurring = recurringArrayList.get(i);
-            if (recurring.getDonationScheduleId().equalsIgnoreCase(id)) {
+            if (recurring.getId().equalsIgnoreCase(id)) {
                 txt_amount.setText(recurring.getPaymentFrom());
                 txt_recurring_time.setText(recurring.getNextScheduleRunDate());
-                txt_date.setText(recurring.getScheduleStartDate());
+                txt_date.setText(recurring.getNextScheduleRunDate());
                 txt_category.setText(recurring.getDonationName());
-                txt_card_name.setText(recurring.getCardType());
-                txt_card_number.setText(recurring.getMaskCardNumber());
+                txt_card_name.setText(recurring.getAccountType());
+                txt_card_number.setText(recurring.getPaymentFrom());
+                if (recurring.getAccountType().equalsIgnoreCase("Card")) {
+                    if (recurring.getCardType().equalsIgnoreCase("MasterCard"))
+                        icon_account.setImageResource(R.drawable.mastercard_round);
+                    else if (recurring.getCardType().equalsIgnoreCase("AMEX"))
+                        icon_account.setImageResource(R.drawable.american_round);
+                    else if (recurring.getCardType().equalsIgnoreCase("DiscoverCard"))
+                        icon_account.setImageResource(R.drawable.discover_round);
+                    else if (recurring.getCardType().equalsIgnoreCase("AmericanCan"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                } else if (recurring.getAccountType().equalsIgnoreCase("Bank"))
+                    icon_account.setImageResource(R.drawable.bank_round);
                 break;
             }
         }

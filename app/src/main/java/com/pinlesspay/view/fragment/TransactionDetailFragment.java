@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class TransactionDetailFragment extends Fragment implements View.OnClickListener {
 
     private Activity activity;
-    //    private ImageView img_back, img_menu, img_transaction_status;
+    private ImageView icon_account;
     private MyTextView txt_amount, txt_status, txt_date, txt_transaction_heading, txt_id, txt_card_name, txt_card_number;
     private Toolbar mToolbar;
 
@@ -66,6 +66,7 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
         ImageView img_back = (ImageView) rootView.findViewById(R.id.img_back);
         ImageView img_menu = (ImageView) rootView.findViewById(R.id.img_menu);
         ImageView img_transaction_status = (ImageView) rootView.findViewById(R.id.img_transaction_status);
+        icon_account = (ImageView) rootView.findViewById(R.id.icon_account);
 
         img_back.setOnClickListener(this);
         img_menu.setOnClickListener(this);
@@ -80,14 +81,27 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
         ArrayList<Transaction> transactions = ModelManager.getInstance().getScheduleManager().getTransactions(activity, false, 1);
         for (int i = 0; i < transactions.size(); i++) {
             Transaction transaction = transactions.get(i);
-            if (transaction.getDonationID().equalsIgnoreCase(id)) {
-                txt_amount.setText(transaction.getTranAmount());
-                txt_status.setText(transaction.getProcessorAuthMsg());
+            if (transaction.getInvoiceNo().equalsIgnoreCase(id)) {
+                txt_amount.setText(activity.getString(R.string.dollar) + transaction.getTranAmount());
+                txt_status.setText(transaction.getStatus());
                 txt_date.setText(transaction.getTranDate());
-                txt_transaction_heading.setText(transaction.getTranSource());
-                txt_id.setText(transaction.getDonationID());
-                txt_card_name.setText(transaction.getNameOnCard());
-                txt_card_number.setText(transaction.getCardNumber());
+                txt_transaction_heading.setText(transaction.getDonationName());
+                txt_id.setText(transaction.getInvoiceNo());
+                txt_card_name.setText(transaction.getPaymentType());
+                txt_card_number.setText(transaction.getPaymentFrom());
+
+                if (transaction.getPaymentType().equalsIgnoreCase("Card")) {
+                    if (transaction.getCardTypeCode().equalsIgnoreCase("MasterCard"))
+                        icon_account.setImageResource(R.drawable.mastercard_round);
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("AMEX"))
+                        icon_account.setImageResource(R.drawable.american_round);
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("DiscoverCard"))
+                        icon_account.setImageResource(R.drawable.discover_round);
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("AmericanCan"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                } else if (transaction.getPaymentType().equalsIgnoreCase("Bank"))
+                    icon_account.setImageResource(R.drawable.bank_round);
+
                 break;
             }
         }

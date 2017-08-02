@@ -12,7 +12,10 @@
         android:background="@color/transparent"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/padding_10">
+        android:paddingBottom="@dimen/padding_5"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10"
+        android:paddingTop="@dimen/padding_5">
 
         <ImageView
             android:id="@+id/icon_menu_option"
@@ -29,10 +32,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
+            android:padding="@dimen/padding_10"
             android:text="@string/app_name"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_xlarge"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </LinearLayout>
 

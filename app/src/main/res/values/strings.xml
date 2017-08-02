@@ -109,4 +109,5 @@
     <string name="new_ticket">New Ticket</string>
     <string name="we_would_love_to_hear">We would love to hear some ideas from you</string>
     <string name="describe_your_problem">Describe your problem and we do our best to help you with</string>
+    <string name="dollar">$</string>
 </resources>
