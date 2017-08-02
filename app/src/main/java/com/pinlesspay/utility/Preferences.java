@@ -3,8 +3,8 @@ package com.pinlesspay.utility;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by mukesh on 22/4/15.
+/*
+ * Created by arun.sharma on 22/4/15.
  */
 public class Preferences {
 
@@ -14,16 +14,16 @@ public class Preferences {
     private static final int MODE = Context.MODE_PRIVATE;
     //User Details
     public static final String LOGIN = "login";
-    public static final String EMAIL = "email";
+    //    public static final String EMAIL = "email";
     public static final String OTP_SENT = "otp_sent";
 
-    public static final String REGISTRATION = "registration";
-    public static final String USER_ID = "user_id";
+//    public static final String REGISTRATION = "registration";
+//    public static final String USER_ID = "user_id";
 
     public static final String LOGOUT = "Logout";
     public static final String FORGET_PASS = "forget_pass";
-    public static final String PASSWORD = "password";
-    public static final String DEVICE_ID = "device_id";
+    //    public static final String PASSWORD = "password";
+//    public static final String DEVICE_ID = "device_id";
     public static final String AUTH_TOKEN = "auth_token";
     public static final String UUID = "uuid";
     public static final String MAC_ADDRESS = "mac_address";
@@ -88,18 +88,18 @@ public class Preferences {
 
     // execute at signup time.
     public static void clearAllPreference(Context context) {
-       // ModelManager.getInstance().clearManagerInstance();
+        // ModelManager.getInstance().clearManagerInstance();
         getEditor(context).putString(LOGIN, null).commit();
-        getEditor(context).putString(REGISTRATION, null).commit();
-        getEditor(context).putString(USER_ID, null).commit();
         getEditor(context).putString(UUID, null).commit();
-        getEditor(context).putString(PASSWORD, null).commit();
-        getEditor(context).putString(DEVICE_ID, null).commit();
         getEditor(context).putString(MAC_ADDRESS, null).commit();
-        getEditor(context).putString(EMAIL, null).commit();
         getEditor(context).putString(AUTH_TOKEN, null).commit();
         getEditor(context).putString(DEVICE_NAME, null).commit();
         getEditor(context).putString(OTP_SENT, null).commit();
+        getEditor(context).putString(MOBILE_NUMBER, null).commit();
+        getEditor(context).putString(FORMATTED_MOBILE_NUMBER, null).commit();
+//        getEditor(context).putString(EMAIL, null).commit();
+//        getEditor(context).putString(PASSWORD, null).commit();
+//        getEditor(context).putString(DEVICE_ID, null).commit();
     }
 
 

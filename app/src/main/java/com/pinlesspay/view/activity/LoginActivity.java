@@ -36,8 +36,9 @@ import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.RECEIVE_SMS;
 
 /*
  * Created by arun.sharma on 7/17/2017.
@@ -186,12 +187,15 @@ public class LoginActivity extends Activity {
 
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(), READ_PHONE_STATE);
+        int result1 = ContextCompat.checkSelfPermission(getApplicationContext(), READ_SMS);
+        int result2 = ContextCompat.checkSelfPermission(getApplicationContext(), RECEIVE_SMS);
 
-        return result == PackageManager.PERMISSION_GRANTED;
+        return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+                && result2 == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
-        String[] permissions = new String[]{READ_PHONE_STATE};
+        String[] permissions = new String[]{READ_PHONE_STATE, READ_SMS, RECEIVE_SMS};
         ActivityCompat.requestPermissions(this, permissions, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
     }
@@ -201,11 +205,13 @@ public class LoginActivity extends Activity {
         switch (requestCode) {
             case ASK_MULTIPLE_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0) {
-                    final String[] perm = new String[]{READ_PHONE_STATE};
+                    final String[] perm = new String[]{READ_PHONE_STATE, READ_SMS, RECEIVE_SMS};
                     boolean phoneState = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (!(phoneState)) {
+                    boolean readSMS = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean receiveSMS = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    if (!(phoneState && readSMS && receiveSMS)) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
+                            if (shouldShowRequestPermissionRationale(READ_PHONE_STATE)) {
                                 showMessageOKCancel(getString(R.string.permission_alert),
                                         new DialogInterface.OnClickListener() {
                                             @Override
@@ -349,11 +355,15 @@ public class LoginActivity extends Activity {
             finish();
         } else if (message.contains("Login False")) {
             // showMatchHistoryList();
-            Utils.showMessage(activity, "Please check your credentials!");
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "Login False");
             Utils.dismissLoading();
         } else if (message.equalsIgnoreCase("Login Network Error")) {
-            Utils.showMessage(activity, "Network Error! Please try again");
+            Utils.showMessage(activity, getString(R.string.network_error));
             PPLog.e(TAG, "Login Network Error");
             Utils.dismissLoading();
         }

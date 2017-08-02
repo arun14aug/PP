@@ -10,17 +10,20 @@ public class ModelManager {
 
     private AuthManager authMgr;
     private ScheduleManager scheduleManager;
+    private PaymentManager paymentManager;
 
     private ModelManager() {
 
         authMgr = new AuthManager();
         scheduleManager = new ScheduleManager();
+        paymentManager = new PaymentManager();
     }
 
     public void clearManagerInstance() {
 
         this.authMgr = null;
         this.scheduleManager = null;
+        this.paymentManager = null;
     }
 
     public static ModelManager getInstance() {
@@ -45,5 +48,9 @@ public class ModelManager {
 
     public ScheduleManager getScheduleManager() {
         return scheduleManager;
+    }
+
+    public PaymentManager getPaymentManager() {
+        return paymentManager;
     }
 }

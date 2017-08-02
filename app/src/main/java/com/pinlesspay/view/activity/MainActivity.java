@@ -26,16 +26,10 @@ import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.fragment.DonationFragment;
-import com.pinlesspay.view.fragment.PaymentMethodsFragment;
 import com.pinlesspay.view.fragment.RecurringFragment;
 import com.pinlesspay.view.fragment.ScheduleFragment;
-import com.pinlesspay.view.fragment.SecurityFragment;
 import com.pinlesspay.view.fragment.SuggestionsFragment;
-import com.pinlesspay.view.fragment.SupportFragment;
 import com.pinlesspay.view.fragment.TransactionsFragment;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import de.greenrobot.event.EventBus;
 
@@ -43,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         View.OnClickListener {
 
     private String TAG = MainActivity.class.getSimpleName();
-
+    private Activity activity;
     private FragmentManager fragmentManager;
     private boolean backer = false;
     private MyTextView tvTitle;
@@ -53,7 +47,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(
+
+        activity = MainActivity.this;
+
+        LocalBroadcastManager.getInstance(activity).registerReceiver(
                 mHeaderReceiver, new IntentFilter("Header"));
 
         img_donation = (ImageView) findViewById(R.id.img_donation);
@@ -176,29 +173,31 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                fragment = new PaymentMethodsFragment();
-                title = getString(R.string.title_payment_method);
+//                fragment = new PaymentMethodsFragment();
+//                title = getString(R.string.title_payment_method);
+                startActivity(new Intent(activity, PaymentMethodsActivity.class));
                 break;
             case 1:
-                fragment = new SecurityFragment();
-                title = getString(R.string.title_security);
+//                fragment = new SecurityFragment();
+//                title = getString(R.string.title_security);
+                startActivity(new Intent(activity, SecurityActivity.class));
                 break;
             case 2:
 //                fragment = new TellYourFriendsFragment();
 //                title = getString(R.string.title_tell_your);
-                Intent intent = new Intent(MainActivity.this, TellFriendActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(activity, TellFriendActivity.class));
                 break;
             case 3:
-                fragment = new SupportFragment();
-                title = getString(R.string.title_support);
+//                fragment = new SupportFragment();
+//                title = getString(R.string.title_support);
+                startActivity(new Intent(activity, SupportActivity.class));
                 break;
             case 4:
                 fragment = new SuggestionsFragment();
                 title = getString(R.string.title_suggestions);
                 break;
             case 7:
-                showAlert(MainActivity.this, getString(R.string.lock_alert));
+                showAlert(activity, getString(R.string.lock_alert));
                 break;
             default:
                 break;
@@ -215,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
-    public void showAlert(Activity activity, String msg) {
+    public void showAlert(final Activity activity, String msg) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
         alertDialogBuilder
                 .setTitle("Logout!")
@@ -223,15 +222,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Utils.showLoading(MainActivity.this);
-                        JSONObject jsonObject = new JSONObject();
-                        try {
-                            jsonObject.put("device_type", "android");
-//                            jsonObject.put("device_token", ModelManager.getInstance().getAuthManager().getDeviceToken());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-//                        ModelManager.getInstance().getAuthManager().logout(MainActivity.this, jsonObject);
+                        Preferences.clearAllPreference(activity);
+                        startActivity(new Intent(activity, LoginActivity.class));
+                        finish();
+
                         dialog.cancel();
                     }
                 })
@@ -256,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     finish();
                 else {
                     backer = true;
-                    Toast.makeText(MainActivity.this, "Press again to exit the app.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Press again to exit the app.", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 super.onBackPressed();
@@ -306,16 +300,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (message.equalsIgnoreCase("Logout True")) {
             Utils.dismissLoading();
             PPLog.e(TAG, "Logout True");
-            Preferences.clearAllPreference(MainActivity.this);
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            Preferences.clearAllPreference(activity);
+            startActivity(new Intent(activity, LoginActivity.class));
             finish();
         } else if (message.contains("Logout False")) {
             // showMatchHistoryList();
-            Utils.showMessage(MainActivity.this, "Please check your credentials!");
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "Logout False");
             Utils.dismissLoading();
         } else if (message.equalsIgnoreCase("Logout Network Error")) {
-            Utils.showMessage(MainActivity.this, "Network Error! Please try again");
+            Utils.showMessage(activity, getString(R.string.network_error));
             PPLog.e(TAG, "Logout Network Error");
             Utils.dismissLoading();
         }

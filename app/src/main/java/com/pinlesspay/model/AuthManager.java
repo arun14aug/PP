@@ -140,5 +140,42 @@ public class AuthManager {
         requestQueue.add(jsonObjReq);
     }
 
+    public void userProfile(final Activity activity, JSONObject jsonObject) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.PROFILE, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        PPLog.e("Success Response : ", "Response: " + response.toString());
+
+                        try {
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+//                                if (response.has("data"))
+//                                    if (response.getJSONObject("data").has("AuthenticationToken"))
+//                                        Preferences.writeString(activity, Preferences.AUTH_TOKEN, response.getJSONObject("data").getString("AuthenticationToken"));
+                                if (response.has("data")) {
+                                    String data = response.getString("data");
+                                    String[] auth = data.split("\"Msg\": \"");
+                                    String auth_token = auth[1].substring(0, auth[1].length() - 4);
+                                    EventBus.getDefault().postSticky("Profile True@#@" + auth_token);
+                                }
+                            } else
+                                EventBus.getDefault().postSticky("Profile False@#@" + response.getString("Message"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().postSticky("Profile False");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().postSticky("Profile False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
 
 }

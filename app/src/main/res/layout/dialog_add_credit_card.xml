@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_color"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_color"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/padding_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_5"
+                android:layout_marginRight="@dimen/padding_5"
+                android:text="@string/new_card"
+                android:textColor="@color/new_bank_acc_text"
+                android:textSize="@dimen/app_name_text_size"
+                android:textStyle="normal" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/about"
+                android:padding="@dimen/padding_5"
+                android:src="@drawable/visa" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/about"
+                android:padding="@dimen/padding_5"
+                android:src="@drawable/mastercard" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/about"
+                android:padding="@dimen/padding_5"
+                android:src="@drawable/american_express" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/about"
+                android:padding="@dimen/padding_5"
+                android:src="@drawable/discover" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/padding_5"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.pinlesspay.customUi.MyEditText
+                android:id="@+id/et_card_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/card_number"
+                android:inputType="number"
+                android:padding="@dimen/padding_7"
+                android:textColor="@color/login_text_color"
+                android:textSize="@dimen/text_size_large" />
+
+            <View
+                android:id="@+id/vw_card_number"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_1"
+                android:layout_marginLeft="@dimen/padding_5"
+                android:layout_marginRight="@dimen/padding_5"
+                android:background="@color/login_line_color" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_5"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="@dimen/cc_dates"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/edt_mm"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/mm"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textColor="@color/login_text_color"
+                    android:textSize="@dimen/text_size_large" />
+
+                <View
+                    android:id="@+id/vw_mm"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/padding_5"
+                    android:layout_marginRight="@dimen/padding_5"
+                    android:layout_height="@dimen/padding_1"
+                    android:background="@color/login_line_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/cc_cvv"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/padding_10"
+                android:layout_marginLeft="@dimen/padding_15"
+                android:layout_marginRight="@dimen/padding_10"
+                android:layout_marginStart="@dimen/padding_15"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/edt_yy"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/yy"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textColor="@color/login_text_color"
+                    android:textSize="@dimen/text_size_large" />
+
+                <View
+                    android:id="@+id/vw_yy"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_1"
+                    android:background="@color/login_line_color" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="@dimen/cc_cvv"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding_10"
+                android:layout_marginRight="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.pinlesspay.customUi.MyEditText
+                    android:id="@+id/edt_cvv"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/cvv"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:padding="@dimen/padding_7"
+                    android:textColor="@color/login_text_color"
+                    android:textSize="@dimen/text_size_large" />
+
+                <View
+                    android:id="@+id/vw_cvv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_1"
+                    android:background="@color/login_line_color" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="@dimen/padding_30"
+            android:layout_marginTop="@dimen/padding_5"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.pinlesspay.customUi.MyEditText
+                android:id="@+id/et_card_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/card_name"
+                android:inputType="text"
+                android:padding="@dimen/padding_7"
+                android:textColor="@color/new_bank_acc_text"
+                android:textSize="@dimen/text_size_large" />
+
+            <View
+                android:id="@+id/vw_card_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_1"
+                android:layout_marginLeft="@dimen/padding_5"
+                android:layout_marginRight="@dimen/padding_5"
+                android:background="@color/login_line_color" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10"
+        android:background="@color/bg_color"
+        android:clickable="true"
+        android:gravity="end"
+        android:orientation="vertical">
+
+
+        <com.pinlesspay.customUi.MyButton
+            android:id="@+id/btn_add"
+            android:layout_width="90dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_margin="@dimen/padding_5"
+            android:background="@drawable/button_blue_bg"
+            android:text="@string/add"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="normal" />
+    </LinearLayout>
+</LinearLayout>

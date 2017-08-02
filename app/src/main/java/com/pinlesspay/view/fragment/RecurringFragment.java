@@ -172,12 +172,12 @@ public class RecurringFragment extends Fragment {
             }
         } else if (message.contains("Recurring False")) {
             // showMatchHistoryList();
-            Utils.showMessage(activity, activity.getString(R.string.please_wait));
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "Recurring False");
-            Utils.dismissLoading();
-        } else if (message.equalsIgnoreCase("Recurring Network Error")) {
-            Utils.showMessage(activity, "Network Error! Please try again");
-            PPLog.e(TAG, "Recurring Network Error");
             Utils.dismissLoading();
         }
 

@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyEditText;
@@ -31,7 +32,7 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
     private String TAG = VerifyActivity.this.getClass().getName();
     private MyEditText et_code_1, et_code_2, et_code_3, et_code_4;
     private View vw_code_1, vw_code_2, vw_code_3, vw_code_4;
-    private MyTextView txt_phone_number, txt_resend;
+    private MyTextView txt_resend;
     private boolean isBtnEnable = false;
     private Activity activity;
     private String mobile = "";
@@ -54,47 +55,32 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
         vw_code_4 = findViewById(R.id.vw_code_4);
 
         txt_resend = (MyTextView) findViewById(R.id.txt_resend_code);
-        txt_phone_number = (MyTextView) findViewById(R.id.txt_phone_number);
+        MyTextView txt_phone_number = (MyTextView) findViewById(R.id.txt_phone_number);
 
         txt_phone_number.setText(Preferences.readString(activity, Preferences.FORMATTED_MOBILE_NUMBER, ""));
+        txt_phone_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call api for resend message
+            }
+        });
+
+        ImageView img_back = (ImageView) findViewById(R.id.img_back);
+        img_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(activity, LoginActivity.class));
+                finish();
+            }
+        });
 
         et_code_1.setOnFocusChangeListener(this);
         et_code_2.setOnFocusChangeListener(this);
         et_code_3.setOnFocusChangeListener(this);
         et_code_4.setOnFocusChangeListener(this);
 
-        new CountDownTimer(30000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-
-
-                int secondsUntilFinished = (int) (millisUntilFinished / 1000);
-
-                int seconds = secondsUntilFinished % 60;
-                int mins = secondsUntilFinished / 60;
-
-//                String time = String.format(Locale.getDefault(),"%d:%d",
-//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60,
-//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60);
-                String time = "", min = "", sec = "";
-                if (seconds < 10)
-                    sec = "0" + seconds;
-                else
-                    sec = "" + seconds;
-                if (mins < 10)
-                    min = "0" + mins;
-                else
-                    min = "" + mins;
-                time = min + ":" + sec;
-                txt_resend.setText(getString(R.string.resend_code_within) + " " + time);
-            }
-
-            public void onFinish() {
-                txt_resend.setText(getString(R.string.resend_code));
-                txt_resend.setTextColor(Utils.setColor(activity, R.color.light_blue));
-            }
-        }.start();
-
+        // start count down timer
+        setTimer();
 
         et_code_1.addTextChangedListener(new TextWatcher() {
             @Override
@@ -194,6 +180,50 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
         });
     }
 
+    // Automatically read OTP from SMS
+    public void recivedSms(String message) {
+        if (!Utils.isEmptyString(message)) {
+            et_code_1.setText(message.substring(0, 1));
+            et_code_2.setText(message.substring(1, 2));
+            et_code_3.setText(message.substring(2, 3));
+            et_code_4.setText(message.substring(3, 4));
+        }
+    }
+
+    private void setTimer() {
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+
+                int secondsUntilFinished = (int) (millisUntilFinished / 1000);
+
+                int seconds = secondsUntilFinished % 60;
+                int mins = secondsUntilFinished / 60;
+
+//                String time = String.format(Locale.getDefault(),"%d:%d",
+//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60,
+//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60);
+                String time, min, sec;
+                if (seconds < 10)
+                    sec = "0" + seconds;
+                else
+                    sec = "" + seconds;
+                if (mins < 10)
+                    min = "0" + mins;
+                else
+                    min = "" + mins;
+                time = min + ":" + sec;
+                txt_resend.setText(getString(R.string.resend_code_within) + " " + time);
+            }
+
+            public void onFinish() {
+                txt_resend.setText(getString(R.string.resend_code));
+                txt_resend.setTextColor(Utils.setColor(activity, R.color.light_blue));
+            }
+        }.start();
+    }
+
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         switch (v.getId()) {
@@ -232,6 +262,12 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(activity, LoginActivity.class));
+        finish();
+    }
 
     private boolean validate() {
         if (et_code_1.getText().toString().trim().length() == 0) {
@@ -277,11 +313,15 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
             finish();
         } else if (message.contains("Verify False")) {
             // showMatchHistoryList();
-            Utils.showMessage(activity, "Please check your credentials!");
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "Verify False");
             Utils.dismissLoading();
         } else if (message.equalsIgnoreCase("Verify Network Error")) {
-            Utils.showMessage(activity, "Network Error! Please try again");
+            Utils.showMessage(activity, getString(R.string.network_error));
             PPLog.e(TAG, "Logout Network Error");
             Utils.dismissLoading();
         }

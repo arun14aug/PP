@@ -172,12 +172,12 @@ public class ScheduleFragment extends Fragment {
             }
         } else if (message.contains("GetSchedule False")) {
             // showMatchHistoryList();
-            Utils.showMessage(activity, activity.getString(R.string.please_wait));
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "GetSchedule False");
-            Utils.dismissLoading();
-        } else if (message.equalsIgnoreCase("GetSchedule Network Error")) {
-            Utils.showMessage(activity, "Network Error! Please try again");
-            PPLog.e(TAG, "GetSchedule Network Error");
             Utils.dismissLoading();
         }
 
