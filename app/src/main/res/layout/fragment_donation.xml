@@ -67,6 +67,6 @@
         android:padding="@dimen/padding_5"
         android:text="@string/make_donation"
         android:textColor="@color/white"
-        android:textSize="@dimen/medium_large_text_size" />
+        android:textSize="@dimen/text_size_medium" />
 
 </LinearLayout>

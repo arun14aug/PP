@@ -86,7 +86,7 @@
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
                     <View
@@ -132,7 +132,7 @@
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
                     <View
@@ -177,7 +177,7 @@
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
                     <View
@@ -222,7 +222,7 @@
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
                     <View
@@ -267,7 +267,7 @@
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
                     <View
@@ -313,7 +313,7 @@
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
                     <View
@@ -359,7 +359,7 @@
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
                     <View
@@ -415,7 +415,7 @@
                             android:paddingBottom="@dimen/padding_10"
                             android:paddingTop="@dimen/padding_10"
                             android:textColor="@color/waterfall_text_color"
-                            android:textSize="@dimen/text_size_xlarge"
+                            android:textSize="@dimen/text_size_large"
                             android:textStyle="normal" />
 
                         <View
@@ -445,7 +445,7 @@
                             android:paddingBottom="@dimen/padding_10"
                             android:paddingTop="@dimen/padding_10"
                             android:textColor="@color/waterfall_text_color"
-                            android:textSize="@dimen/text_size_xlarge"
+                            android:textSize="@dimen/text_size_large"
                             android:textStyle="normal" />
 
                         <View
@@ -486,10 +486,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:paddingTop="@dimen/padding_10"
                         android:text="@string/country"
                         android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_xlarge"
+                        android:textSize="@dimen/text_size_small"
                         android:textStyle="normal" />
 
                     <com.hbb20.CountryCodePicker
@@ -517,7 +516,7 @@
             <com.pinlesspay.customUi.MyButton
                 android:id="@+id/btn_save"
                 android:layout_width="120dp"
-                android:layout_height="@dimen/toolbar_height"
+                android:layout_height="@dimen/button_height"
                 android:layout_gravity="end"
                 android:layout_marginBottom="@dimen/padding_10"
                 android:layout_marginLeft="@dimen/padding_10"
@@ -528,7 +527,7 @@
                 android:padding="@dimen/padding_5"
                 android:text="@string/save"
                 android:textColor="@color/white"
-                android:textSize="@dimen/medium_large_text_size" />
+                android:textSize="@dimen/text_size_medium" />
 
         </LinearLayout>
     </ScrollView>

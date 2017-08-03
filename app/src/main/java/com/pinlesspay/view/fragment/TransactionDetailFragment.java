@@ -93,11 +93,17 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
                 if (transaction.getPaymentType().equalsIgnoreCase("Card")) {
                     if (transaction.getCardTypeCode().equalsIgnoreCase("MasterCard"))
                         icon_account.setImageResource(R.drawable.mastercard_round);
-                    else if (transaction.getCardTypeCode().equalsIgnoreCase("AMEX"))
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("Amex"))
                         icon_account.setImageResource(R.drawable.american_round);
-                    else if (transaction.getCardTypeCode().equalsIgnoreCase("DiscoverCard"))
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("Discover"))
                         icon_account.setImageResource(R.drawable.discover_round);
-                    else if (transaction.getCardTypeCode().equalsIgnoreCase("AmericanCan"))
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("Visa"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("DinnersClub"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("JCB"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                    else if (transaction.getCardTypeCode().equalsIgnoreCase("DINERS"))
                         icon_account.setImageResource(R.drawable.visa_round);
                 } else if (transaction.getPaymentType().equalsIgnoreCase("Bank"))
                     icon_account.setImageResource(R.drawable.bank_round);

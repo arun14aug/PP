@@ -12,6 +12,7 @@ import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
 import com.pinlesspay.customUi.MyEditText;
 import com.pinlesspay.model.ModelManager;
+import com.pinlesspay.model.User;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.ServiceApi;
@@ -19,6 +20,8 @@ import com.pinlesspay.utility.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
 
@@ -36,6 +39,7 @@ public class ProfileActivity extends Activity {
 //            vw_address_1, vw_address_2, vw_city, vw_state, vw_zip;
     private CountryCodePicker namePicker;
     private String countryCode = "";
+    private ArrayList<User> userArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,7 @@ public class ProfileActivity extends Activity {
                         jsonObject1.put("State", et_state.getText().toString().trim());
                         jsonObject1.put("Zip", et_zip.getText().toString().trim());
                         jsonObject1.put("Country", countryCode);
-                        jsonObject1.put("Address", et_address_1.getText().toString().trim());
+                        jsonObject1.put("Address1", et_address_1.getText().toString().trim());
                         jsonObject1.put("Address2", et_address_2.getText().toString().trim());
                         jsonObject.put("data", jsonObject1);
 
@@ -109,6 +113,9 @@ public class ProfileActivity extends Activity {
                 }
             }
         });
+
+        Utils.showLoading(activity);
+        ModelManager.getInstance().getAuthManager().getProfile(activity, true, 1);
     }
 
     CountryCodePicker.OnCountryChangeListener countryChangeListener = new CountryCodePicker.OnCountryChangeListener() {
@@ -117,6 +124,27 @@ public class ProfileActivity extends Activity {
             countryCode = namePicker.getSelectedCountryCode();
         }
     };
+
+    private void setData() {
+        if (!Utils.isEmptyString(userArrayList.get(0).getFirstName()))
+        et_first_name.setText(userArrayList.get(0).getFirstName());
+        if (!Utils.isEmptyString(userArrayList.get(0).getLastName()))
+        et_last_name.setText(userArrayList.get(0).getLastName());
+        if (!Utils.isEmptyString(userArrayList.get(0).getEmail()))
+        et_email.setText(userArrayList.get(0).getEmail());
+        if (!Utils.isEmptyString(userArrayList.get(0).getMobileNo()))
+        et_mobile.setText(userArrayList.get(0).getMobileNo());
+        if (!Utils.isEmptyString(userArrayList.get(0).getAddress1()))
+        et_address_1.setText(userArrayList.get(0).getAddress1());
+        if (!Utils.isEmptyString(userArrayList.get(0).getAddress2()))
+        et_address_2.setText(userArrayList.get(0).getAddress2());
+        if (!Utils.isEmptyString(userArrayList.get(0).getCity()))
+        et_city.setText(userArrayList.get(0).getCity());
+        if (!Utils.isEmptyString(userArrayList.get(0).getState()))
+        et_state.setText(userArrayList.get(0).getState());
+        if (!Utils.isEmptyString(userArrayList.get(0).getZip()))
+        et_zip.setText(userArrayList.get(0).getZip());
+    }
 
     private boolean isValidate() {
         if (et_first_name.getText().toString().trim().length() == 0) {
@@ -135,23 +163,23 @@ public class ProfileActivity extends Activity {
             requestFocus(et_mobile);
             Utils.showMessage(activity, getString(R.string.please_enter_mobile));
             return false;
-        } else if (et_address_1.getText().toString().trim().length() == 0
-                && et_address_2.getText().toString().trim().length() == 0) {
-            requestFocus(et_address_1);
-            Utils.showMessage(activity, getString(R.string.please_enter_address));
-            return false;
-        } else if (et_city.getText().toString().trim().length() == 0) {
-            requestFocus(et_city);
-            Utils.showMessage(activity, getString(R.string.please_enter_city));
-            return false;
-        } else if (et_state.getText().toString().trim().length() == 0) {
-            requestFocus(et_state);
-            Utils.showMessage(activity, getString(R.string.please_enter_state));
-            return false;
-        } else if (et_zip.getText().toString().trim().length() == 0) {
-            requestFocus(et_zip);
-            Utils.showMessage(activity, getString(R.string.please_enter_zip));
-            return false;
+//        } else if (et_address_1.getText().toString().trim().length() == 0
+//                && et_address_2.getText().toString().trim().length() == 0) {
+//            requestFocus(et_address_1);
+//            Utils.showMessage(activity, getString(R.string.please_enter_address));
+//            return false;
+//        } else if (et_city.getText().toString().trim().length() == 0) {
+//            requestFocus(et_city);
+//            Utils.showMessage(activity, getString(R.string.please_enter_city));
+//            return false;
+//        } else if (et_state.getText().toString().trim().length() == 0) {
+//            requestFocus(et_state);
+//            Utils.showMessage(activity, getString(R.string.please_enter_state));
+//            return false;
+//        } else if (et_zip.getText().toString().trim().length() == 0) {
+//            requestFocus(et_zip);
+//            Utils.showMessage(activity, getString(R.string.please_enter_zip));
+//            return false;
         }
         return true;
     }
@@ -206,9 +234,21 @@ public class ProfileActivity extends Activity {
                 Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "Profile False");
             Utils.dismissLoading();
-        } else if (message.equalsIgnoreCase("Profile Network Error")) {
-            Utils.showMessage(activity, getString(R.string.network_error));
-            PPLog.e(TAG, "Profile Network Error");
+        } else if (message.contains("ProfileInfo True")) {
+            Utils.dismissLoading();
+            PPLog.e(TAG, "ProfileInfo True");
+            userArrayList = ModelManager.getInstance().getAuthManager().getProfile(activity, false, 1);
+            if (userArrayList != null)
+                if (userArrayList.size() > 0)
+                    setData();
+        } else if (message.contains("ProfileInfo False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            PPLog.e(TAG, "Profile False");
             Utils.dismissLoading();
         }
 

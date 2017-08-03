@@ -4,7 +4,7 @@ package com.pinlesspay.view.adapter;
  * Created by Ravi on 29/07/15.
  */
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +21,11 @@ import java.util.ArrayList;
 public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyViewHolder> {
     private ArrayList<Recurring> data;
     private LayoutInflater inflater;
+    private Activity activity;
 
 
-    public RecurringAdapter(Context context, ArrayList<Recurring> data) {
-//        this.context = context;
+    public RecurringAdapter(Activity context, ArrayList<Recurring> data) {
+        this.activity = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -57,16 +58,22 @@ public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyVi
         holder.txt_recurring_time.setText(recurring.getScheduleName());
         holder.txt_next_date.setText(recurring.getNextScheduleRunDate());
         holder.txt_recurring_heading.setText(recurring.getDonationName());
-        holder.txt_amount.setText(recurring.getDonationAmount());
+        holder.txt_amount.setText(activity.getString(R.string.dollar) + recurring.getDonationAmount());
 
         if (recurring.getAccountType().equalsIgnoreCase("Card")) {
             if (recurring.getCardType().equalsIgnoreCase("MasterCard"))
                 holder.icon_account.setImageResource(R.drawable.mastercard_round);
-            else if (recurring.getCardType().equalsIgnoreCase("AMEX"))
+            else if (recurring.getCardType().equalsIgnoreCase("Amex"))
                 holder.icon_account.setImageResource(R.drawable.american_round);
-            else if (recurring.getCardType().equalsIgnoreCase("DiscoverCard"))
+            else if (recurring.getCardType().equalsIgnoreCase("Discover"))
                 holder.icon_account.setImageResource(R.drawable.discover_round);
-            else if (recurring.getCardType().equalsIgnoreCase("AmericanCan"))
+            else if (recurring.getCardType().equalsIgnoreCase("Visa"))
+                holder.icon_account.setImageResource(R.drawable.visa_round);
+            else if (recurring.getCardType().equalsIgnoreCase("DInnersClub"))
+                holder.icon_account.setImageResource(R.drawable.visa_round);
+            else if (recurring.getCardType().equalsIgnoreCase("JCB"))
+                holder.icon_account.setImageResource(R.drawable.visa_round);
+            else if (recurring.getCardType().equalsIgnoreCase("DINERS"))
                 holder.icon_account.setImageResource(R.drawable.visa_round);
         } else if (recurring.getAccountType().equalsIgnoreCase("Bank"))
             holder.icon_account.setImageResource(R.drawable.bank_round);
@@ -88,7 +95,7 @@ public class RecurringAdapter extends RecyclerView.Adapter<RecurringAdapter.MyVi
             txt_recurring_heading = (TextView) itemView.findViewById(R.id.txt_recurring_heading);
             txt_amount = (TextView) itemView.findViewById(R.id.txt_amount);
 
-            icon_account = (ImageView)itemView.findViewById(R.id.icon_account);
+            icon_account = (ImageView) itemView.findViewById(R.id.icon_account);
         }
     }
 }

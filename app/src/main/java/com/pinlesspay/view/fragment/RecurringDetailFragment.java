@@ -83,7 +83,7 @@ public class RecurringDetailFragment extends Fragment implements View.OnClickLis
         for (int i = 0; i < recurringArrayList.size(); i++) {
             Recurring recurring = recurringArrayList.get(i);
             if (recurring.getId().equalsIgnoreCase(id)) {
-                txt_amount.setText(recurring.getPaymentFrom());
+                txt_amount.setText(activity.getString(R.string.dollar) + recurring.getDonationAmount());
                 txt_recurring_time.setText(recurring.getNextScheduleRunDate());
                 txt_date.setText(recurring.getNextScheduleRunDate());
                 txt_category.setText(recurring.getDonationName());
@@ -92,11 +92,17 @@ public class RecurringDetailFragment extends Fragment implements View.OnClickLis
                 if (recurring.getAccountType().equalsIgnoreCase("Card")) {
                     if (recurring.getCardType().equalsIgnoreCase("MasterCard"))
                         icon_account.setImageResource(R.drawable.mastercard_round);
-                    else if (recurring.getCardType().equalsIgnoreCase("AMEX"))
+                    else if (recurring.getCardType().equalsIgnoreCase("Amex"))
                         icon_account.setImageResource(R.drawable.american_round);
-                    else if (recurring.getCardType().equalsIgnoreCase("DiscoverCard"))
+                    else if (recurring.getCardType().equalsIgnoreCase("Discover"))
                         icon_account.setImageResource(R.drawable.discover_round);
-                    else if (recurring.getCardType().equalsIgnoreCase("AmericanCan"))
+                    else if (recurring.getCardType().equalsIgnoreCase("Visa"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                    else if (recurring.getCardType().equalsIgnoreCase("DinnersClub"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                    else if (recurring.getCardType().equalsIgnoreCase("JCB"))
+                        icon_account.setImageResource(R.drawable.visa_round);
+                    else if (recurring.getCardType().equalsIgnoreCase("DINERS"))
                         icon_account.setImageResource(R.drawable.visa_round);
                 } else if (recurring.getAccountType().equalsIgnoreCase("Bank"))
                     icon_account.setImageResource(R.drawable.bank_round);

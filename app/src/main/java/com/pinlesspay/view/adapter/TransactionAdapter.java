@@ -53,11 +53,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (transaction.getPaymentType().equalsIgnoreCase("Card")) {
             if (transaction.getCardTypeCode().equalsIgnoreCase("MasterCard"))
                 holder.icon_account.setImageResource(R.drawable.mastercard_round);
-            else if (transaction.getCardTypeCode().equalsIgnoreCase("AMEX"))
+            else if (transaction.getCardTypeCode().equalsIgnoreCase("Amex"))
                 holder.icon_account.setImageResource(R.drawable.american_round);
-            else if (transaction.getCardTypeCode().equalsIgnoreCase("DiscoverCard"))
+            else if (transaction.getCardTypeCode().equalsIgnoreCase("Discover"))
                 holder.icon_account.setImageResource(R.drawable.discover_round);
-            else if (transaction.getCardTypeCode().equalsIgnoreCase("AmericanCan"))
+            else if (transaction.getCardTypeCode().equalsIgnoreCase("Visa"))
+                holder.icon_account.setImageResource(R.drawable.visa_round);
+            else if (transaction.getCardTypeCode().equalsIgnoreCase("DInnersClub"))
+                holder.icon_account.setImageResource(R.drawable.visa_round);
+            else if (transaction.getCardTypeCode().equalsIgnoreCase("JCB"))
+                holder.icon_account.setImageResource(R.drawable.visa_round);
+            else if (transaction.getCardTypeCode().equalsIgnoreCase("DINERS"))
                 holder.icon_account.setImageResource(R.drawable.visa_round);
         } else if (transaction.getPaymentType().equalsIgnoreCase("Bank"))
             holder.icon_account.setImageResource(R.drawable.bank_round);
