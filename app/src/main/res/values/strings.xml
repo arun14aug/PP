@@ -97,7 +97,7 @@
     <string name="new_card">New Card</string>
     <string name="card_number">Card Number</string>
     <string name="mm">MM</string>
-    <string name="yy">YYYY</string>
+    <string name="yy">YY</string>
     <string name="cvv">CVV</string>
     <string name="card_name">Card Name(optional)</string>
     <string name="error_message">Error Occurred! Please try again</string>
@@ -110,4 +110,6 @@
     <string name="we_would_love_to_hear">We would love to hear some ideas from you</string>
     <string name="describe_your_problem">Describe your problem and we do our best to help you with</string>
     <string name="dollar">$</string>
+    <string name="preferred">Preferred</string>
+    <string name="na">NA</string>
 </resources>

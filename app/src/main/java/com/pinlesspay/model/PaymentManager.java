@@ -50,7 +50,7 @@ public class PaymentManager {
         }
 
         PPLog.e("json data : ", jsonObject.toString());
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SCHEDULES, jsonObject,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.GET_ALL_DATA, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -60,8 +60,8 @@ public class PaymentManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                if (response.getJSONObject("data").has("Entities")) {
-                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
+                                if (response.has("data")) {
+                                    JSONArray jsonArray = response.getJSONArray("data");
                                     if (jsonArray == null)
                                         jsonArray = new JSONArray();
                                     int count = jsonArray.length();
@@ -128,7 +128,7 @@ public class PaymentManager {
         }
 
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SCHEDULES, jsonObject,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.GET_ALL_DATA, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
