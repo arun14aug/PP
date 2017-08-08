@@ -370,4 +370,41 @@ public class ScheduleManager {
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
         requestQueue.add(jsonObjReq);
     }
+
+    public void deleteRecurring(Activity activity, JSONObject jsonObject) {
+        PPLog.e("json data : ", jsonObject.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.DELETE_RECURRING_SCHEDULE, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "onSuccess  --> " + response.toString());
+
+                        try {
+
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                if (response.has("data")) {
+                                    JSONObject jsonObject1 = new JSONObject(response.getString("data"));
+                                    EventBus.getDefault().post("DeleteRecurring True@#@" + jsonObject1.getString("Msg"));
+                                }
+                            } else
+                                EventBus.getDefault().post("DeleteRecurring False");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post("DeleteRecurring False");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().post("DeleteRecurring False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
 }

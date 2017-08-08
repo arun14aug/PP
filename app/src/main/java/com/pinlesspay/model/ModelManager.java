@@ -11,12 +11,14 @@ public class ModelManager {
     private AuthManager authMgr;
     private ScheduleManager scheduleManager;
     private PaymentManager paymentManager;
+    private RestOfAllManager restOfAllManager;
 
     private ModelManager() {
 
         authMgr = new AuthManager();
         scheduleManager = new ScheduleManager();
         paymentManager = new PaymentManager();
+        restOfAllManager = new RestOfAllManager();
     }
 
     public void clearManagerInstance() {
@@ -24,6 +26,7 @@ public class ModelManager {
         this.authMgr = null;
         this.scheduleManager = null;
         this.paymentManager = null;
+        this.restOfAllManager = null;
     }
 
     public static ModelManager getInstance() {
@@ -52,5 +55,9 @@ public class ModelManager {
 
     public PaymentManager getPaymentManager() {
         return paymentManager;
+    }
+
+    public RestOfAllManager getRestOfAllManager() {
+        return restOfAllManager;
     }
 }

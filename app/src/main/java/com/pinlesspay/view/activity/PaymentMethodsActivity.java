@@ -10,11 +10,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
@@ -48,8 +53,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     private LayoutInflater layoutInflater;
     private TextInputLayout input_layout_routing_number, input_layout_account_number, input_layout_account_name;
     private EditText et_routing_number, et_account_number, et_account_name, et_card_name, edt_cvv, edt_yy, edt_mm, et_card_number;
-    private MyTextView txt_account_type;
+    //    private MyTextView txt_account_type;
     private View vw_card_number, vw_card_name, vw_mm, vw_yy, vw_cvv;
+    String[] title = null;
+    private String spinner_item = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         setContentView(R.layout.activity_payment_method);
 
         activity = PaymentMethodsActivity.this;
+
+        title = getResources().getStringArray(R.array.account_type_array);
+
 
         payment_methods_list = (LinearLayout) findViewById(R.id.payment_methods_list);
         waterfall_layout = (LinearLayout) findViewById(R.id.waterfall_layout);
@@ -67,6 +77,12 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         img_back.setOnClickListener(this);
         layout_add_bank.setOnClickListener(this);
         layout_add_card.setOnClickListener(this);
+
+        if (!Preferences.readString(activity, Preferences.BANKING_ENABLED, "").equalsIgnoreCase("Y")) {
+            layout_add_bank.setVisibility(View.GONE);
+        } else
+            layout_add_bank.setVisibility(View.VISIBLE);
+
 
         // list of credit cards
         Utils.showLoading(activity);
@@ -307,7 +323,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         et_account_name = (EditText) dialog.findViewById(R.id.et_account_name);
         MyButton btn_add = (MyButton) dialog.findViewById(R.id.btn_add);
 
-        txt_account_type = (MyTextView) dialog.findViewById(R.id.txt_account_type);
+//        txt_account_type = (MyTextView) dialog.findViewById(R.id.txt_account_type);
+        final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner_account_type);
+
+        SpinnerAdapter adapter = new SpinnerAdapter();
 
         et_routing_number.addTextChangedListener(new MyTextWatcher(et_routing_number));
         et_account_number.addTextChangedListener(new MyTextWatcher(et_account_number));
@@ -318,7 +337,12 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             et_account_number.setText(bankArrayList.get(position).getMaskBankAccountNum());
             et_routing_number.setText(bankArrayList.get(position).getMaskBankRoutingNum());
 
-            txt_account_type.setText(bankArrayList.get(position).getBankAccountType());
+            if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("Saving"))
+                spinner.setSelection(1);
+            else if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("Checking"))
+                spinner.setSelection(2);
+            else
+                spinner.setSelection(0);
         }
 
         // if button is clicked, close the custom dialog
@@ -331,9 +355,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 } else if (et_account_number.getText().toString().trim().length() == 0) {
                     requestFocus(et_account_number);
                     Utils.showMessage(activity, getString(R.string.please_enter_account_number));
+                } else if (spinner_item.equalsIgnoreCase(getString(R.string.account_type))) {
+                    Utils.showMessage(activity, getString(R.string.please_select_account_type));
                 } else if (et_account_name.getText().toString().trim().length() == 0) {
                     requestFocus(et_account_name);
-                    Utils.showMessage(activity, getString(R.string.please_select_account_type));
+                    Utils.showMessage(activity, getString(R.string.please_enter_account_name));
                 } else {
                     JSONObject jsonObject = new JSONObject();
                     try {
@@ -343,9 +369,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                         JSONObject jsonObject1 = new JSONObject();
                         jsonObject1.put("BankAccountNum", et_account_number.getText().toString().trim());
                         jsonObject1.put("BankRoutingNum", et_routing_number.getText().toString().trim());
-                        jsonObject1.put("BankAccountType", txt_account_type.getText().toString().trim());
+                        jsonObject1.put("BankAccountType", spinner_item);
                         jsonObject1.put("NickName", et_account_name.getText().toString().trim());
-                        jsonObject.put("data", jsonObject1);
+                        jsonObject.put("data", jsonObject1.toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -358,12 +384,22 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             }
         });
 
-        txt_account_type.setOnClickListener(new View.OnClickListener() {
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item = title[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
 
             }
         });
+
 
         dialog.show();
     }
@@ -474,8 +510,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             Utils.dismissLoading();
             PPLog.e(TAG, "CreditCard True");
             creditCardArrayList = ModelManager.getInstance().getPaymentManager().getCreditCard(activity, false, 1);
-            Utils.showLoading(activity);
-            ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            if (Preferences.readString(activity, Preferences.BANKING_ENABLED, "").equalsIgnoreCase("Y")) {
+                Utils.showLoading(activity);
+                ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            } else
+                setData();
         } else if (message.contains("CreditCard False")) {
             // showMatchHistoryList();
             if (message.contains("@#@")) {
@@ -485,8 +524,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "CreditCard False");
             Utils.dismissLoading();
-            Utils.showLoading(activity);
-            ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            if (Preferences.readString(activity, Preferences.BANKING_ENABLED, "").equalsIgnoreCase("Y")) {
+                Utils.showLoading(activity);
+                ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            } else
+                setData();
         } else if (message.equalsIgnoreCase("BankList True")) {
             Utils.dismissLoading();
             PPLog.e(TAG, "BankList True");
@@ -533,4 +575,49 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         }
 
     }
+
+    private class SpinnerAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+
+        @Override
+        public int getCount() {
+            return title.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final ListContent holder;
+            View v = convertView;
+            if (v == null) {
+                mInflater = (LayoutInflater) activity.getSystemService(LAYOUT_INFLATER_SERVICE);
+                v = mInflater.inflate(R.layout.row_spinner_account_type, null);
+                holder = new ListContent();
+                holder.text = (TextView) v.findViewById(R.id.textView1);
+
+                v.setTag(holder);
+            } else {
+                holder = (ListContent) v.getTag();
+            }
+
+            holder.text.setText(title[position]);
+
+            return v;
+        }
+
+        class ListContent {
+            TextView text;
+        }
+    }
+
 }
+

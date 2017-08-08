@@ -67,8 +67,16 @@ public class AuthManager {
         requestQueue.add(jsonObjReq);
     }
 
-    public void registerUser(final Activity activity, JSONObject jsonObject) {
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.REGISTER, jsonObject,
+    public void resendOTP(final Activity activity) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+            jsonObject.put("Action", "resenddonorotp");
+            jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.RESEND_OTP, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -77,14 +85,17 @@ public class AuthManager {
                         try {
                             boolean state = response.getBoolean("Status");
                             if (state) {
+                                String data = response.getString("data");
+                                JSONObject jsonObject1 = new JSONObject(data);
+
                                 Preferences.writeString(activity, Preferences.OTP_SENT, "true");
 
-                                EventBus.getDefault().postSticky("Register True");
+                                EventBus.getDefault().postSticky("ResendOTP True@#@" + jsonObject1.getString("Msg"));
                             } else {
-                                EventBus.getDefault().postSticky("Register False@#@" + response.getString("Message"));
+                                EventBus.getDefault().postSticky("ResendOTP False@#@" + response.getString("Message"));
                             }
                         } catch (JSONException e) {
-                            EventBus.getDefault().postSticky("Register False");
+                            EventBus.getDefault().postSticky("ResendOTP False");
                         }
 
 
@@ -94,14 +105,14 @@ public class AuthManager {
             @Override
             public void onErrorResponse(VolleyError error) {
                 PPLog.e("Error Response : ", "Error: " + error.getMessage());
-                EventBus.getDefault().postSticky("Register False");
+                EventBus.getDefault().postSticky("ResendOTP False");
             }
         });
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
         requestQueue.add(jsonObjReq);
     }
 
-    public void verifyUser(final Activity activity, JSONObject jsonObject) {
+    public void verifyUser(final Activity activity, final JSONObject jsonObject) {
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.VERIFY_USER, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -117,14 +128,14 @@ public class AuthManager {
 //                                        Preferences.writeString(activity, Preferences.AUTH_TOKEN, response.getJSONObject("data").getString("AuthenticationToken"));
                                 if (response.has("data")) {
                                     String data = response.getString("data");
-                                    String[] auth = data.split("\"AuthenticationToken\": \"");
-                                    String auth_token = auth[1].substring(0, auth[1].length() - 4);
+                                    JSONObject jsonObject1 = new JSONObject(data);
+
+//                                    String[] auth = data.split("\"AuthenticationToken\": \"");
+//                                    String auth_token = auth[1].substring(0, auth[1].length() - 4);
+                                    String auth_token = jsonObject1.getString("AuthenticationToken");
                                     Preferences.writeString(activity, Preferences.AUTH_TOKEN, auth_token);
+                                    Preferences.writeString(activity, Preferences.BANKING_ENABLED, jsonObject1.getString("EnableBanking"));
                                 }
-                                EventBus.getDefault().postSticky("Verify True");
-                            } else if (response.has("AuthenticationToken")) {
-                                Preferences.writeBoolean(activity, Preferences.LOGIN, true);
-                                Preferences.writeString(activity, Preferences.AUTH_TOKEN, response.getString("AuthenticationToken"));
                                 EventBus.getDefault().postSticky("Verify True");
                             } else
                                 EventBus.getDefault().postSticky("Verify False@#@" + response.getString("Message"));

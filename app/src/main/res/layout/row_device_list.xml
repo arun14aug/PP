@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_10">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_device_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textColor="@color/schedule_heading_color"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="normal" />
+
+        <com.pinlesspay.customUi.MyTextView
+            android:id="@+id/txt_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/app_name"
+            android:textColor="@color/schedule_subheading_color"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <com.pinlesspay.customUi.MyTextView
+        android:id="@+id/txt_current_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
+        android:maxLines="2"
+        android:text="@string/this_device"
+        android:textColor="@color/schedule_subheading_color"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="normal" />
+
+</LinearLayout>

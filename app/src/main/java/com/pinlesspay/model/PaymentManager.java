@@ -60,7 +60,7 @@ public class PaymentManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                if (response.has("data")) {
+                                if (response.has("data")&& !response.isNull("data")) {
                                     JSONArray jsonArray = response.getJSONArray("data");
                                     if (jsonArray == null)
                                         jsonArray = new JSONArray();
@@ -86,8 +86,8 @@ public class PaymentManager {
 
                                             creditCardArrayList.add(creditCard);
                                         }
-                                    EventBus.getDefault().post("CreditCard True");
                                 }
+                                EventBus.getDefault().post("CreditCard True");
                             }
 
                         } catch (JSONException e) {
@@ -138,10 +138,14 @@ public class PaymentManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                if (response.getJSONObject("data").has("Entities")) {
-                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
-                                    if (jsonArray == null)
-                                        jsonArray = new JSONArray();
+                                if (response.has("data")&& !response.isNull("data")){
+                                    JSONArray jsonArray = response.getJSONArray("data");
+//                                }
+//
+//                                if (response.getJSONObject("data").has("Entities")) {
+//                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
+//                                    if (jsonArray == null)
+//                                        jsonArray = new JSONArray();
                                     int count = jsonArray.length();
                                     bankArrayList = new ArrayList<>();
                                     if (count > 0)
@@ -161,8 +165,8 @@ public class PaymentManager {
 
                                             bankArrayList.add(bank);
                                         }
-                                    EventBus.getDefault().post("BankList True");
                                 }
+                                EventBus.getDefault().post("BankList True");
                             }
 
                         } catch (JSONException e) {
