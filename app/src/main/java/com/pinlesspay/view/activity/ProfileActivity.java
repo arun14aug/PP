@@ -102,7 +102,7 @@ public class ProfileActivity extends Activity {
                         jsonObject1.put("Country", countryCode);
                         jsonObject1.put("Address1", et_address_1.getText().toString().trim());
                         jsonObject1.put("Address2", et_address_2.getText().toString().trim());
-                        jsonObject.put("data", jsonObject1);
+                        jsonObject.put("data", jsonObject1.toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -127,23 +127,23 @@ public class ProfileActivity extends Activity {
 
     private void setData() {
         if (!Utils.isEmptyString(userArrayList.get(0).getFirstName()))
-        et_first_name.setText(userArrayList.get(0).getFirstName());
+            et_first_name.setText(userArrayList.get(0).getFirstName());
         if (!Utils.isEmptyString(userArrayList.get(0).getLastName()))
-        et_last_name.setText(userArrayList.get(0).getLastName());
+            et_last_name.setText(userArrayList.get(0).getLastName());
         if (!Utils.isEmptyString(userArrayList.get(0).getEmail()))
-        et_email.setText(userArrayList.get(0).getEmail());
+            et_email.setText(userArrayList.get(0).getEmail());
         if (!Utils.isEmptyString(userArrayList.get(0).getMobileNo()))
-        et_mobile.setText(userArrayList.get(0).getMobileNo());
+            et_mobile.setText(userArrayList.get(0).getMobileNo());
         if (!Utils.isEmptyString(userArrayList.get(0).getAddress1()))
-        et_address_1.setText(userArrayList.get(0).getAddress1());
+            et_address_1.setText(userArrayList.get(0).getAddress1());
         if (!Utils.isEmptyString(userArrayList.get(0).getAddress2()))
-        et_address_2.setText(userArrayList.get(0).getAddress2());
+            et_address_2.setText(userArrayList.get(0).getAddress2());
         if (!Utils.isEmptyString(userArrayList.get(0).getCity()))
-        et_city.setText(userArrayList.get(0).getCity());
+            et_city.setText(userArrayList.get(0).getCity());
         if (!Utils.isEmptyString(userArrayList.get(0).getState()))
-        et_state.setText(userArrayList.get(0).getState());
+            et_state.setText(userArrayList.get(0).getState());
         if (!Utils.isEmptyString(userArrayList.get(0).getZip()))
-        et_zip.setText(userArrayList.get(0).getZip());
+            et_zip.setText(userArrayList.get(0).getZip());
     }
 
     private boolean isValidate() {
