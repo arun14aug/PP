@@ -30,6 +30,9 @@ public class Preferences {
     public static final String DEVICE_NAME = "device_name";
     public static final String MOBILE_NUMBER = "mobile_number";
     public static final String FORMATTED_MOBILE_NUMBER = "formatted_mobile_number";
+    public static final String BANKING_ENABLED = "banking_enabled";
+    public static final String PASSCODE_TURN_ON = "passcode_turn_on";
+    public static final String PASSCODE_VALUE = "passcode_value";
 
     //  GpPreferences.writeString(getApplicationContext(), Preferences.NAME, "dev");
     // GpPreferences.readString(getApplicationContext(), Preferences.NAME, "");

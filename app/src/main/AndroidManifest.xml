@@ -56,6 +56,14 @@
             android:name=".view.activity.NewTicketActivity"
             android:configChanges="orientation|keyboard|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.SuggestionActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PassCodeConfirmationActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden"
+            android:screenOrientation="portrait" />
 
 
         <receiver android:name=".sms.SmsReceiver">

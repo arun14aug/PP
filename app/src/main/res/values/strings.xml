@@ -65,6 +65,7 @@
     <string name="hash_tag">#</string>
     <string name="next_run">Next run</string>
     <string name="turn_passcode_on">Turn Passcode On</string>
+    <string name="turn_passcode_off">Turn Passcode Off</string>
     <string name="authenticated_devices">Authenticated Devices</string>
     <string name="confirm_passcode">Confirm Passcode</string>
     <string name="enter_new_passcode">Enter new Passcode</string>
@@ -97,7 +98,7 @@
     <string name="new_card">New Card</string>
     <string name="card_number">Card Number</string>
     <string name="mm">MM</string>
-    <string name="yy">YYYY</string>
+    <string name="yy">YY</string>
     <string name="cvv">CVV</string>
     <string name="card_name">Card Name(optional)</string>
     <string name="error_message">Error Occurred! Please try again</string>
@@ -110,4 +111,21 @@
     <string name="we_would_love_to_hear">We would love to hear some ideas from you</string>
     <string name="describe_your_problem">Describe your problem and we do our best to help you with</string>
     <string name="dollar">$</string>
+    <string name="preferred">Preferred</string>
+    <string name="na">NA</string>
+    <string name="saving_account">Saving</string>
+    <string name="checking_account">Checking</string>
+    <!-- Account type array  -->
+    <string-array name="account_type_array">
+        <item>Account Type</item>
+        <item>Saving</item>
+        <item>Checking</item>
+    </string-array>
+    <string name="delete">Delete</string>
+    <string name="this_device">This device</string>
+    <string name="cancel">CANCEL</string>
+    <string name="caps_delete">DELETE</string>
+    <string name="passcode_does_not_match">Passcode does not match</string>
+    <string name="passcode_delete_alert">Do you really want to turn off your Passcode?</string>
+    <string name="recurring_delete_alert">Do you really want to delete this?</string>
 </resources>

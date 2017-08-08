@@ -50,7 +50,7 @@ public class PaymentManager {
         }
 
         PPLog.e("json data : ", jsonObject.toString());
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SCHEDULES, jsonObject,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.GET_ALL_DATA, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -60,8 +60,8 @@ public class PaymentManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                if (response.getJSONObject("data").has("Entities")) {
-                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
+                                if (response.has("data")&& !response.isNull("data")) {
+                                    JSONArray jsonArray = response.getJSONArray("data");
                                     if (jsonArray == null)
                                         jsonArray = new JSONArray();
                                     int count = jsonArray.length();
@@ -86,8 +86,8 @@ public class PaymentManager {
 
                                             creditCardArrayList.add(creditCard);
                                         }
-                                    EventBus.getDefault().post("CreditCard True");
                                 }
+                                EventBus.getDefault().post("CreditCard True");
                             }
 
                         } catch (JSONException e) {
@@ -128,7 +128,7 @@ public class PaymentManager {
         }
 
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SCHEDULES, jsonObject,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.GET_ALL_DATA, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -138,10 +138,14 @@ public class PaymentManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                if (response.getJSONObject("data").has("Entities")) {
-                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
-                                    if (jsonArray == null)
-                                        jsonArray = new JSONArray();
+                                if (response.has("data")&& !response.isNull("data")){
+                                    JSONArray jsonArray = response.getJSONArray("data");
+//                                }
+//
+//                                if (response.getJSONObject("data").has("Entities")) {
+//                                    JSONArray jsonArray = response.getJSONObject("data").getJSONArray("Entities");
+//                                    if (jsonArray == null)
+//                                        jsonArray = new JSONArray();
                                     int count = jsonArray.length();
                                     bankArrayList = new ArrayList<>();
                                     if (count > 0)
@@ -161,8 +165,8 @@ public class PaymentManager {
 
                                             bankArrayList.add(bank);
                                         }
-                                    EventBus.getDefault().post("BankList True");
                                 }
+                                EventBus.getDefault().post("BankList True");
                             }
 
                         } catch (JSONException e) {

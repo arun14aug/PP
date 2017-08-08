@@ -13,9 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
@@ -49,8 +53,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     private LayoutInflater layoutInflater;
     private TextInputLayout input_layout_routing_number, input_layout_account_number, input_layout_account_name;
     private EditText et_routing_number, et_account_number, et_account_name, et_card_name, edt_cvv, edt_yy, edt_mm, et_card_number;
-    private MyTextView txt_account_type;
+    //    private MyTextView txt_account_type;
     private View vw_card_number, vw_card_name, vw_mm, vw_yy, vw_cvv;
+    String[] title = null;
+    private String spinner_item = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         setContentView(R.layout.activity_payment_method);
 
         activity = PaymentMethodsActivity.this;
+
+        title = getResources().getStringArray(R.array.account_type_array);
+
 
         payment_methods_list = (LinearLayout) findViewById(R.id.payment_methods_list);
         waterfall_layout = (LinearLayout) findViewById(R.id.waterfall_layout);
@@ -69,6 +78,12 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         layout_add_bank.setOnClickListener(this);
         layout_add_card.setOnClickListener(this);
 
+        if (!Preferences.readString(activity, Preferences.BANKING_ENABLED, "").equalsIgnoreCase("Y")) {
+            layout_add_bank.setVisibility(View.GONE);
+        } else
+            layout_add_bank.setVisibility(View.VISIBLE);
+
+
         // list of credit cards
         Utils.showLoading(activity);
         ModelManager.getInstance().getPaymentManager().getCreditCard(activity, true, 1);
@@ -78,10 +93,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.layout_add_bank:
-                addBankAccount();
+                addBankAccount(0, 0);
                 break;
             case R.id.layout_add_card:
-                addCreditCard();
+                addCreditCard(0, 0);
                 break;
             case R.id.img_back:
                 finish();
@@ -94,7 +109,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             payment_methods_list.removeAllViews();
         if (creditCardArrayList == null)
             creditCardArrayList = new ArrayList<>();
-        if (bankArrayList != null)
+        if (bankArrayList == null)
             bankArrayList = new ArrayList<>();
 
         if (creditCardArrayList.size() == 0 && bankArrayList.size() == 0) {
@@ -102,8 +117,8 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             payment_methods_list.setVisibility(View.GONE);
             return;
         } else {
-            waterfall_layout.setVisibility(View.VISIBLE);
-            payment_methods_list.setVisibility(View.GONE);
+            waterfall_layout.setVisibility(View.GONE);
+            payment_methods_list.setVisibility(View.VISIBLE);
         }
 
         if (creditCardArrayList.size() > 0)
@@ -123,12 +138,38 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             MyTextView txt_card_number = (MyTextView) view.findViewById(R.id.txt_card_number);
             MyTextView txt_default = (MyTextView) view.findViewById(R.id.txt_default);
 
-            txt_card_name.setText(creditCardArrayList.get(i).getNickName());
+            if (!Utils.isEmptyString(creditCardArrayList.get(i).getNickName()))
+                txt_card_name.setText(creditCardArrayList.get(i).getNickName());
+            else
+                txt_card_name.setText(activity.getString(R.string.na));
             txt_card_number.setText(creditCardArrayList.get(i).getMaskCardNumber());
             if (creditCardArrayList.get(i).getIsDefault().equalsIgnoreCase("Y"))
                 txt_default.setVisibility(View.VISIBLE);
             else
-                txt_default.setVisibility(View.VISIBLE);
+                txt_default.setVisibility(View.INVISIBLE);
+
+            if (creditCardArrayList.get(i).getCardTypeCode().equalsIgnoreCase("MasterCard"))
+                icon_account.setImageResource(R.drawable.mastercard_round);
+            else if (creditCardArrayList.get(i).getCardTypeCode().equalsIgnoreCase("Amex"))
+                icon_account.setImageResource(R.drawable.american_round);
+            else if (creditCardArrayList.get(i).getCardTypeCode().equalsIgnoreCase("Discover"))
+                icon_account.setImageResource(R.drawable.discover_round);
+            else if (creditCardArrayList.get(i).getCardTypeCode().equalsIgnoreCase("Visa"))
+                icon_account.setImageResource(R.drawable.visa_round);
+            else if (creditCardArrayList.get(i).getCardTypeCode().equalsIgnoreCase("DinnersClub"))
+                icon_account.setImageResource(R.drawable.visa_round);
+            else if (creditCardArrayList.get(i).getCardTypeCode().equalsIgnoreCase("JCB"))
+                icon_account.setImageResource(R.drawable.visa_round);
+            else if (creditCardArrayList.get(i).getCardTypeCode().equalsIgnoreCase("DINERS"))
+                icon_account.setImageResource(R.drawable.visa_round);
+
+            final int position = i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addCreditCard(1, position);
+                }
+            });
 
             payment_methods_list.addView(view);
         }
@@ -145,18 +186,32 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             MyTextView txt_card_number = (MyTextView) view.findViewById(R.id.txt_card_number);
             MyTextView txt_default = (MyTextView) view.findViewById(R.id.txt_default);
 
-            txt_card_name.setText(bankArrayList.get(i).getNickName());
+            if (!Utils.isEmptyString(bankArrayList.get(i).getNickName()))
+                txt_card_name.setText(bankArrayList.get(i).getNickName());
+            else
+                txt_card_name.setText(activity.getString(R.string.na));
+
             txt_card_number.setText(bankArrayList.get(i).getMaskBankAccountNum());
             if (bankArrayList.get(i).getIsDefault().equalsIgnoreCase("Y"))
                 txt_default.setVisibility(View.VISIBLE);
             else
-                txt_default.setVisibility(View.VISIBLE);
+                txt_default.setVisibility(View.INVISIBLE);
+
+            icon_account.setImageResource(R.drawable.bank_round);
+
+            final int position = i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addBankAccount(1, position);
+                }
+            });
 
             payment_methods_list.addView(view);
         }
     }
 
-    private void addCreditCard() {
+    private void addCreditCard(int type, int position) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_credit_card);
 //Grab the window of the dialog, and change the width
@@ -190,6 +245,14 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         edt_yy.setOnFocusChangeListener(this);
         edt_cvv.setOnFocusChangeListener(this);
         et_card_name.setOnFocusChangeListener(this);
+
+        if (type == 1) {
+            et_card_number.setText(creditCardArrayList.get(position).getMaskCardNumber());
+            edt_mm.setText(creditCardArrayList.get(position).getCCardExpMM());
+            et_card_name.setText(creditCardArrayList.get(position).getNickName());
+            edt_yy.setText(creditCardArrayList.get(position).getCCardExpYYYY());
+        }
+
         // if button is clicked, close the custom dialog
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +283,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                         jsonObject1.put("CCardExpMM", edt_mm.getText().toString().trim());
                         jsonObject1.put("CCardExpYYYY", edt_yy.getText().toString().trim());
                         jsonObject1.put("NickName", et_card_name.getText().toString().trim());
-                        jsonObject.put("data", jsonObject1);
+                        jsonObject.put("data", jsonObject1.toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -228,15 +291,15 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     PPLog.e("JSON DATA : ", jsonObject.toString());
                     Utils.showLoading(activity);
                     ModelManager.getInstance().getPaymentManager().addCreditCard(activity, jsonObject);
+                    dialog.dismiss();
                 }
-                dialog.dismiss();
             }
         });
 
         dialog.show();
     }
 
-    private void addBankAccount() {
+    private void addBankAccount(int type, int position) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_bank_acc);
 //Grab the window of the dialog, and change the width
@@ -260,11 +323,32 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         et_account_name = (EditText) dialog.findViewById(R.id.et_account_name);
         MyButton btn_add = (MyButton) dialog.findViewById(R.id.btn_add);
 
-        txt_account_type = (MyTextView) dialog.findViewById(R.id.txt_account_type);
+//        txt_account_type = (MyTextView) dialog.findViewById(R.id.txt_account_type);
+        final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner_account_type);
+
+        SpinnerAdapter adapter = new SpinnerAdapter();
+        spinner.setAdapter(adapter);
 
         et_routing_number.addTextChangedListener(new MyTextWatcher(et_routing_number));
         et_account_number.addTextChangedListener(new MyTextWatcher(et_account_number));
         et_account_name.addTextChangedListener(new MyTextWatcher(et_account_name));
+
+        if (type == 1) {
+            et_account_name.setText(bankArrayList.get(position).getNickName());
+            et_account_number.setText(bankArrayList.get(position).getMaskBankAccountNum());
+            et_routing_number.setText(bankArrayList.get(position).getMaskBankRoutingNum());
+
+            if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("S")) {
+                spinner_item = title[1];
+                spinner.setSelection(1);
+            } else if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("C")) {
+                spinner_item = title[2];
+                spinner.setSelection(2);
+            }else {
+                spinner_item = title[0];
+                spinner.setSelection(0);
+            }
+        }
 
         // if button is clicked, close the custom dialog
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -276,9 +360,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 } else if (et_account_number.getText().toString().trim().length() == 0) {
                     requestFocus(et_account_number);
                     Utils.showMessage(activity, getString(R.string.please_enter_account_number));
+                } else if (spinner_item.equalsIgnoreCase(getString(R.string.account_type))) {
+                    Utils.showMessage(activity, getString(R.string.please_select_account_type));
                 } else if (et_account_name.getText().toString().trim().length() == 0) {
                     requestFocus(et_account_name);
-                    Utils.showMessage(activity, getString(R.string.please_select_account_type));
+                    Utils.showMessage(activity, getString(R.string.please_enter_account_name));
                 } else {
                     JSONObject jsonObject = new JSONObject();
                     try {
@@ -288,9 +374,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                         JSONObject jsonObject1 = new JSONObject();
                         jsonObject1.put("BankAccountNum", et_account_number.getText().toString().trim());
                         jsonObject1.put("BankRoutingNum", et_routing_number.getText().toString().trim());
-                        jsonObject1.put("BankAccountType", txt_account_type.getText().toString().trim());
+                        jsonObject1.put("BankAccountType", spinner_item);
                         jsonObject1.put("NickName", et_account_name.getText().toString().trim());
-                        jsonObject.put("data", jsonObject1);
+                        jsonObject.put("data", jsonObject1.toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -298,17 +384,26 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     PPLog.e("JSON DATA : ", jsonObject.toString());
                     Utils.showLoading(activity);
                     ModelManager.getInstance().getPaymentManager().addBankAccount(activity, jsonObject);
+                    dialog.dismiss();
                 }
-                dialog.dismiss();
             }
         });
 
-        txt_account_type.setOnClickListener(new View.OnClickListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item = title[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
 
             }
         });
+
 
         dialog.show();
     }
@@ -419,8 +514,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             Utils.dismissLoading();
             PPLog.e(TAG, "CreditCard True");
             creditCardArrayList = ModelManager.getInstance().getPaymentManager().getCreditCard(activity, false, 1);
-            Utils.showLoading(activity);
-            ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            if (Preferences.readString(activity, Preferences.BANKING_ENABLED, "").equalsIgnoreCase("Y")) {
+                Utils.showLoading(activity);
+                ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            } else
+                setData();
         } else if (message.contains("CreditCard False")) {
             // showMatchHistoryList();
             if (message.contains("@#@")) {
@@ -430,8 +528,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "CreditCard False");
             Utils.dismissLoading();
-            Utils.showLoading(activity);
-            ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            if (Preferences.readString(activity, Preferences.BANKING_ENABLED, "").equalsIgnoreCase("Y")) {
+                Utils.showLoading(activity);
+                ModelManager.getInstance().getPaymentManager().getBank(activity, true, 1);
+            } else
+                setData();
         } else if (message.equalsIgnoreCase("BankList True")) {
             Utils.dismissLoading();
             PPLog.e(TAG, "BankList True");
@@ -478,4 +579,49 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         }
 
     }
+
+    private class SpinnerAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+
+        @Override
+        public int getCount() {
+            return title.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final ListContent holder;
+            View v = convertView;
+            if (v == null) {
+                mInflater = (LayoutInflater) activity.getSystemService(LAYOUT_INFLATER_SERVICE);
+                v = mInflater.inflate(R.layout.row_spinner_account_type, null);
+                holder = new ListContent();
+                holder.text = (TextView) v.findViewById(R.id.textView1);
+
+                v.setTag(holder);
+            } else {
+                holder = (ListContent) v.getTag();
+            }
+
+            holder.text.setText(title[position]);
+
+            return v;
+        }
+
+        class ListContent {
+            TextView text;
+        }
+    }
+
 }
+

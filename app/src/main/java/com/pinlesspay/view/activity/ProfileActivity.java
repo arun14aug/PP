@@ -99,7 +99,7 @@ public class ProfileActivity extends Activity {
                         jsonObject1.put("City", et_city.getText().toString().trim());
                         jsonObject1.put("State", et_state.getText().toString().trim());
                         jsonObject1.put("Zip", et_zip.getText().toString().trim());
-                        jsonObject1.put("Country", countryCode);
+                        jsonObject1.put("CountryISO3", countryCode);
                         jsonObject1.put("Address1", et_address_1.getText().toString().trim());
                         jsonObject1.put("Address2", et_address_2.getText().toString().trim());
                         jsonObject.put("data", jsonObject1.toString());
@@ -121,7 +121,7 @@ public class ProfileActivity extends Activity {
     CountryCodePicker.OnCountryChangeListener countryChangeListener = new CountryCodePicker.OnCountryChangeListener() {
         @Override
         public void onCountrySelected() {
-            countryCode = namePicker.getSelectedCountryCode();
+            countryCode = namePicker.getSelectedCountryNameCode();
         }
     };
 
@@ -144,6 +144,13 @@ public class ProfileActivity extends Activity {
             et_state.setText(userArrayList.get(0).getState());
         if (!Utils.isEmptyString(userArrayList.get(0).getZip()))
             et_zip.setText(userArrayList.get(0).getZip());
+
+
+        if (!Utils.isEmptyString(userArrayList.get(0).getCountry())) {
+            PPLog.e("Country Code : ", userArrayList.get(0).getCountry());
+            namePicker.setCountryForNameCode(userArrayList.get(0).getCountry());
+            namePicker.setDefaultCountryUsingNameCode(userArrayList.get(0).getCountry());
+        }
     }
 
     private boolean isValidate() {

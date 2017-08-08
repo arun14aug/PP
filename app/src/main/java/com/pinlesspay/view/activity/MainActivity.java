@@ -28,7 +28,6 @@ import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.fragment.DonationFragment;
 import com.pinlesspay.view.fragment.RecurringFragment;
 import com.pinlesspay.view.fragment.ScheduleFragment;
-import com.pinlesspay.view.fragment.SuggestionsFragment;
 import com.pinlesspay.view.fragment.TransactionsFragment;
 
 import de.greenrobot.event.EventBus;
@@ -139,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
         }
 
+        backer = false;
         if (fragment != null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment, title);
@@ -169,8 +169,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
-        Fragment fragment = null;
-        String title = getString(R.string.app_name);
         switch (position) {
             case 0:
 //                fragment = new PaymentMethodsFragment();
@@ -193,8 +191,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(new Intent(activity, SupportActivity.class));
                 break;
             case 4:
-                fragment = new SuggestionsFragment();
-                title = getString(R.string.title_suggestions);
+//                fragment = new SuggestionsFragment();
+//                title = getString(R.string.title_suggestions);
+                startActivity(new Intent(activity, SuggestionActivity.class));
                 break;
             case 7:
                 showAlert(activity, getString(R.string.lock_alert));
@@ -203,15 +202,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
         }
 
-        if (fragment != null) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, fragment, title);
-            fragmentTransaction.addToBackStack(title);
-            fragmentTransaction.commit();
-
-            // set the toolbar title
-            getSupportActionBar().setTitle(title);
-        }
     }
 
     public void showAlert(final Activity activity, String msg) {
@@ -245,7 +235,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public void onBackPressed() {
         Fragment f = fragmentManager.findFragmentById(R.id.container_body);
         try {
-            if (f instanceof DonationFragment) {
+            if (f instanceof DonationFragment || f instanceof ScheduleFragment
+                    || f instanceof RecurringFragment || f instanceof TransactionsFragment) {
                 if (backer)
                     finish();
                 else {
