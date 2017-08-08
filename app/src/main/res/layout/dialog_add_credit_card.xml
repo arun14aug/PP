@@ -128,9 +128,9 @@
                 <View
                     android:id="@+id/vw_mm"
                     android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_1"
                     android:layout_marginLeft="@dimen/padding_5"
                     android:layout_marginRight="@dimen/padding_5"
-                    android:layout_height="@dimen/padding_1"
                     android:background="@color/login_line_color" />
             </LinearLayout>
 
@@ -181,7 +181,8 @@
                 android:layout_marginLeft="@dimen/padding_10"
                 android:layout_marginRight="@dimen/padding_10"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="invisible">
 
                 <com.pinlesspay.customUi.MyEditText
                     android:id="@+id/edt_cvv"
@@ -242,12 +243,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/padding_10"
-        android:paddingRight="@dimen/padding_10"
         android:background="@color/bg_color"
         android:clickable="true"
         android:gravity="end"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
 
 
         <com.pinlesspay.customUi.MyButton

@@ -166,7 +166,7 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
                             jsonObject.put("RegisterMobile", Preferences.readString(activity, Preferences.MOBILE_NUMBER, ""));
                             jsonObject.put("DeviceIdentifier", Preferences.readString(activity, Preferences.MAC_ADDRESS, ""));
                             jsonObject.put("DeviceName", Preferences.readString(activity, Preferences.DEVICE_NAME, ""));
-                            jsonObject.put("DeviceType", "Mobile");
+                            jsonObject.put("DeviceType", "Android");
                             jsonObject.put("Appkey", Preferences.readString(activity, Preferences.UUID, ""));
                             jsonObject.put("OTPCode", code);
                         } catch (JSONException e) {

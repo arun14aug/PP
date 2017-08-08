@@ -173,7 +173,7 @@ public class LoginActivity extends Activity {
                         jsonObject.put("RegisterMobile", countryCode + mobile);
                         jsonObject.put("DeviceIdentifier", Preferences.readString(activity, Preferences.MAC_ADDRESS, ""));
                         jsonObject.put("DeviceName", Preferences.readString(activity, Preferences.DEVICE_NAME, ""));
-                        jsonObject.put("DeviceType", "Mobile");
+                        jsonObject.put("DeviceType", "Android");
                         jsonObject.put("Appkey", Preferences.readString(activity, Preferences.UUID, ""));
                     } catch (JSONException e) {
                         e.printStackTrace();

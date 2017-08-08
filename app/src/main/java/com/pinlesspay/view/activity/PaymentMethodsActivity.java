@@ -52,9 +52,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     private ArrayList<Bank> bankArrayList = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private TextInputLayout input_layout_routing_number, input_layout_account_number, input_layout_account_name;
-    private EditText et_routing_number, et_account_number, et_account_name, et_card_name, edt_cvv, edt_yy, edt_mm, et_card_number;
+    private EditText et_routing_number, et_account_number, et_account_name, et_card_name, /*edt_cvv,*/ edt_yy, edt_mm, et_card_number;
     //    private MyTextView txt_account_type;
-    private View vw_card_number, vw_card_name, vw_mm, vw_yy, vw_cvv;
+    private View vw_card_number, vw_card_name, vw_mm, vw_yy/*, vw_cvv*/;
     String[] title = null;
     private String spinner_item = "";
 
@@ -230,20 +230,20 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         et_card_number = (EditText) dialog.findViewById(R.id.et_card_number);
         edt_mm = (EditText) dialog.findViewById(R.id.edt_mm);
         edt_yy = (EditText) dialog.findViewById(R.id.edt_yy);
-        edt_cvv = (EditText) dialog.findViewById(R.id.edt_cvv);
+//        edt_cvv = (EditText) dialog.findViewById(R.id.edt_cvv);
         et_card_name = (EditText) dialog.findViewById(R.id.et_card_name);
         MyButton btn_add = (MyButton) dialog.findViewById(R.id.btn_add);
 
         vw_card_name = dialog.findViewById(R.id.vw_card_name);
         vw_card_number = dialog.findViewById(R.id.vw_card_number);
-        vw_cvv = dialog.findViewById(R.id.vw_cvv);
+//        vw_cvv = dialog.findViewById(R.id.vw_cvv);
         vw_mm = dialog.findViewById(R.id.vw_mm);
         vw_yy = dialog.findViewById(R.id.vw_yy);
 
         et_card_number.setOnFocusChangeListener(this);
         edt_mm.setOnFocusChangeListener(this);
         edt_yy.setOnFocusChangeListener(this);
-        edt_cvv.setOnFocusChangeListener(this);
+//        edt_cvv.setOnFocusChangeListener(this);
         et_card_name.setOnFocusChangeListener(this);
 
         if (type == 1) {
@@ -266,9 +266,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 } else if (edt_yy.getText().toString().trim().length() == 0) {
                     requestFocus(edt_yy);
                     Utils.showMessage(activity, getString(R.string.please_enter_yy));
-                } else if (edt_cvv.getText().toString().trim().length() == 0) {
-                    requestFocus(edt_cvv);
-                    Utils.showMessage(activity, getString(R.string.please_enter_cvv));
+//                } else if (edt_cvv.getText().toString().trim().length() == 0) {
+//                    requestFocus(edt_cvv);
+//                    Utils.showMessage(activity, getString(R.string.please_enter_cvv));
                 } else if (et_card_name.getText().toString().trim().length() == 0) {
                     requestFocus(et_card_name);
                     Utils.showMessage(activity, getString(R.string.please_enter_card_name));
@@ -439,13 +439,13 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 } else
                     vw_yy.setBackgroundColor(Utils.setColor(activity, R.color.login_line_color));
                 break;
-            case R.id.edt_cvv:
-                if (hasFocus) {
-                    edt_cvv.requestFocus();
-                    vw_cvv.setBackgroundColor(Utils.setColor(activity, R.color.light_blue));
-                } else
-                    vw_cvv.setBackgroundColor(Utils.setColor(activity, R.color.login_line_color));
-                break;
+//            case R.id.edt_cvv:
+//                if (hasFocus) {
+//                    edt_cvv.requestFocus();
+//                    vw_cvv.setBackgroundColor(Utils.setColor(activity, R.color.light_blue));
+//                } else
+//                    vw_cvv.setBackgroundColor(Utils.setColor(activity, R.color.login_line_color));
+//                break;
         }
     }
 
