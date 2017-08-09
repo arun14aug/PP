@@ -2,8 +2,10 @@ package com.pinlesspay.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -52,7 +54,8 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     private ArrayList<Bank> bankArrayList = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private TextInputLayout input_layout_routing_number, input_layout_account_number, input_layout_account_name;
-    private EditText et_routing_number, et_account_number, et_account_name, et_card_name, /*edt_cvv,*/ edt_yy, edt_mm, et_card_number;
+    private EditText et_routing_number, et_account_number, et_account_name, et_card_name, /*edt_cvv,*/
+            edt_yy, edt_mm, et_card_number;
     //    private MyTextView txt_account_type;
     private View vw_card_number, vw_card_name, vw_mm, vw_yy/*, vw_cvv*/;
     String[] title = null;
@@ -164,9 +167,15 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 icon_account.setImageResource(R.drawable.visa_round);
 
             final int position = i;
-            view.setOnClickListener(new View.OnClickListener() {
+            icon_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    showAlert(creditCardArrayList.get(position).getNickName(), 0);
+                }
+            });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     addCreditCard(1, position);
                 }
             });
@@ -200,9 +209,15 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             icon_account.setImageResource(R.drawable.bank_round);
 
             final int position = i;
-            view.setOnClickListener(new View.OnClickListener() {
+            icon_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    showAlert(bankArrayList.get(position).getNickName(), 1);
+                }
+            });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     addBankAccount(1, position);
                 }
             });
@@ -211,7 +226,36 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         }
     }
 
-    private void addCreditCard(int type, int position) {
+    private void showAlert(String msg, final int type) {
+        String message = getString(R.string.delete) + " " + msg + "?";
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder
+                .setMessage(message)
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton(getString(R.string.caps_delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (type == 0)
+                            Utils.showMessage(activity, "Credit Card Delete operation will be performed");
+                        else {
+                            Utils.showMessage(activity, "Bank Account Delete operation will be performed");
+                        }
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // show it
+        alertDialog.show();
+    }
+
+    private void addCreditCard(final int type, int position) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_credit_card);
 //Grab the window of the dialog, and change the width
@@ -279,9 +323,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                         jsonObject.put("Action", "CreditCardAccount");
                         jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
                         JSONObject jsonObject1 = new JSONObject();
-                        jsonObject1.put("CardNumber", et_card_number.getText().toString().trim());
-                        jsonObject1.put("CCardExpMM", edt_mm.getText().toString().trim());
-                        jsonObject1.put("CCardExpYYYY", edt_yy.getText().toString().trim());
+                        if (type == 0) {
+                            jsonObject1.put("CardNumber", et_card_number.getText().toString().trim());
+                            jsonObject1.put("CCardExpMM", edt_mm.getText().toString().trim());
+                            jsonObject1.put("CCardExpYYYY", edt_yy.getText().toString().trim());
+                        }
                         jsonObject1.put("NickName", et_card_name.getText().toString().trim());
                         jsonObject.put("data", jsonObject1.toString());
 
@@ -290,7 +336,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     }
                     PPLog.e("JSON DATA : ", jsonObject.toString());
                     Utils.showLoading(activity);
-                    ModelManager.getInstance().getPaymentManager().addCreditCard(activity, jsonObject);
+                    if (type == 0)
+                        ModelManager.getInstance().getPaymentManager().addCreditCard(activity, jsonObject);
+                    else
+                        ModelManager.getInstance().getPaymentManager().addCreditCard(activity, jsonObject);
                     dialog.dismiss();
                 }
             }
@@ -299,7 +348,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         dialog.show();
     }
 
-    private void addBankAccount(int type, int position) {
+    private void addBankAccount(final int type, int position) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_bank_acc);
 //Grab the window of the dialog, and change the width
@@ -344,7 +393,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             } else if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("C")) {
                 spinner_item = title[2];
                 spinner.setSelection(2);
-            }else {
+            } else {
                 spinner_item = title[0];
                 spinner.setSelection(0);
             }
@@ -372,9 +421,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                         jsonObject.put("Action", "BankAccount");
                         jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
                         JSONObject jsonObject1 = new JSONObject();
-                        jsonObject1.put("BankAccountNum", et_account_number.getText().toString().trim());
-                        jsonObject1.put("BankRoutingNum", et_routing_number.getText().toString().trim());
-                        jsonObject1.put("BankAccountType", spinner_item);
+                        if (type == 0) {
+                            jsonObject1.put("BankAccountNum", et_account_number.getText().toString().trim());
+                            jsonObject1.put("BankRoutingNum", et_routing_number.getText().toString().trim());
+                            jsonObject1.put("BankAccountType", spinner_item);
+                        }
                         jsonObject1.put("NickName", et_account_name.getText().toString().trim());
                         jsonObject.put("data", jsonObject1.toString());
 
@@ -383,7 +434,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     }
                     PPLog.e("JSON DATA : ", jsonObject.toString());
                     Utils.showLoading(activity);
-                    ModelManager.getInstance().getPaymentManager().addBankAccount(activity, jsonObject);
+                    if (type == 0)
+                        ModelManager.getInstance().getPaymentManager().addBankAccount(activity, jsonObject);
+                    else
+                        ModelManager.getInstance().getPaymentManager().addBankAccount(activity, jsonObject);
                     dialog.dismiss();
                 }
             }
@@ -598,6 +652,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             return position;
         }
 
+        @SuppressLint("InflateParams")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final ListContent holder;

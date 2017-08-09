@@ -24,13 +24,10 @@ import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
-import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.fragment.DonationFragment;
 import com.pinlesspay.view.fragment.RecurringFragment;
 import com.pinlesspay.view.fragment.ScheduleFragment;
 import com.pinlesspay.view.fragment.TransactionsFragment;
-
-import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,
         View.OnClickListener {
@@ -195,8 +192,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //                title = getString(R.string.title_suggestions);
                 startActivity(new Intent(activity, SuggestionActivity.class));
                 break;
-            case 7:
-                showAlert(activity, getString(R.string.lock_alert));
+            case 5:
+                if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").length() > 1) {
+                    Preferences.writeString(activity, Preferences.LOGOUT, "true");
+                    Intent intent = new Intent(activity, LockActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                } else
+                    showAlert(activity, getString(R.string.lock_alert));
                 break;
             default:
                 break;
@@ -207,20 +211,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public void showAlert(final Activity activity, String msg) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
         alertDialogBuilder
-                .setTitle("Logout!")
                 .setMessage(msg)
                 .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Preferences.clearAllPreference(activity);
-                        startActivity(new Intent(activity, LoginActivity.class));
+                        startActivity(new Intent(activity, SecurityActivity.class));
                         finish();
 
                         dialog.cancel();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(activity, VerifyActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
                         dialog.cancel();
                     }
                 });
@@ -277,38 +283,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
-
     }
-
-    public void onEventMainThread(String message) {
-        if (message.equalsIgnoreCase("Logout True")) {
-            Utils.dismissLoading();
-            PPLog.e(TAG, "Logout True");
-            Preferences.clearAllPreference(activity);
-            startActivity(new Intent(activity, LoginActivity.class));
-            finish();
-        } else if (message.contains("Logout False")) {
-            // showMatchHistoryList();
-            if (message.contains("@#@")) {
-                String[] m = message.split("@#@");
-                Utils.showMessage(activity, m[1]);
-            } else
-                Utils.showMessage(activity, getString(R.string.error_message));
-            PPLog.e(TAG, "Logout False");
-            Utils.dismissLoading();
-        } else if (message.equalsIgnoreCase("Logout Network Error")) {
-            Utils.showMessage(activity, getString(R.string.network_error));
-            PPLog.e(TAG, "Logout Network Error");
-            Utils.dismissLoading();
-        }
-
-    }
-
 }

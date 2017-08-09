@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.pinlesspay.R;
@@ -43,6 +44,7 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
         setContentView(R.layout.activity_verify);
 
         activity = VerifyActivity.this;
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         et_code_1 = (MyEditText) findViewById(R.id.edt_code_1);
         et_code_2 = (MyEditText) findViewById(R.id.edt_code_2);
