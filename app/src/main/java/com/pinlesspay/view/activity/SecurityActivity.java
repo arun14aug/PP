@@ -121,6 +121,7 @@ public class SecurityActivity extends Activity {
                             Utils.showMessage(activity, "Delete operation will be performed");
                         else {
                             Utils.showMessage(activity, "Passcode Turned Off");
+                            Preferences.writeString(activity, Preferences.LOGOUT, "false");
                             Preferences.writeString(activity, Preferences.PASSCODE_VALUE, "");
                             Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, false);
                             txt_turn_passcode_on.setText(getString(R.string.turn_passcode_on));

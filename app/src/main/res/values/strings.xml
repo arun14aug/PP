@@ -29,7 +29,6 @@
     <string name="raleway_medium">Raleway-Medium.ttf</string>
     <string name="please_wait">Please Wait....</string>
 
-    <string name="lock_alert">Are you sure, you want to Lock it?</string>
     <string name="about">About</string>
     <string name="next">Next</string>
 
@@ -128,4 +127,9 @@
     <string name="passcode_does_not_match">Passcode does not match</string>
     <string name="passcode_delete_alert">Do you really want to turn off your Passcode?</string>
     <string name="recurring_delete_alert">Do you really want to delete this?</string>
+    <string name="enter_your_passcode">Enter your Passcode</string>
+    <!--<string name="lock_alert">Are you sure, you want to Lock it?</string>-->
+    <string name="lock_alert">Do you want to turn on your passcode?</string>
+    <string name="yes">Yes</string>
+    <string name="later">Later</string>
 </resources>

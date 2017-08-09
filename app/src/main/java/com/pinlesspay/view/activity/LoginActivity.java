@@ -17,6 +17,7 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.hbb20.CountryCodePicker;
 import com.pinlesspay.R;
@@ -62,6 +63,12 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         activity = LoginActivity.this;
+
+        if (Preferences.readString(activity, Preferences.LOGOUT, "").equalsIgnoreCase("true")) {
+            startActivity(new Intent(activity, LockActivity.class));
+            finish();
+        }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         edt_phone_number = (MyEditText) findViewById(R.id.et_phone_number);
         btn_next = (MyButton) findViewById(R.id.btn_next);

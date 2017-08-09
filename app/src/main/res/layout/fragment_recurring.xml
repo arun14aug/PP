@@ -1,44 +1,63 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
     android:orientation="vertical">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recurring_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_horizontal_margin" />
-
-
     <LinearLayout
-        android:id="@+id/waterfall_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/padding_30"
         android:background="@color/bg_color"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/empty_screen_icon_recurring" />
 
-        <com.pinlesspay.customUi.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_5"
-            android:text="@string/no_recurring"
-            android:textColor="@color/waterfall_text_color"
-            android:textSize="@dimen/text_size_xlarge"
-            android:textStyle="normal" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recurring_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_horizontal_margin" />
+
+
+        <LinearLayout
+            android:id="@+id/waterfall_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/padding_30"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/empty_screen_icon_recurring" />
+
+            <com.pinlesspay.customUi.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_5"
+                android:text="@string/no_recurring"
+                android:textColor="@color/waterfall_text_color"
+                android:textSize="@dimen/text_size_xlarge"
+                android:textStyle="normal" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/toolbar_icon_plus" />
+
+</RelativeLayout>

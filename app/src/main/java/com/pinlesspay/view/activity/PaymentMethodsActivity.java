@@ -2,8 +2,10 @@ package com.pinlesspay.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -52,7 +54,8 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     private ArrayList<Bank> bankArrayList = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private TextInputLayout input_layout_routing_number, input_layout_account_number, input_layout_account_name;
-    private EditText et_routing_number, et_account_number, et_account_name, et_card_name, /*edt_cvv,*/ edt_yy, edt_mm, et_card_number;
+    private EditText et_routing_number, et_account_number, et_account_name, et_card_name, /*edt_cvv,*/
+            edt_yy, edt_mm, et_card_number;
     //    private MyTextView txt_account_type;
     private View vw_card_number, vw_card_name, vw_mm, vw_yy/*, vw_cvv*/;
     String[] title = null;
@@ -93,10 +96,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.layout_add_bank:
-                addBankAccount(0, 0);
+                addBankAccount(/*0, 0*/);
                 break;
             case R.id.layout_add_card:
-                addCreditCard(0, 0);
+                addCreditCard(/*0, 0*/);
                 break;
             case R.id.img_back:
                 finish();
@@ -164,10 +167,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 icon_account.setImageResource(R.drawable.visa_round);
 
             final int position = i;
-            view.setOnClickListener(new View.OnClickListener() {
+            icon_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    addCreditCard(1, position);
+                    showAlert(creditCardArrayList.get(position).getNickName(), 0);
                 }
             });
 
@@ -200,10 +203,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             icon_account.setImageResource(R.drawable.bank_round);
 
             final int position = i;
-            view.setOnClickListener(new View.OnClickListener() {
+            icon_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    addBankAccount(1, position);
+                    showAlert(bankArrayList.get(position).getNickName(), 1);
                 }
             });
 
@@ -211,7 +214,36 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         }
     }
 
-    private void addCreditCard(int type, int position) {
+    private void showAlert(String msg, final int type) {
+        String message = getString(R.string.delete) + " " + msg + "?";
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder
+                .setMessage(message)
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton(getString(R.string.caps_delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (type == 0)
+                            Utils.showMessage(activity, "Credit Card Delete operation will be performed");
+                        else {
+                            Utils.showMessage(activity, "Bank Account Delete operation will be performed");
+                        }
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // show it
+        alertDialog.show();
+    }
+
+    private void addCreditCard(/*int type, int position*/) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_credit_card);
 //Grab the window of the dialog, and change the width
@@ -246,12 +278,12 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
 //        edt_cvv.setOnFocusChangeListener(this);
         et_card_name.setOnFocusChangeListener(this);
 
-        if (type == 1) {
-            et_card_number.setText(creditCardArrayList.get(position).getMaskCardNumber());
-            edt_mm.setText(creditCardArrayList.get(position).getCCardExpMM());
-            et_card_name.setText(creditCardArrayList.get(position).getNickName());
-            edt_yy.setText(creditCardArrayList.get(position).getCCardExpYYYY());
-        }
+//        if (type == 1) {
+//            et_card_number.setText(creditCardArrayList.get(position).getMaskCardNumber());
+//            edt_mm.setText(creditCardArrayList.get(position).getCCardExpMM());
+//            et_card_name.setText(creditCardArrayList.get(position).getNickName());
+//            edt_yy.setText(creditCardArrayList.get(position).getCCardExpYYYY());
+//        }
 
         // if button is clicked, close the custom dialog
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -299,7 +331,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         dialog.show();
     }
 
-    private void addBankAccount(int type, int position) {
+    private void addBankAccount(/*int type, int position*/) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_bank_acc);
 //Grab the window of the dialog, and change the width
@@ -333,22 +365,22 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         et_account_number.addTextChangedListener(new MyTextWatcher(et_account_number));
         et_account_name.addTextChangedListener(new MyTextWatcher(et_account_name));
 
-        if (type == 1) {
-            et_account_name.setText(bankArrayList.get(position).getNickName());
-            et_account_number.setText(bankArrayList.get(position).getMaskBankAccountNum());
-            et_routing_number.setText(bankArrayList.get(position).getMaskBankRoutingNum());
-
-            if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("S")) {
-                spinner_item = title[1];
-                spinner.setSelection(1);
-            } else if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("C")) {
-                spinner_item = title[2];
-                spinner.setSelection(2);
-            }else {
-                spinner_item = title[0];
-                spinner.setSelection(0);
-            }
-        }
+//        if (type == 1) {
+//            et_account_name.setText(bankArrayList.get(position).getNickName());
+//            et_account_number.setText(bankArrayList.get(position).getMaskBankAccountNum());
+//            et_routing_number.setText(bankArrayList.get(position).getMaskBankRoutingNum());
+//
+//            if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("S")) {
+//                spinner_item = title[1];
+//                spinner.setSelection(1);
+//            } else if (bankArrayList.get(position).getBankAccountType().equalsIgnoreCase("C")) {
+//                spinner_item = title[2];
+//                spinner.setSelection(2);
+//            }else {
+//                spinner_item = title[0];
+//                spinner.setSelection(0);
+//            }
+//        }
 
         // if button is clicked, close the custom dialog
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -598,6 +630,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             return position;
         }
 
+        @SuppressLint("InflateParams")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final ListContent holder;

@@ -1,6 +1,7 @@
 package com.pinlesspay.view.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,32 +16,27 @@ import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.Utils;
 
 /*
- * Created by arun.sharma on 8/8/2017.
+ * Created by arun.sharma on 8/9/2017.
  */
 
-public class PassCodeConfirmationActivity extends Activity implements View.OnFocusChangeListener {
+public class LockActivity extends Activity implements View.OnFocusChangeListener {
 
-    private String TAG = PassCodeConfirmationActivity.this.getClass().getName();
+    private String TAG = LockActivity.this.getClass().getName();
     private Activity activity;
-    private MyTextView txt_heading;
     private MyEditText et_code_1, et_code_2, et_code_3, et_code_4;
     private View vw_code_1, vw_code_2, vw_code_3, vw_code_4;
-    private String Previous_code = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_passcode);
 
-        activity = PassCodeConfirmationActivity.this;
+        activity = LockActivity.this;
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
-        txt_heading = (MyTextView) findViewById(R.id.txt_heading);
+        MyTextView txt_heading = (MyTextView) findViewById(R.id.txt_heading);
 
-        if (Preferences.readBoolean(activity, Preferences.PASSCODE_TURN_ON, false))
-            txt_heading.setText(getString(R.string.confirm_passcode));
-        else
-            txt_heading.setText(getString(R.string.enter_new_passcode));
+        txt_heading.setText(getString(R.string.enter_your_passcode));
 
         et_code_1 = (MyEditText) findViewById(R.id.edt_code_1);
         et_code_2 = (MyEditText) findViewById(R.id.edt_code_2);
@@ -56,6 +52,7 @@ public class PassCodeConfirmationActivity extends Activity implements View.OnFoc
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                startActivity(new Intent(activity, LoginActivity.class));
                 finish();
             }
         });
@@ -143,18 +140,12 @@ public class PassCodeConfirmationActivity extends Activity implements View.OnFoc
                                 et_code_3.getText().toString() +
                                 et_code_4.getText().toString();
                     }
-                    if (Preferences.readBoolean(activity, Preferences.PASSCODE_TURN_ON, false)) {
-                        if (Previous_code.equalsIgnoreCase(code)) {
-                            Preferences.writeString(activity, Preferences.PASSCODE_VALUE, code);
-                            finish();
-                        } else {
-                            Utils.showMessage(activity, getString(R.string.passcode_does_not_match));
-                            clearFields();
-                        }
+                    if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").equalsIgnoreCase(code)) {
+//                        Preferences.writeString(activity, Preferences.LOGOUT, "false");
+                        startActivity(new Intent(activity, MainActivity.class));
+                        finish();
                     } else {
-                        Previous_code = code;
-                        txt_heading.setText(getString(R.string.confirm_passcode));
-                        Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, true);
+                        Utils.showMessage(activity, getString(R.string.passcode_does_not_match));
                         clearFields();
                     }
                 } else

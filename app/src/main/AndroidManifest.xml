@@ -64,6 +64,10 @@
             android:name=".view.activity.PassCodeConfirmationActivity"
             android:configChanges="orientation|keyboard|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.LockActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden"
+            android:screenOrientation="portrait" />
 
 
         <receiver android:name=".sms.SmsReceiver">
