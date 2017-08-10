@@ -89,7 +89,9 @@ public class ScheduleManager {
                                         }
                                     EventBus.getDefault().post("GetSchedule True");
                                 }
-                            }
+                            } else
+                                EventBus.getDefault().post("GetSchedule False@#@" + response.getString("Message"));
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -162,7 +164,8 @@ public class ScheduleManager {
                                         }
                                     EventBus.getDefault().post("GetCharity True");
                                 }
-                            }
+                            } else
+                                EventBus.getDefault().post("GetCharity False@#@" + response.getString("Message"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -221,20 +224,6 @@ public class ScheduleManager {
                                     if (count > 0)
                                         for (int i = 0; i < count; i++) {
                                             Recurring recurring = new Recurring();
-//                                            "ServiceName": "RecurringService",
-//                                                    "EntityName": "DonationSchedule",
-//                                                    "Id": 8,
-//                                                    "DataBaseAction": 2,
-//                                                    "RowNum": 1,
-//                                                    "DonationName": "Self-enabling attitude-oriented systemengine",
-//                                                    "AccountType": "CARD",
-//                                                    "PaymentFrom": "5454XXXXXXXX5454",
-//                                                    "CardType": "MasterCard",
-//                                                    "NextScheduleRunDate": "09 Aug 2017",
-//                                                    "ScheduleName": "Every 2 Week",
-//                                                    "DonationAmount": 19.99,
-//                                                    "DonorID": 39
-
 
                                             recurring.setDonationName(jsonArray.getJSONObject(i).getString("DonationName"));
                                             recurring.setDonorID(jsonArray.getJSONObject(i).getString("DonorID"));
@@ -255,7 +244,8 @@ public class ScheduleManager {
                                         }
                                     EventBus.getDefault().post("Recurring True");
                                 }
-                            }
+                            } else
+                                EventBus.getDefault().post("Recurring False@#@" + response.getString("Message"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -314,20 +304,6 @@ public class ScheduleManager {
                                     if (count > 0)
                                         for (int i = 0; i < count; i++) {
                                             Transaction transaction = new Transaction();
-//                                            "ServiceName": "TransactionService",
-//                                                    "EntityName": "TransactionLog",
-//                                                    "Id": null,
-//                                                    "DataBaseAction": 2,
-//                                                    "RowNum": 1,
-//                                                    "InvoiceNo": "3P1003",
-//                                                    "TranDate": "02 Aug 2017",
-//                                                    "DonationName": "Blind Child Support",
-//                                                    "TranAmount": 5.55,
-//                                                    "PaymentType": "CARD",
-//                                                    "CardTypeCode": "MasterCard",
-//                                                    "PaymentFrom": "5454XXXXXXXX5454",
-//                                                    "NameOnCard": null,
-//                                                    "DeviceName": "Virtual Terminal"
                                             transaction.setId(jsonArray.getJSONObject(i).getString("Id"));
                                             transaction.setDataBaseAction(jsonArray.getJSONObject(i).getString("DataBaseAction"));
                                             transaction.setRowNum(jsonArray.getJSONObject(i).getString("RowNum"));
@@ -351,7 +327,8 @@ public class ScheduleManager {
                                         }
                                     EventBus.getDefault().post("Transactions True");
                                 }
-                            }
+                            } else
+                                EventBus.getDefault().post("Transactions False@#@" + response.getString("Message"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -402,6 +379,43 @@ public class ScheduleManager {
             public void onErrorResponse(VolleyError error) {
                 PPLog.e("Error Response : ", "Error: " + error.getMessage());
                 EventBus.getDefault().post("DeleteRecurring False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public void addRecurring(Activity activity, JSONObject jsonObject) {
+        PPLog.e("json data : ", jsonObject.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.DELETE_RECURRING_SCHEDULE, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "onSuccess  --> " + response.toString());
+
+                        try {
+
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                if (response.has("data")) {
+                                    JSONObject jsonObject1 = new JSONObject(response.getString("data"));
+                                    EventBus.getDefault().post("AddRecurring True@#@" + jsonObject1.getString("Message"));
+                                }
+                            } else
+                                EventBus.getDefault().post("AddRecurring False@#@" + response.getString("Message"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post("AddRecurring False");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().post("AddRecurring False");
             }
         });
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);

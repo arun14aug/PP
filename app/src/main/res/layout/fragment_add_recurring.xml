@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
@@ -29,12 +28,12 @@
             android:src="@drawable/toolbar_icon_back" />
 
         <com.pinlesspay.customUi.MyTextView
-            android:id="@+id/txt_schedule_header"
+            android:id="@+id/txt_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/title_profile"
+            android:text="@string/add_recurring"
             android:textColor="@color/white"
             android:textSize="@dimen/app_name_text_size" />
 
@@ -82,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:hint="@string/amount"
-                        android:inputType="text"
+                        android:inputType="numberDecimal"
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:textColor="@color/waterfall_text_color"
@@ -110,8 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_10"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_person"
-                    android:visibility="invisible" />
+                    android:src="@drawable/shape" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -122,21 +120,18 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <com.pinlesspay.customUi.MyEditText
-                        android:id="@+id/et_last_name"
+                    <Spinner
+                        android:id="@+id/spinner_cause_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/last_name"
-                        android:inputType="text"
+                        android:minHeight="@dimen/padding_40"
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
-                        android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_large"
-                        android:textStyle="normal" />
+                        android:spinnerMode="dropdown" />
+
 
                     <View
-                        android:id="@+id/vw_last_name"
+                        android:id="@+id/vw_cause_type"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/padding_1"
                         android:background="@color/login_line_color" />
@@ -156,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_10"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_email" />
+                    android:src="@drawable/icon_time" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -168,101 +163,12 @@
                     android:orientation="vertical">
 
                     <com.pinlesspay.customUi.MyEditText
-                        android:id="@+id/et_email"
+                        android:id="@+id/et_next_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:hint="@string/email"
-                        android:inputType="textEmailAddress"
-                        android:paddingBottom="@dimen/padding_10"
-                        android:paddingTop="@dimen/padding_10"
-                        android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_large"
-                        android:textStyle="normal" />
-
-                    <View
-                        android:id="@+id/vw_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/padding_1"
-                        android:background="@color/login_line_color" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/bg_color"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_phone" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/padding_10"
-                    android:background="@color/bg_color"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.pinlesspay.customUi.MyEditText
-                        android:id="@+id/et_mobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/mobile"
-                        android:inputType="phone"
-                        android:paddingBottom="@dimen/padding_10"
-                        android:paddingTop="@dimen/padding_10"
-                        android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_large"
-                        android:textStyle="normal" />
-
-                    <View
-                        android:id="@+id/vw_mobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/padding_1"
-                        android:background="@color/login_line_color" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/bg_color"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_address" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/padding_10"
-                    android:background="@color/bg_color"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.pinlesspay.customUi.MyEditText
-                        android:id="@+id/et_address_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/address"
+                        android:focusable="false"
+                        android:hint="@string/next_run"
                         android:inputType="textPostalAddress"
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
@@ -270,8 +176,9 @@
                         android:textSize="@dimen/text_size_large"
                         android:textStyle="normal" />
 
+
                     <View
-                        android:id="@+id/vw_address_1"
+                        android:id="@+id/vw_next_date"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/padding_1"
                         android:background="@color/login_line_color" />
@@ -291,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_10"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_person"
+                    android:src="@drawable/icon_phone"
                     android:visibility="invisible" />
 
                 <LinearLayout
@@ -303,210 +210,18 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <com.pinlesspay.customUi.MyEditText
-                        android:id="@+id/et_address_2"
+                    <Spinner
+                        android:id="@+id/spinner_payment_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/address_2"
-                        android:inputType="textPostalAddress"
+                        android:minHeight="@dimen/padding_40"
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
-                        android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_large"
-                        android:textStyle="normal" />
+                        android:spinnerMode="dropdown" />
+
 
                     <View
-                        android:id="@+id/vw_address_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/padding_1"
-                        android:background="@color/login_line_color" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/bg_color"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_person"
-                    android:visibility="invisible" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/padding_10"
-                    android:background="@color/bg_color"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.pinlesspay.customUi.MyEditText
-                        android:id="@+id/et_city"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/city"
-                        android:inputType="text"
-                        android:paddingBottom="@dimen/padding_10"
-                        android:paddingTop="@dimen/padding_10"
-                        android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_large"
-                        android:textStyle="normal" />
-
-                    <View
-                        android:id="@+id/vw_city"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/padding_1"
-                        android:background="@color/login_line_color" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/bg_color"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_person"
-                    android:visibility="invisible" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@color/bg_color"
-                    android:baselineAligned="false"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/padding_10"
-                        android:layout_weight="0.70"
-                        android:background="@color/bg_color"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <com.pinlesspay.customUi.MyEditText
-                            android:id="@+id/et_state"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:hint="@string/state"
-                            android:inputType="text"
-                            android:paddingBottom="@dimen/padding_10"
-                            android:paddingTop="@dimen/padding_10"
-                            android:textColor="@color/waterfall_text_color"
-                            android:textSize="@dimen/text_size_large"
-                            android:textStyle="normal" />
-
-                        <View
-                            android:id="@+id/vw_state"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/padding_1"
-                            android:background="@color/login_line_color" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/padding_10"
-                        android:layout_weight="0.30"
-                        android:background="@color/bg_color"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <com.pinlesspay.customUi.MyEditText
-                            android:id="@+id/et_zip"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:hint="@string/zip"
-                            android:inputType="textPostalAddress"
-                            android:paddingBottom="@dimen/padding_10"
-                            android:paddingTop="@dimen/padding_10"
-                            android:textColor="@color/waterfall_text_color"
-                            android:textSize="@dimen/text_size_large"
-                            android:textStyle="normal" />
-
-                        <View
-                            android:id="@+id/vw_zip"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/padding_1"
-                            android:background="@color/login_line_color" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/bg_color"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/icon_person"
-                    android:visibility="invisible" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/padding_10"
-                    android:background="@color/bg_color"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.pinlesspay.customUi.MyTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:text="@string/country"
-                        android:textColor="@color/waterfall_text_color"
-                        android:textSize="@dimen/text_size_small"
-                        android:textStyle="normal" />
-
-                    <com.hbb20.CountryCodePicker
-                        android:id="@+id/txt_country_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/padding_7"
-                        android:paddingTop="@dimen/padding_7"
-                        app:ccpSearchBox_showPhoneCode="false"
-                        app:ccp_showPhoneCode="false"
-                        app:contentColor="@color/login_text_color"
-                        app:hideNameCode="true"
-                        app:showFlag="false"
-                        app:showFullName="true"
-                        app:textSize="@dimen/text_size_large" />
-
-                    <View
-                        android:id="@+id/vw_country_name"
+                        android:id="@+id/vw_payment_type"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/padding_1"
                         android:background="@color/login_line_color" />

@@ -30,6 +30,7 @@
     <dimen name="app_name_text_size">20sp</dimen>
     <dimen name="schedule_date_text">24sp</dimen>
     <dimen name="recurring_detail_large_text">32sp</dimen>
+    <dimen name="text_size_very_small">9sp</dimen>
 
     <dimen name="padding_0.5">0.5dp</dimen>
     <dimen name="padding_1">1dp</dimen>

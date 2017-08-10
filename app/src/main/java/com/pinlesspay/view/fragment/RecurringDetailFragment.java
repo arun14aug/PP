@@ -213,6 +213,7 @@ public class RecurringDetailFragment extends Fragment implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
+        mToolbar.setVisibility(View.GONE);
         EventBus.getDefault().register(this);
     }
 

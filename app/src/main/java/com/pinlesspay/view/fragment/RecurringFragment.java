@@ -83,7 +83,13 @@ public class RecurringFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.showMessage(activity, "Add Recurring Schedule");
+                Fragment fragment = new AddRecurringFragment();
+                FragmentManager fragmentManager = ((FragmentActivity) activity)
+                        .getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_body, fragment, "AddRecurringFragment");
+                fragmentTransaction.addToBackStack("AddRecurringFragment");
+                fragmentTransaction.commit();
             }
         });
         // Inflate the layout for this fragment

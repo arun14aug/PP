@@ -94,6 +94,7 @@
         android:orientation="horizontal">
 
         <com.pinlesspay.customUi.MyEditText
+            android:id="@+id/et_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -105,6 +106,7 @@
             android:textSize="@dimen/text_size_large" />
 
         <ImageView
+            android:id="@+id/img_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

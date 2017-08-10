@@ -17,7 +17,11 @@ import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.model.Transaction;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 /*
  * Created by arun.sharma on 7/25/2017.
@@ -84,7 +88,19 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
             if (transaction.getInvoiceNo().equalsIgnoreCase(id)) {
                 txt_amount.setText(activity.getString(R.string.dollar) + transaction.getTranAmount());
                 txt_status.setText(transaction.getStatus());
-                txt_date.setText(transaction.getTranDate());
+
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy HH:mm a");
+                Date date = null;
+                try {
+                    date = sdf.parse(transaction.getTranDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(format2.format(date));
+
+                txt_date.setText(format2.format(date));
                 txt_transaction_heading.setText(transaction.getDonationName());
                 txt_id.setText(transaction.getInvoiceNo());
                 txt_card_name.setText(transaction.getPaymentType());
@@ -123,6 +139,12 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
             case R.id.img_menu:
                 break;
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mToolbar.setVisibility(View.GONE);
     }
 
     @Override

@@ -12,16 +12,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
@@ -33,6 +30,7 @@ import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
+import com.pinlesspay.view.adapter.SpinnerAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -375,7 +373,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
 //        txt_account_type = (MyTextView) dialog.findViewById(R.id.txt_account_type);
         final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner_account_type);
 
-        SpinnerAdapter adapter = new SpinnerAdapter();
+        SpinnerAdapter adapter = new SpinnerAdapter(activity, title);
         spinner.setAdapter(adapter);
 
         et_routing_number.addTextChangedListener(new MyTextWatcher(et_routing_number));
@@ -633,50 +631,5 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         }
 
     }
-
-    private class SpinnerAdapter extends BaseAdapter {
-        private LayoutInflater mInflater;
-
-        @Override
-        public int getCount() {
-            return title.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @SuppressLint("InflateParams")
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final ListContent holder;
-            View v = convertView;
-            if (v == null) {
-                mInflater = (LayoutInflater) activity.getSystemService(LAYOUT_INFLATER_SERVICE);
-                v = mInflater.inflate(R.layout.row_spinner_account_type, null);
-                holder = new ListContent();
-                holder.text = (TextView) v.findViewById(R.id.textView1);
-
-                v.setTag(holder);
-            } else {
-                holder = (ListContent) v.getTag();
-            }
-
-            holder.text.setText(title[position]);
-
-            return v;
-        }
-
-        class ListContent {
-            TextView text;
-        }
-    }
-
 }
 

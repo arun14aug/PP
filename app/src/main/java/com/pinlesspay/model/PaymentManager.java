@@ -60,7 +60,7 @@ public class PaymentManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                if (response.has("data")&& !response.isNull("data")) {
+                                if (response.has("data") && !response.isNull("data")) {
                                     JSONArray jsonArray = response.getJSONArray("data");
                                     if (jsonArray == null)
                                         jsonArray = new JSONArray();
@@ -88,7 +88,9 @@ public class PaymentManager {
                                         }
                                 }
                                 EventBus.getDefault().post("CreditCard True");
-                            }
+                            } else
+                                EventBus.getDefault().post("CreditCard False@#@" + response.getString("Message"));
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -138,7 +140,7 @@ public class PaymentManager {
 
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                if (response.has("data")&& !response.isNull("data")){
+                                if (response.has("data") && !response.isNull("data")) {
                                     JSONArray jsonArray = response.getJSONArray("data");
 //                                }
 //
@@ -167,7 +169,9 @@ public class PaymentManager {
                                         }
                                 }
                                 EventBus.getDefault().post("BankList True");
-                            }
+                            } else
+                                EventBus.getDefault().post("BankList False@#@" + response.getString("Message"));
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();

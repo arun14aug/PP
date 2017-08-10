@@ -177,6 +177,8 @@ public class ScheduleFragment extends Fragment {
                 Utils.showMessage(activity, m[1]);
             } else
                 Utils.showMessage(activity, getString(R.string.error_message));
+            recyclerView.setVisibility(View.GONE);
+            waterfall_layout.setVisibility(View.VISIBLE);
             PPLog.e(TAG, "GetSchedule False");
             Utils.dismissLoading();
         }

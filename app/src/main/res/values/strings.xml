@@ -133,4 +133,11 @@
     <string name="yes">Yes</string>
     <string name="later">Later</string>
     <string name="amount">Amount</string>
+
+    <string name="add_recurring">Add Recurring</string>
+    <string name="please_enter_amount">Please enter amount</string>
+    <string name="please_select_category">Please select category</string>
+    <string name="please_select_date">Please select date</string>
+    <string name="please_select_payment_method">Please select payment method</string>
+    <string name="please_enter_text">Please enter text</string>
 </resources>

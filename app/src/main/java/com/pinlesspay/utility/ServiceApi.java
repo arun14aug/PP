@@ -25,4 +25,10 @@ public class ServiceApi {
     public static final String DELETE_RECURRING_SCHEDULE = baseurl + "Process"; // Action "DeleteRecuSchedule"
     public static final String RESEND_OTP = baseurl + "Process"; // Action "resenddonorotp"
     public static final String GET_DONOR_DEVICES = baseurl + "GetAllData"; // Action "GetDevices"
+    public static final String POST_TICKET = baseurl + "PostTicket"; // Action "PostTicket"
+    public static final String POST_TICKET_REPLY = baseurl + "PostTicketReply"; // Action "PostTicketReply"
+    public static final String GET_ALL_TICKETS = baseurl + "GetAllData"; // Action "GetAllTickets"
+    public static final String GET_TICKET_DETAIL = baseurl + "GetAllData"; // Action "GetTicketDetail"
+    public static final String POST_SUGGESTIONS = baseurl + "PostSuggestion"; // Action "PostSuggestion"
+    public static final String ADD_RECURRING_SCHEDULE = baseurl + "Process"; // Action "AddRecuSchedule"
 }

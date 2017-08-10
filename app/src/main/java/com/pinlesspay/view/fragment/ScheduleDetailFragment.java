@@ -101,4 +101,10 @@ public class ScheduleDetailFragment extends Fragment {
         super.onDestroy();
         mToolbar.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mToolbar.setVisibility(View.GONE);
+    }
 }

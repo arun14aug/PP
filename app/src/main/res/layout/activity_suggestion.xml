@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:contentDescription="@string/tell_a_friend"
+            android:contentDescription="@string/app_name"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -38,5 +38,71 @@
             android:textColor="@color/white"
             android:textSize="@dimen/app_name_text_size" />
 
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/waterfall_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@color/bg_color"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:contentDescription="@string/app_name"-->
+        <!--android:src="@drawable/empty_screen_icon_schedule" />-->
+
+        <com.pinlesspay.customUi.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/padding_30"
+            android:gravity="center_horizontal"
+            android:text="@string/we_would_love_to_hear"
+            android:textColor="@color/waterfall_text_color"
+            android:textSize="@dimen/text_size_xlarge"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_1"
+        android:background="@drawable/shadow" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chat_bar"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <com.pinlesspay.customUi.MyEditText
+            android:id="@+id/et_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/place_your_text"
+            android:inputType="text"
+            android:padding="@dimen/padding_10"
+            android:textColor="#FF241923"
+            android:textSize="@dimen/text_size_large" />
+
+        <ImageView
+            android:id="@+id/img_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/about"
+            android:paddingBottom="@dimen/padding_8"
+            android:paddingLeft="@dimen/padding_10"
+            android:paddingRight="@dimen/padding_10"
+            android:paddingTop="@dimen/padding_8"
+            android:src="@drawable/icon_send" />
     </LinearLayout>
 </LinearLayout>

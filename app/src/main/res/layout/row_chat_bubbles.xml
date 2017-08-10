@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/user_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/bubble_in"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_5">
+
+            <com.pinlesspay.customUi.MyTextView
+                android:id="@+id/txt_user_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/schedule_heading_color"
+                android:textSize="@dimen/text_size_large" />
+
+            <com.pinlesspay.customUi.MyTextView
+                android:id="@+id/txt_user_message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textColor="@color/schedule_heading_color"
+                android:textSize="@dimen/text_size_very_small" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reply_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bubble_out"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_5">
+
+            <com.pinlesspay.customUi.MyTextView
+                android:id="@+id/txt_response"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/schedule_heading_color"
+                android:textSize="@dimen/text_size_large" />
+
+            <com.pinlesspay.customUi.MyTextView
+                android:id="@+id/txt_response_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textColor="@color/schedule_heading_color"
+                android:textSize="@dimen/text_size_very_small" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

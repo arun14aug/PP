@@ -1,7 +1,7 @@
 package com.pinlesspay.view.adapter;
 
 /*
- * Created by Ravi on 29/07/15.
+ * Created by arun.sharma on 29/07/15.
  */
 
 import android.app.Activity;
@@ -15,7 +15,11 @@ import android.widget.TextView;
 import com.pinlesspay.R;
 import com.pinlesspay.model.Transaction;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
@@ -46,7 +50,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         Transaction transaction = data.get(position);
 
         holder.txt_transaction_time.setText(activity.getString(R.string.hash_tag) + transaction.getInvoiceNo());
-        holder.txt_next_date.setText(transaction.getTranDate());
+
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        try {
+            date = sdf.parse(transaction.getTranDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(format2.format(date));
+        holder.txt_next_date.setText(format2.format(date));
         holder.txt_transaction_heading.setText(transaction.getDonationName());
         holder.txt_amount.setText(activity.getString(R.string.dollar) + transaction.getTranAmount());
 
