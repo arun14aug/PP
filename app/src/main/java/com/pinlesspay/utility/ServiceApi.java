@@ -31,4 +31,6 @@ public class ServiceApi {
     public static final String GET_TICKET_DETAIL = baseurl + "GetAllData"; // Action "GetTicketDetail"
     public static final String POST_SUGGESTIONS = baseurl + "PostSuggestion"; // Action "PostSuggestion"
     public static final String ADD_RECURRING_SCHEDULE = baseurl + "Process"; // Action "AddRecuSchedule"
+
+    public static final String MAKE_DONATION = "http://pinlesspay.edu360.guru/donate?token=";
 }

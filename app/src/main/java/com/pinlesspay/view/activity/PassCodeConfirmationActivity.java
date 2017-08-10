@@ -37,10 +37,7 @@ public class PassCodeConfirmationActivity extends Activity implements View.OnFoc
 
         txt_heading = (MyTextView) findViewById(R.id.txt_heading);
 
-        if (Preferences.readBoolean(activity, Preferences.PASSCODE_TURN_ON, false))
-            txt_heading.setText(getString(R.string.confirm_passcode));
-        else
-            txt_heading.setText(getString(R.string.enter_new_passcode));
+        txt_heading.setText(getString(R.string.enter_new_passcode));
 
         et_code_1 = (MyEditText) findViewById(R.id.edt_code_1);
         et_code_2 = (MyEditText) findViewById(R.id.edt_code_2);
@@ -143,8 +140,9 @@ public class PassCodeConfirmationActivity extends Activity implements View.OnFoc
                                 et_code_3.getText().toString() +
                                 et_code_4.getText().toString();
                     }
-                    if (Preferences.readBoolean(activity, Preferences.PASSCODE_TURN_ON, false)) {
+                    if (!Utils.isEmptyString(Previous_code)) {
                         if (Previous_code.equalsIgnoreCase(code)) {
+                            Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, true);
                             Preferences.writeString(activity, Preferences.PASSCODE_VALUE, code);
                             finish();
                         } else {
@@ -154,9 +152,22 @@ public class PassCodeConfirmationActivity extends Activity implements View.OnFoc
                     } else {
                         Previous_code = code;
                         txt_heading.setText(getString(R.string.confirm_passcode));
-                        Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, true);
                         clearFields();
                     }
+//                    if (Preferences.readBoolean(activity, Preferences.PASSCODE_TURN_ON, false)) {
+//                        if (Previous_code.equalsIgnoreCase(code)) {
+//                            Preferences.writeString(activity, Preferences.PASSCODE_VALUE, code);
+//                            finish();
+//                        } else {
+//                            Utils.showMessage(activity, getString(R.string.passcode_does_not_match));
+//                            clearFields();
+//                        }
+//                    } else {
+//                        Previous_code = code;
+//                        txt_heading.setText(getString(R.string.confirm_passcode));
+//                        Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, true);
+//                        clearFields();
+//                    }
                 } else
                     et_code_3.requestFocus();
             }

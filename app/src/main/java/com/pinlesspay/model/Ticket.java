@@ -26,7 +26,7 @@ import de.greenrobot.event.EventBus;
 public class Ticket {
 
     private String TAG = Ticket.class.getSimpleName();
-    private String ServiceName, EntityName, Id, DataBaseAction, TicketID, DateCreated, TicketShortDesc;
+    private String ServiceName, EntityName, Id, DataBaseAction, TicketID, DateCreated, TicketShortDesc, TicketStatus;
     private ArrayList<TicketDetail> ticketArrayList;
 
     public String getServiceName() {
@@ -83,6 +83,14 @@ public class Ticket {
 
     public void setTicketShortDesc(String ticketShortDesc) {
         TicketShortDesc = ticketShortDesc;
+    }
+
+    public String getTicketStatus() {
+        return TicketStatus;
+    }
+
+    public void setTicketStatus(String ticketStatus) {
+        TicketStatus = ticketStatus;
     }
 
     public ArrayList<TicketDetail> getTicketDetail(Activity activity, boolean shouldRefresh, JSONObject jsonObject) {

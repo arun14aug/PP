@@ -21,7 +21,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 /*
  * Created by arun.sharma on 7/25/2017.
@@ -89,8 +88,9 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
                 txt_amount.setText(activity.getString(R.string.dollar) + transaction.getTranAmount());
                 txt_status.setText(transaction.getStatus());
 
-                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//                String format = transaction.getTranDate().replace("T", " ");
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy HH:mm a");
                 Date date = null;
                 try {

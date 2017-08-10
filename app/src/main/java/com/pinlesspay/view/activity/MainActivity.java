@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 5:
                 if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").length() > 1) {
                     Preferences.writeString(activity, Preferences.LOGOUT, "true");
+                    Preferences.writeString(activity, Preferences.LOGIN, "false");
                     Intent intent = new Intent(activity, LockActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -223,7 +224,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 })
                 .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(activity, VerifyActivity.class);
+                        Preferences.writeString(activity, Preferences.LATER_CASE, "true");
+                        Preferences.writeString(activity, Preferences.LOGIN, "false");
+                        Intent intent = new Intent(activity, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();

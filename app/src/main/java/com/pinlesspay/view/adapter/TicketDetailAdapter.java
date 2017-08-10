@@ -56,8 +56,8 @@ public class TicketDetailAdapter extends RecyclerView.Adapter<TicketDetailAdapte
         c.set(1, 0, 1, 0, 0, 0);
         c.set(Calendar.MILLISECOND, 0);
 
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         SimpleDateFormat format2 = new SimpleDateFormat("HH:mm a");
         Date date = null;
         try {

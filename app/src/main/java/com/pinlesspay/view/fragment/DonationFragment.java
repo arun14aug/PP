@@ -2,6 +2,7 @@ package com.pinlesspay.view.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -10,10 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pinlesspay.R;
+import com.pinlesspay.customUi.MyButton;
 import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.Charity;
 import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.utility.PPLog;
+import com.pinlesspay.utility.Preferences;
+import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
 
 import java.io.UnsupportedEncodingException;
@@ -44,6 +48,16 @@ public class DonationFragment extends Fragment {
 
         txt_description = (MyTextView) rootView.findViewById(R.id.txt_description);
 
+        MyButton btn_make_donation = (MyButton) rootView.findViewById(R.id.btn_make_payment);
+        btn_make_donation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = ServiceApi.MAKE_DONATION + Preferences.readString(activity, Preferences.AUTH_TOKEN, "");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                activity.startActivity(intent);
+            }
+        });
+
 
         charityArrayList = ModelManager.getInstance().getScheduleManager().getCharity(activity, false, 1);
         if (charityArrayList == null) {
@@ -57,7 +71,7 @@ public class DonationFragment extends Fragment {
     }
 
     private void setData() {
-        byte[] bytes = new byte[0]; // Charset to encode into
+        byte[] bytes; // Charset to encode into
         String s2 = "";
         try {
             bytes = charityArrayList.get(0).getDescription().getBytes("UTF-8");

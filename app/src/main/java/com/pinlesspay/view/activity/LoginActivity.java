@@ -64,7 +64,10 @@ public class LoginActivity extends Activity {
 
         activity = LoginActivity.this;
 
-        if (Preferences.readString(activity, Preferences.LOGOUT, "").equalsIgnoreCase("true")) {
+        if (Preferences.readString(activity, Preferences.LOGIN, "").equalsIgnoreCase("True")) {
+            startActivity(new Intent(activity, MainActivity.class));
+            finish();
+        } else if (Preferences.readString(activity, Preferences.LOGOUT, "").equalsIgnoreCase("true")) {
             startActivity(new Intent(activity, LockActivity.class));
             finish();
         }
@@ -76,6 +79,8 @@ public class LoginActivity extends Activity {
         codePicker = (MyTextView) findViewById(R.id.txt_country_code);
         namePicker = (CountryCodePicker) findViewById(R.id.txt_country_name);
 
+        if (Preferences.readString(activity, Preferences.LATER_CASE, "").equalsIgnoreCase("true"))
+            edt_phone_number.setText(Preferences.readString(activity, Preferences.FORMATTED_MOBILE_NUMBER, ""));
 
         namePicker.setOnCountryChangeListener(countryChangeListener);
         codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());
@@ -177,7 +182,11 @@ public class LoginActivity extends Activity {
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
-                        jsonObject.put("RegisterMobile", countryCode + mobile);
+                        if (Preferences.readString(activity, Preferences.FORMATTED_MOBILE_NUMBER, "")
+                                .equalsIgnoreCase(edt_phone_number.getText().toString()))
+                            jsonObject.put("RegisterMobile", Preferences.readString(activity, Preferences.MOBILE_NUMBER, ""));
+                        else
+                            jsonObject.put("RegisterMobile", countryCode + mobile);
                         jsonObject.put("DeviceIdentifier", Preferences.readString(activity, Preferences.MAC_ADDRESS, ""));
                         jsonObject.put("DeviceName", Preferences.readString(activity, Preferences.DEVICE_NAME, ""));
                         jsonObject.put("DeviceType", "Android");
@@ -359,6 +368,7 @@ public class LoginActivity extends Activity {
             Utils.dismissLoading();
             PPLog.e(TAG, "Login True");
             Preferences.writeString(activity, Preferences.MOBILE_NUMBER, countryCode + mobile);
+//            Preferences.writeString(activity, Preferences.MOBILE, mobile);
             Preferences.writeString(activity, Preferences.FORMATTED_MOBILE_NUMBER, edt_phone_number.getText().toString());
             startActivity(new Intent(activity, VerifyActivity.class));
             finish();

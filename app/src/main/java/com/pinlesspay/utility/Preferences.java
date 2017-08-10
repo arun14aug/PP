@@ -33,6 +33,8 @@ public class Preferences {
     public static final String BANKING_ENABLED = "banking_enabled";
     public static final String PASSCODE_TURN_ON = "passcode_turn_on";
     public static final String PASSCODE_VALUE = "passcode_value";
+    public static final String LATER_CASE = "later_case";
+//    public static final String MOBILE = "mobile";
 
     //  GpPreferences.writeString(getApplicationContext(), Preferences.NAME, "dev");
     // GpPreferences.readString(getApplicationContext(), Preferences.NAME, "");

@@ -139,6 +139,7 @@ public class RestOfAllManager {
                                             ticket.setTicketID(jsonArray.getJSONObject(i).getString("TicketID"));
                                             ticket.setDateCreated(jsonArray.getJSONObject(i).getString("DateCreated"));
                                             ticket.setTicketShortDesc(jsonArray.getJSONObject(i).getString("TicketShortDesc"));
+                                            ticket.setTicketStatus(jsonArray.getJSONObject(i).getString("TicketStatus"));
 
                                             ticketArrayList.add(ticket);
                                         }

@@ -16,9 +16,13 @@ import android.widget.LinearLayout;
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.Ticket;
+import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.activity.NewTicketActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class SupportAdapter extends RecyclerView.Adapter<SupportAdapter.MyViewHolder> {
@@ -49,9 +53,27 @@ public class SupportAdapter extends RecyclerView.Adapter<SupportAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Ticket current = data.get(position);
 
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        try {
+            date = sdf.parse(current.getDateCreated());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(format2.format(date));
+        holder.txt_date.setText(format2.format(date));
 
-        holder.txt_date.setText(current.getDateCreated());
+//        holder.txt_date.setText(current.getDateCreated());
         holder.txt_description.setText(current.getTicketShortDesc());
+        if (current.getTicketStatus().equalsIgnoreCase("N")) {
+            holder.txt_date.setTextColor(Utils.setColor(activity, R.color.support_new_text));
+            holder.txt_description.setTextColor(Utils.setColor(activity, R.color.schedule_heading_color));
+        } else {
+            holder.txt_date.setTextColor(Utils.setColor(activity, R.color.schedule_subheading_color));
+            holder.txt_description.setTextColor(Utils.setColor(activity, R.color.schedule_subheading_color));
+        }
         holder.row_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
