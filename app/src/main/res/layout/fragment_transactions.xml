@@ -5,10 +5,16 @@
     android:orientation="vertical">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/transaction_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/transaction_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/waterfall_layout"
@@ -30,8 +36,8 @@
         <com.pinlesspay.customUi.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_transactions"
             android:layout_marginTop="@dimen/padding_5"
+            android:text="@string/no_transactions"
             android:textColor="@color/waterfall_text_color"
             android:textSize="@dimen/text_size_xlarge"
             android:textStyle="normal" />

@@ -220,6 +220,35 @@ public class PaymentManager {
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
         requestQueue.add(jsonObjReq);
     }
+    public void updateBankAccount(final Activity activity, JSONObject jsonObject) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.UPDATE_BANK_ACCOUNT, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        PPLog.e("Success Response : ", "Response: " + response.toString());
+
+                        try {
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                EventBus.getDefault().postSticky("UpdateBankAccount True");
+                            } else
+                                EventBus.getDefault().postSticky("UpdateBankAccount False@#@" + response.getString("Message"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().postSticky("UpdateBankAccount False");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().postSticky("UpdateBankAccount False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
 
     public void addCreditCard(final Activity activity, JSONObject jsonObject) {
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.PROCESS_CREDIT_CARD, jsonObject,
@@ -245,6 +274,64 @@ public class PaymentManager {
             public void onErrorResponse(VolleyError error) {
                 PPLog.e("Error Response : ", "Error: " + error.getMessage());
                 EventBus.getDefault().postSticky("AddCC False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+    public void updateCreditCard(final Activity activity, JSONObject jsonObject) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.UPDATE_CREDIT_CARD, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        PPLog.e("Success Response : ", "Response: " + response.toString());
+
+                        try {
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                EventBus.getDefault().postSticky("UpdateCC True");
+                            } else
+                                EventBus.getDefault().postSticky("UpdateCC False@#@" + response.getString("Message"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().postSticky("UpdateCC False");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().postSticky("UpdateCC False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+    public void deleteDonorAccount(final Activity activity, JSONObject jsonObject) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.DELETE_DONOR_ACOUNT, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        PPLog.e("Success Response : ", "Response: " + response.toString());
+
+                        try {
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                EventBus.getDefault().postSticky("DeleteDonorAccount True");
+                            } else
+                                EventBus.getDefault().postSticky("DeleteDonorAccount False@#@" + response.getString("Message"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().postSticky("DeleteDonorAccount False");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().postSticky("DeleteDonorAccount False");
             }
         });
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);

@@ -31,6 +31,16 @@ public class ServiceApi {
     public static final String GET_TICKET_DETAIL = baseurl + "GetAllData"; // Action "GetTicketDetail"
     public static final String POST_SUGGESTIONS = baseurl + "PostSuggestion"; // Action "PostSuggestion"
     public static final String ADD_RECURRING_SCHEDULE = baseurl + "Process"; // Action "AddRecuSchedule"
+    public static final String DELETE_DONOR_ACOUNT = baseurl + "Process"; // Action "DeleteDonorAccount"
+    public static final String DELETE_DONOR_DEVICE = baseurl + "Process"; // Action "DeleteDonorDevice"
+    public static final String UPDATE_CREDIT_CARD = baseurl + "Process"; // Action "UpdateCreditCard"
+    public static final String UPDATE_BANK_ACCOUNT = baseurl + "Process"; // Action "UpdateBankAccount"
+    public static final String GET_DONATION_FREQUENCY = baseurl + "GetAllData"; // Action "GetDonationFrequency"
+    public static final String GET_DONATION_CAUSE_LIST = baseurl + "GetAllData"; // Action "GetDonationCauseList"
+    public static final String GET_DONOR_PAYMENT_ACCOUNTS = baseurl + "GetAllData"; // Action "GetDonorPaymentAccounts"
+    public static final String SAVE_DONATION_SCHEDULE = baseurl + "Process"; // Action "SaveDonationSchedule"
+    public static final String POST_PUSH_NOTIFY = baseurl + "Process"; // Action "PostPushNtfy"
+    public static final String DELETE_PUSH_NOTIFY = baseurl + "Process"; // Action "DeletePushNtfy"
 
     public static final String MAKE_DONATION = "http://pinlesspay.edu360.guru/donate?token=";
 }

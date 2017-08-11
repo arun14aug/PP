@@ -31,6 +31,9 @@ public class ScheduleManager {
     private ArrayList<Charity> charityArrayList;
     private ArrayList<Recurring> recurringArrayList;
     private ArrayList<Transaction> transactionArrayList;
+    private ArrayList<PaymentAccount> paymentAccountArrayList;
+    private ArrayList<Causes> causesArrayList;
+    private ArrayList<Frequency> frequencyArrayList;
 
     public ArrayList<Schedule> getSchedules(Activity activity, boolean shouldRefresh, int pageNumber) {
         if (shouldRefresh)
@@ -387,7 +390,7 @@ public class ScheduleManager {
 
     public void addRecurring(Activity activity, JSONObject jsonObject) {
         PPLog.e("json data : ", jsonObject.toString());
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.DELETE_RECURRING_SCHEDULE, jsonObject,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.SAVE_DONATION_SCHEDULE, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -399,7 +402,7 @@ public class ScheduleManager {
                             if (state) {
                                 if (response.has("data")) {
                                     JSONObject jsonObject1 = new JSONObject(response.getString("data"));
-                                    EventBus.getDefault().post("AddRecurring True@#@" + jsonObject1.getString("Message"));
+                                    EventBus.getDefault().post("AddRecurring True@#@" + jsonObject1.getString("Msg"));
                                 }
                             } else
                                 EventBus.getDefault().post("AddRecurring False@#@" + response.getString("Message"));
@@ -416,6 +419,207 @@ public class ScheduleManager {
             public void onErrorResponse(VolleyError error) {
                 PPLog.e("Error Response : ", "Error: " + error.getMessage());
                 EventBus.getDefault().post("AddRecurring False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+
+
+    public ArrayList<PaymentAccount> getPaymentAccounts(Activity activity, boolean shouldRefresh, int pageNumber) {
+        if (shouldRefresh)
+            getAccountList(activity, pageNumber);
+        return paymentAccountArrayList;
+    }
+
+    private void getAccountList(Activity activity, int pageNumber) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+            jsonObject.put("PageSize", ServiceApi.PAGE_SIZE);
+            jsonObject.put("PageNumber", pageNumber);
+            jsonObject.put("Action", "GetDonorPaymentAccounts");
+            jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        PPLog.e("json data : ", jsonObject.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.GET_DONOR_PAYMENT_ACCOUNTS, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "onSuccess  --> " + response.toString());
+
+                        try {
+
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                if (response.has("data") && !response.isNull("data")) {
+                                    JSONArray jsonArray = response.getJSONArray("data");
+                                    int count = jsonArray.length();
+                                    paymentAccountArrayList = new ArrayList<>();
+                                    if (count > 0)
+                                        for (int i = 0; i < count; i++) {
+                                            PaymentAccount paymentAccount = new PaymentAccount();
+
+                                            paymentAccount.setAccountId(jsonArray.getJSONObject(i).getString("AccountId"));
+                                            paymentAccount.setAccountType(jsonArray.getJSONObject(i).getString("AccountType"));
+                                            paymentAccount.setCardType(jsonArray.getJSONObject(i).getString("CardType"));
+                                            paymentAccount.setAccountNumber(jsonArray.getJSONObject(i).getString("AccountNumber"));
+
+                                            paymentAccountArrayList.add(paymentAccount);
+                                        }
+                                    EventBus.getDefault().post("PaymentAccount True");
+                                }
+                            } else
+                                EventBus.getDefault().post("PaymentAccount False@#@" + response.getString("Message"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post("PaymentAccount False");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().post("PaymentAccount False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public ArrayList<Causes> getCauses(Activity activity, boolean shouldRefresh, int pageNumber) {
+        if (shouldRefresh)
+            getCausesList(activity, pageNumber);
+        return causesArrayList;
+    }
+
+    private void getCausesList(Activity activity, int pageNumber) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+            jsonObject.put("PageSize", ServiceApi.PAGE_SIZE);
+            jsonObject.put("PageNumber", pageNumber);
+            jsonObject.put("Action", "GetDonationCauseList");
+            jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        PPLog.e("json data : ", jsonObject.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.GET_DONATION_CAUSE_LIST, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "onSuccess  --> " + response.toString());
+
+                        try {
+
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                if (response.has("data") && !response.isNull("data")) {
+                                    JSONArray jsonArray = response.getJSONArray("data");
+                                    int count = jsonArray.length();
+                                    causesArrayList = new ArrayList<>();
+                                    if (count > 0)
+                                        for (int i = 0; i < count; i++) {
+                                            Causes causes = new Causes();
+
+                                            causes.setDonationID(jsonArray.getJSONObject(i).getString("DonationID"));
+                                            causes.setDonationName(jsonArray.getJSONObject(i).getString("DonationName"));
+
+                                            causesArrayList.add(causes);
+                                        }
+                                    EventBus.getDefault().post("Causes True");
+                                }
+                            } else
+                                EventBus.getDefault().post("Causes False@#@" + response.getString("Message"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post("Causes False");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().post("Causes False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public ArrayList<Frequency> getFrequency(Activity activity, boolean shouldRefresh, int pageNumber) {
+        if (shouldRefresh)
+            getFrequencyList(activity, pageNumber);
+        return frequencyArrayList;
+    }
+
+    private void getFrequencyList(Activity activity, int pageNumber) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+            jsonObject.put("PageSize", ServiceApi.PAGE_SIZE);
+            jsonObject.put("PageNumber", pageNumber);
+            jsonObject.put("Action", "GetDonationFrequency");
+            jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        PPLog.e("json data : ", jsonObject.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.GET_DONATION_FREQUENCY, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "onSuccess  --> " + response.toString());
+
+                        try {
+
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                if (response.has("data") && !response.isNull("data")) {
+                                    JSONArray jsonArray = response.getJSONArray("data");
+                                    int count = jsonArray.length();
+                                    frequencyArrayList = new ArrayList<>();
+                                    if (count > 0)
+                                        for (int i = 0; i < count; i++) {
+                                            Frequency frequency = new Frequency();
+
+                                            frequency.setDonationScheduleId(jsonArray.getJSONObject(i).getString("DonationScheduleId"));
+                                            frequency.setDonationScheduleName(jsonArray.getJSONObject(i).getString("DonationScheduleName"));
+
+                                            frequencyArrayList.add(frequency);
+                                        }
+                                    EventBus.getDefault().post("Frequency True");
+                                }
+                            } else
+                                EventBus.getDefault().post("Frequency False@#@" + response.getString("Message"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post("Frequency False");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().post("Frequency False");
             }
         });
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);

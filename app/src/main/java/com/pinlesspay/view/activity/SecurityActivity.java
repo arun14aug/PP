@@ -20,8 +20,12 @@ import com.pinlesspay.model.DonorDevice;
 import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
+import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.adapter.DeviceAdapter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -64,7 +68,7 @@ public class SecurityActivity extends Activity {
         device_list.addOnItemTouchListener(new RecyclerTouchListener(activity, device_list, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                showAlert(donorDeviceArrayList.get(position).getDeviceName(), 0);
+                showAlert(donorDeviceArrayList.get(position).getDeviceName(), 0, donorDeviceArrayList.get(position).getDonorDeviceID());
             }
 
             @Override
@@ -77,7 +81,7 @@ public class SecurityActivity extends Activity {
             public void onClick(View v) {
                 if (Preferences.readBoolean(activity, Preferences.PASSCODE_TURN_ON, false))
                     if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").length() > 0)
-                        showAlert("", 1);
+                        showAlert("", 1, "");
                     else
                         startActivity(new Intent(activity, PassCodeConfirmationActivity.class));
                 else
@@ -98,7 +102,7 @@ public class SecurityActivity extends Activity {
             txt_turn_passcode_on.setText(getString(R.string.turn_passcode_on));
     }
 
-    private void showAlert(String msg, final int type) {
+    private void showAlert(String msg, final int type, final String id) {
         String message;
         if (type == 0)
             message = getString(R.string.delete) + " " + msg + "?";
@@ -117,15 +121,30 @@ public class SecurityActivity extends Activity {
                 .setPositiveButton(getString(R.string.caps_delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (type == 0)
-                            Utils.showMessage(activity, "Delete operation will be performed");
-                        else {
+                        if (type == 0) {
+                            JSONObject jsonObject = new JSONObject();
+                            try {
+                                jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+                                jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+                                jsonObject.put("Action", "DeleteDonorDevice");
+                                JSONObject jsonObject1 = new JSONObject();
+                                jsonObject1.put("DonorDeviceID", id);
+                                jsonObject.put("data", jsonObject1.toString());
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            PPLog.e("JSON DATA : ", jsonObject.toString());
+                            Utils.showLoading(activity);
+                            ModelManager.getInstance().getRestOfAllManager().deleteDevice(activity, jsonObject);
+                        } else {
                             Utils.showMessage(activity, "Passcode Turned Off");
                             Preferences.writeString(activity, Preferences.LOGOUT, "false");
                             Preferences.writeString(activity, Preferences.PASSCODE_VALUE, "");
                             Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, false);
                             txt_turn_passcode_on.setText(getString(R.string.turn_passcode_on));
                         }
+                        dialog.dismiss();
                     }
                 });
 
@@ -220,6 +239,21 @@ public class SecurityActivity extends Activity {
             } else
                 Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "GetDevices False");
+            Utils.dismissLoading();
+        } else if (message.equalsIgnoreCase("DeleteDonorDevice True")) {
+            Utils.dismissLoading();
+            PPLog.e(TAG, "DeleteDonorDevice True");
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getRestOfAllManager().getDevices(activity, true);
+
+        } else if (message.contains("DeleteDonorDevice False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            PPLog.e(TAG, "DeleteDonorDevice False");
             Utils.dismissLoading();
         }
 

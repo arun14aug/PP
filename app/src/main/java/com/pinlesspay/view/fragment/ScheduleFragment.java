@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -40,6 +41,7 @@ public class ScheduleFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Schedule> scheduleArrayList;
     private LinearLayout waterfall_layout;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,8 +56,8 @@ public class ScheduleFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.schedule_list);
         waterfall_layout = (LinearLayout) rootView.findViewById(R.id.waterfall_layout);
 
-        Utils.showLoading(activity);
-        ModelManager.getInstance().getScheduleManager().getSchedules(activity, true, 1);
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
         recyclerView.addOnItemTouchListener(new ScheduleFragment.RecyclerTouchListener(getActivity(), recyclerView, new ScheduleFragment.ClickListener() {
             @Override
@@ -77,17 +79,43 @@ public class ScheduleFragment extends Fragment {
 
             }
         }));
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                Utils.showLoading(activity);
+                ModelManager.getInstance().getScheduleManager().getSchedules(activity, true, 1);
+            }
+        });
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        scheduleArrayList = ModelManager.getInstance().getScheduleManager().getSchedules(activity, false, 1);
+        if (scheduleArrayList == null) {
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getScheduleManager().getSchedules(activity, true, 1);
+        } else
+            setData();
+
         // Inflate the layout for this fragment
         return rootView;
     }
 
 
     private void setData() {
-        recyclerView.setVisibility(View.VISIBLE);
+        swipeContainer.setVisibility(View.VISIBLE);
         waterfall_layout.setVisibility(View.GONE);
         SchedulesAdapter adapter = new SchedulesAdapter(activity, scheduleArrayList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        swipeContainer.setRefreshing(false);
     }
 
     interface ClickListener {
@@ -163,11 +191,11 @@ public class ScheduleFragment extends Fragment {
                 if (scheduleArrayList.size() > 0)
                     setData();
                 else {
-                    recyclerView.setVisibility(View.GONE);
+                    swipeContainer.setVisibility(View.GONE);
                     waterfall_layout.setVisibility(View.VISIBLE);
                 }
             else {
-                recyclerView.setVisibility(View.GONE);
+                swipeContainer.setVisibility(View.GONE);
                 waterfall_layout.setVisibility(View.VISIBLE);
             }
         } else if (message.contains("GetSchedule False")) {
@@ -177,7 +205,7 @@ public class ScheduleFragment extends Fragment {
                 Utils.showMessage(activity, m[1]);
             } else
                 Utils.showMessage(activity, getString(R.string.error_message));
-            recyclerView.setVisibility(View.GONE);
+            swipeContainer.setVisibility(View.GONE);
             waterfall_layout.setVisibility(View.VISIBLE);
             PPLog.e(TAG, "GetSchedule False");
             Utils.dismissLoading();

@@ -162,13 +162,53 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
+                    <Spinner
+                        android:id="@+id/spinner_next_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/padding_40"
+                        android:paddingBottom="@dimen/padding_10"
+                        android:paddingTop="@dimen/padding_10"
+                        android:spinnerMode="dropdown" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/padding_1"
+                        android:background="@color/login_line_color" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/bg_color"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_10"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/icon_time" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/padding_10"
+                    android:background="@color/bg_color"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <com.pinlesspay.customUi.MyEditText
-                        android:id="@+id/et_next_date"
+                        android:id="@+id/et_start_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:focusable="false"
-                        android:hint="@string/next_run"
+                        android:hint="@string/start_date"
                         android:inputType="textPostalAddress"
                         android:paddingBottom="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
@@ -178,7 +218,7 @@
 
 
                     <View
-                        android:id="@+id/vw_next_date"
+                        android:id="@+id/vw_start_date"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/padding_1"
                         android:background="@color/login_line_color" />

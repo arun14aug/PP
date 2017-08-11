@@ -203,6 +203,10 @@ public class NewTicketActivity extends Activity {
         } else if (message.contains("AddTicket True")) {
             Utils.dismissLoading();
             PPLog.e(TAG, "AddTicket True");
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                id = m[1];
+            }
             et_message.setText("");
             Utils.showLoading(activity);
             ModelManager.getInstance().getRestOfAllManager().getTickets(activity, true);

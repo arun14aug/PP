@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,7 +59,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     //    private MyTextView txt_account_type;
     private View vw_card_number, vw_card_name, vw_mm, vw_yy/*, vw_cvv*/;
     String[] title = null;
-    private String spinner_item = "";
+    private String spinner_item = "", defaultBank = "", defaultCredit = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +170,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             icon_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showAlert(creditCardArrayList.get(position).getNickName(), 0);
+                    showAlert(creditCardArrayList.get(position).getNickName(), creditCardArrayList.get(position).getAccountId());
                 }
             });
             view.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +212,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             icon_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showAlert(bankArrayList.get(position).getNickName(), 1);
+                    showAlert(bankArrayList.get(position).getNickName(), bankArrayList.get(position).getAccountId());
                 }
             });
             view.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +226,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         }
     }
 
-    private void showAlert(String msg, final int type) {
+    private void showAlert(String msg, final String AccountId) {
         String message = getString(R.string.delete) + " " + msg + "?";
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
@@ -239,11 +241,22 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 .setPositiveButton(getString(R.string.caps_delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (type == 0)
-                            Utils.showMessage(activity, "Credit Card Delete operation will be performed");
-                        else {
-                            Utils.showMessage(activity, "Bank Account Delete operation will be performed");
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+                            jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+                            jsonObject.put("Action", "DeleteDonorAccount");
+                            JSONObject jsonObject1 = new JSONObject();
+                            jsonObject1.put("AccountId", AccountId);
+                            jsonObject.put("data", jsonObject1.toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                        PPLog.e("JSON DATA : ", jsonObject.toString());
+                        Utils.showLoading(activity);
+                        ModelManager.getInstance().getPaymentManager().deleteDonorAccount(activity, jsonObject);
+                        dialog.dismiss();
                     }
                 });
 
@@ -253,7 +266,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         alertDialog.show();
     }
 
-    private void addCreditCard(final int type, int position) {
+    private void addCreditCard(final int type, final int position) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_credit_card);
 //Grab the window of the dialog, and change the width
@@ -265,7 +278,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
         //        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(true);
 
         // set the custom dialog components - text, image and button
@@ -275,6 +288,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
 //        edt_cvv = (EditText) dialog.findViewById(R.id.edt_cvv);
         et_card_name = (EditText) dialog.findViewById(R.id.et_card_name);
         MyButton btn_add = (MyButton) dialog.findViewById(R.id.btn_add);
+        MyButton btn_cancel = (MyButton) dialog.findViewById(R.id.btn_cancel);
+
+        SwitchCompat is_default = (SwitchCompat) dialog.findViewById(R.id.is_default);
 
         vw_card_name = dialog.findViewById(R.id.vw_card_name);
         vw_card_number = dialog.findViewById(R.id.vw_card_number);
@@ -289,11 +305,30 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         et_card_name.setOnFocusChangeListener(this);
 
         if (type == 1) {
+            is_default.setVisibility(View.VISIBLE);
+            if (creditCardArrayList.get(position).getIsDefault().equalsIgnoreCase("true"))
+                is_default.setChecked(true);
+            else
+                is_default.setChecked(false);
+            et_card_number.setEnabled(false);
             et_card_number.setText(creditCardArrayList.get(position).getMaskCardNumber());
             edt_mm.setText(creditCardArrayList.get(position).getCCardExpMM());
             et_card_name.setText(creditCardArrayList.get(position).getNickName());
             edt_yy.setText(creditCardArrayList.get(position).getCCardExpYYYY());
+        } else {
+            is_default.setVisibility(View.GONE);
+            et_card_number.setEnabled(true);
         }
+
+        is_default.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    defaultCredit = "Y";
+                else
+                    defaultCredit = "N";
+            }
+        });
 
         // if button is clicked, close the custom dialog
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -318,14 +353,18 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
-                        jsonObject.put("Action", "CreditCardAccount");
                         jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
                         JSONObject jsonObject1 = new JSONObject();
                         if (type == 0) {
+                            jsonObject.put("Action", "CreditCardAccount");
                             jsonObject1.put("CardNumber", et_card_number.getText().toString().trim());
-                            jsonObject1.put("CCardExpMM", edt_mm.getText().toString().trim());
-                            jsonObject1.put("CCardExpYYYY", edt_yy.getText().toString().trim());
+                        } else {
+                            jsonObject.put("Action", "UpdateCreditCard");
+                            jsonObject1.put("IsDefault", defaultCredit);
+                            jsonObject1.put("AccountId", creditCardArrayList.get(position).getAccountId());
                         }
+                        jsonObject1.put("CCardExpMM", edt_mm.getText().toString().trim());
+                        jsonObject1.put("CCardExpYYYY", edt_yy.getText().toString().trim());
                         jsonObject1.put("NickName", et_card_name.getText().toString().trim());
                         jsonObject.put("data", jsonObject1.toString());
 
@@ -337,16 +376,23 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     if (type == 0)
                         ModelManager.getInstance().getPaymentManager().addCreditCard(activity, jsonObject);
                     else
-                        ModelManager.getInstance().getPaymentManager().addCreditCard(activity, jsonObject);
+                        ModelManager.getInstance().getPaymentManager().updateCreditCard(activity, jsonObject);
                     dialog.dismiss();
                 }
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_card_number.setEnabled(true);
+                dialog.dismiss();
             }
         });
 
         dialog.show();
     }
 
-    private void addBankAccount(final int type, int position) {
+    private void addBankAccount(final int type, final int position) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_add_bank_acc);
 //Grab the window of the dialog, and change the width
@@ -358,7 +404,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
         //        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(true);
 
         // set the custom dialog components - text, image and button
@@ -369,6 +415,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         et_account_number = (EditText) dialog.findViewById(R.id.et_account_number);
         et_account_name = (EditText) dialog.findViewById(R.id.et_account_name);
         MyButton btn_add = (MyButton) dialog.findViewById(R.id.btn_add);
+        MyButton btn_cancel = (MyButton) dialog.findViewById(R.id.btn_cancel);
+
+        SwitchCompat is_default = (SwitchCompat) dialog.findViewById(R.id.is_default);
 
 //        txt_account_type = (MyTextView) dialog.findViewById(R.id.txt_account_type);
         final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner_account_type);
@@ -381,6 +430,11 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         et_account_name.addTextChangedListener(new MyTextWatcher(et_account_name));
 
         if (type == 1) {
+            is_default.setVisibility(View.VISIBLE);
+            if (bankArrayList.get(position).getIsDefault().equalsIgnoreCase("true"))
+                is_default.setChecked(true);
+            else
+                is_default.setChecked(false);
             et_account_name.setText(bankArrayList.get(position).getNickName());
             et_account_number.setText(bankArrayList.get(position).getMaskBankAccountNum());
             et_routing_number.setText(bankArrayList.get(position).getMaskBankRoutingNum());
@@ -395,7 +449,22 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 spinner_item = title[0];
                 spinner.setSelection(0);
             }
+            et_routing_number.setEnabled(false);
+            et_account_number.setEnabled(false);
+        } else {
+            is_default.setVisibility(View.GONE);
+            et_routing_number.setEnabled(true);
+            et_account_number.setEnabled(true);
         }
+        is_default.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    defaultBank = "Y";
+                else
+                    defaultBank = "N";
+            }
+        });
 
         // if button is clicked, close the custom dialog
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -416,14 +485,18 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
-                        jsonObject.put("Action", "BankAccount");
                         jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
                         JSONObject jsonObject1 = new JSONObject();
                         if (type == 0) {
+                            jsonObject.put("Action", "BankAccount");
                             jsonObject1.put("BankAccountNum", et_account_number.getText().toString().trim());
                             jsonObject1.put("BankRoutingNum", et_routing_number.getText().toString().trim());
-                            jsonObject1.put("BankAccountType", spinner_item);
+                        } else {
+                            jsonObject.put("Action", "UpdateBankAccount");
+                            jsonObject1.put("IsDefault", defaultBank);
+                            jsonObject1.put("AccountId", bankArrayList.get(position).getAccountId());
                         }
+                        jsonObject1.put("BankAccountType", spinner_item);
                         jsonObject1.put("NickName", et_account_name.getText().toString().trim());
                         jsonObject.put("data", jsonObject1.toString());
 
@@ -435,9 +508,18 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     if (type == 0)
                         ModelManager.getInstance().getPaymentManager().addBankAccount(activity, jsonObject);
                     else
-                        ModelManager.getInstance().getPaymentManager().addBankAccount(activity, jsonObject);
+                        ModelManager.getInstance().getPaymentManager().updateBankAccount(activity, jsonObject);
                     dialog.dismiss();
                 }
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_routing_number.setEnabled(true);
+                et_account_number.setEnabled(true);
+                dialog.dismiss();
             }
         });
 
@@ -627,6 +709,48 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
             } else
                 Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "AddBankAccount False");
+            Utils.dismissLoading();
+        } else if (message.equalsIgnoreCase("UpdateCC True")) {
+            Utils.dismissLoading();
+            PPLog.e(TAG, "UpdateCC True");
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getPaymentManager().getCreditCard(activity, true, 1);
+        } else if (message.contains("UpdateCC False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            PPLog.e(TAG, "UpdateCC False");
+            Utils.dismissLoading();
+        } else if (message.equalsIgnoreCase("UpdateBankAccount True")) {
+            Utils.dismissLoading();
+            PPLog.e(TAG, "UpdateBankAccount True");
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getPaymentManager().getCreditCard(activity, true, 1);
+        } else if (message.contains("UpdateBankAccount False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            PPLog.e(TAG, "UpdateBankAccount False");
+            Utils.dismissLoading();
+        } else if (message.equalsIgnoreCase("DeleteDonorAccount True")) {
+            Utils.dismissLoading();
+            PPLog.e(TAG, "DeleteDonorAccount True");
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getPaymentManager().getCreditCard(activity, true, 1);
+        } else if (message.contains("DeleteDonorAccount False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            PPLog.e(TAG, "DeleteDonorAccount False");
             Utils.dismissLoading();
         }
 

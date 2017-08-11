@@ -66,6 +66,7 @@ public class RestOfAllManager {
                                         for (int i = 0; i < count; i++) {
                                             DonorDevice donorDevice = new DonorDevice();
 
+                                            donorDevice.setDonorDeviceID(jsonArray.getJSONObject(i).getString("DonorDeviceID"));
                                             donorDevice.setDeviceName(jsonArray.getJSONObject(i).getString("DeviceName"));
                                             donorDevice.setDeviceType(jsonArray.getJSONObject(i).getString("DeviceType"));
                                             donorDevice.setDonorId(jsonArray.getJSONObject(i).getString("DonorId"));
@@ -177,7 +178,8 @@ public class RestOfAllManager {
                         try {
                             boolean state = response.getBoolean("Status");
                             if (state) {
-                                EventBus.getDefault().postSticky("AddTicket True");
+//                                "data":{"TicketID":15,"Msg":"","isSuccess":true}
+                                EventBus.getDefault().postSticky("AddTicket True@#@" + response.getJSONObject("data").getString("TicketID"));
                             } else
                                 EventBus.getDefault().postSticky("AddTicket False@#@" + response.getString("Message"));
                         } catch (JSONException e) {
@@ -253,6 +255,36 @@ public class RestOfAllManager {
             public void onErrorResponse(VolleyError error) {
                 PPLog.e("Error Response : ", "Error: " + error.getMessage());
                 EventBus.getDefault().postSticky("SendSuggestion False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public void deleteDevice(final Activity activity, JSONObject jsonObject) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.DELETE_DONOR_DEVICE, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        PPLog.e("Success Response : ", "Response: " + response.toString());
+
+                        try {
+                            boolean state = response.getBoolean("Status");
+                            if (state) {
+                                EventBus.getDefault().postSticky("DeleteDonorDevice True");
+                            } else
+                                EventBus.getDefault().postSticky("DeleteDonorDevice False@#@" + response.getString("Message"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().postSticky("DeleteDonorDevice False");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().postSticky("DeleteDonorDevice False");
             }
         });
         RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);

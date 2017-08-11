@@ -92,6 +92,20 @@
                 android:textSize="@dimen/text_size_large" />
 
         </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/is_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginTop="@dimen/padding_7"
+            android:checked="false"
+            android:gravity="end|center_vertical"
+            android:text="@string/is_default"
+            android:textColor="@color/new_bank_acc_text"
+            android:textSize="@dimen/text_size_large"
+            android:theme="@style/MySwitch"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -100,15 +114,34 @@
         android:background="#FFEEEEEE"
         android:clickable="true"
         android:gravity="end"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="@dimen/padding_10">
+
+        <com.pinlesspay.customUi.MyButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="90dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/padding_5"
+            android:background="@drawable/button_disable_bg"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="normal" />
+
+        <TextView
+            android:layout_width="@dimen/padding_10"
+            android:layout_height="wrap_content" />
 
 
         <com.pinlesspay.customUi.MyButton
             android:id="@+id/btn_add"
             android:layout_width="90dp"
             android:layout_height="@dimen/button_height"
+            android:layout_gravity="center"
             android:background="@drawable/button_blue_bg"
+            android:gravity="center"
             android:text="@string/add"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_medium"

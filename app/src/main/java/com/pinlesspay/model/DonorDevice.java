@@ -6,7 +6,7 @@ package com.pinlesspay.model;
 
 public class DonorDevice {
 
-    private String DeviceName, DeviceType, DonorId, DeviceIdentifier;
+    private String DeviceName, DeviceType, DonorId, DeviceIdentifier, DonorDeviceID;
 
     public String getDeviceName() {
         return DeviceName;
@@ -38,5 +38,13 @@ public class DonorDevice {
 
     public void setDeviceIdentifier(String deviceIdentifier) {
         DeviceIdentifier = deviceIdentifier;
+    }
+
+    public String getDonorDeviceID() {
+        return DonorDeviceID;
+    }
+
+    public void setDonorDeviceID(String donorDeviceID) {
+        DonorDeviceID = donorDeviceID;
     }
 }

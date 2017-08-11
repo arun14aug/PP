@@ -19,7 +19,10 @@ import android.widget.Spinner;
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
 import com.pinlesspay.customUi.MyEditText;
+import com.pinlesspay.model.Causes;
+import com.pinlesspay.model.Frequency;
 import com.pinlesspay.model.ModelManager;
+import com.pinlesspay.model.PaymentAccount;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.ServiceApi;
@@ -46,12 +49,17 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
     private String TAG = AddRecurringFragment.this.getClass().getName();
     private Activity activity;
     private Toolbar mToolbar;
-    private Spinner spinner_cause_type, spinner_payment_type;
-    private MyEditText et_next_date, et_amount;
+    private Spinner spinner_cause_type, spinner_payment_type, spinner_next_date;
+    private MyEditText et_start_date, et_amount;
     //    private View vw_amount, vw_next_date;
-    private String cause = "", payment = "";
+    private String cause = "", payment = "", frequency = "", DonationID = "", AccountId = "",
+            DonationScheduleId = "";
     private ArrayList<String> causeType = new ArrayList<>();
     private ArrayList<String> paymentType = new ArrayList<>();
+    private ArrayList<String> frequencyType = new ArrayList<>();
+    private ArrayList<Causes> causesArrayList;
+    private ArrayList<PaymentAccount> paymentAccountArrayList;
+    private ArrayList<Frequency> frequencyArrayList;
     private Calendar myCalendar;
 
     @Override
@@ -72,33 +80,30 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
 
         spinner_cause_type = (Spinner) rootView.findViewById(R.id.spinner_cause_type);
         spinner_payment_type = (Spinner) rootView.findViewById(R.id.spinner_payment_type);
+        spinner_next_date = (Spinner) rootView.findViewById(R.id.spinner_next_date);
 
         et_amount = (MyEditText) rootView.findViewById(R.id.et_amount);
-        et_next_date = (MyEditText) rootView.findViewById(R.id.et_next_date);
+        et_start_date = (MyEditText) rootView.findViewById(R.id.et_start_date);
 
         MyButton btn_save = (MyButton) rootView.findViewById(R.id.btn_save);
         btn_save.setOnClickListener(this);
         img_back.setOnClickListener(this);
-        et_next_date.setOnClickListener(this);
+        et_start_date.setOnClickListener(this);
 
-//        vw_amount = rootView.findViewById(R.id.vw_amount);
-//        vw_next_date = rootView.findViewById(R.id.vw_next_date);
-
-//        et_amount.setOnFocusChangeListener(this);
-//        et_next_date.setOnFocusChangeListener(this);
-
+        // set spinner adapter
         causeType.add(activity.getString(R.string.category));
         paymentType.add(activity.getString(R.string.payment_method));
-        SpinnerListAdapter adapter = new SpinnerListAdapter(activity, causeType);
-        spinner_cause_type.setAdapter(adapter);
-        SpinnerListAdapter adapter2 = new SpinnerListAdapter(activity, paymentType);
-        spinner_payment_type.setAdapter(adapter2);
+        frequencyType.add(activity.getString(R.string.next_run));
+        setData();
+
         spinner_cause_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // TODO Auto-generated method stub
                 cause = causeType.get(position);
+                if (position > 0)
+                    DonationID = causesArrayList.get(position - 1).getDonationID();
             }
 
             @Override
@@ -114,6 +119,8 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // TODO Auto-generated method stub
                 payment = paymentType.get(position);
+                if (position > 0)
+                    AccountId = paymentAccountArrayList.get(position - 1).getAccountId();
             }
 
             @Override
@@ -122,11 +129,62 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
 
             }
         });
+        spinner_next_date.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                frequency = frequencyType.get(position);
+                if (position > 0) {
+                    DonationScheduleId = frequencyArrayList.get(position - 1).getDonationScheduleId();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        Utils.showLoading(activity);
+        ModelManager.getInstance().getScheduleManager().getCauses(activity, true, 1);
         return rootView;
     }
 
     private void setData() {
+        SpinnerListAdapter adapter = new SpinnerListAdapter(activity, causeType);
+        spinner_cause_type.setAdapter(adapter);
+        SpinnerListAdapter adapter2 = new SpinnerListAdapter(activity, paymentType);
+        spinner_payment_type.setAdapter(adapter2);
+        SpinnerListAdapter adapter3 = new SpinnerListAdapter(activity, frequencyType);
+        spinner_next_date.setAdapter(adapter3);
+    }
 
+    private void addList() {
+        causesArrayList = ModelManager.getInstance().getScheduleManager().getCauses(activity, false, 1);
+        frequencyArrayList = ModelManager.getInstance().getScheduleManager().getFrequency(activity, false, 1);
+        paymentAccountArrayList = ModelManager.getInstance().getScheduleManager().getPaymentAccounts(activity, false, 1);
+        if (causesArrayList == null)
+            causesArrayList = new ArrayList<>();
+        if (frequencyArrayList == null)
+            frequencyArrayList = new ArrayList<>();
+        if (paymentAccountArrayList == null)
+            paymentAccountArrayList = new ArrayList<>();
+
+        for (int i = 0; i < causesArrayList.size(); i++) {
+            causeType.add(causesArrayList.get(i).getDonationName());
+        }
+
+        for (int i = 0; i < frequencyArrayList.size(); i++) {
+            frequencyType.add(frequencyArrayList.get(i).getDonationScheduleName());
+        }
+
+        for (int i = 0; i < paymentAccountArrayList.size(); i++) {
+            paymentType.add(paymentAccountArrayList.get(i).getAccountNumber());
+        }
+
+        setData();
     }
 
     @Override
@@ -138,7 +196,10 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
                     Utils.showMessage(activity, getString(R.string.please_enter_amount));
                 } else if (cause.equalsIgnoreCase(getString(R.string.category))) {
                     Utils.showMessage(activity, getString(R.string.please_select_category));
-                } else if (et_next_date.getText().toString().trim().length() == 0) {
+                } else if (frequency.equalsIgnoreCase(getString(R.string.next_run))) {
+                    Utils.showMessage(activity, getString(R.string.please_select_date));
+                } else if (et_start_date.getText().toString().trim().length() == 0) {
+                    et_start_date.requestFocus();
                     Utils.showMessage(activity, getString(R.string.please_select_date));
                 } else if (payment.equalsIgnoreCase(getString(R.string.payment_method))) {
                     Utils.showMessage(activity, getString(R.string.please_select_payment_method));
@@ -146,13 +207,16 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
-                        jsonObject.put("Action", "AddRecuSchedule");
+                        jsonObject.put("Action", "SaveDonationSchedule");
                         jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
                         JSONObject jsonObject1 = new JSONObject();
-                        jsonObject1.put("Amount", et_amount.getText().toString().trim());
-                        jsonObject1.put("NextDate", et_next_date.getText().toString().trim());
-                        jsonObject1.put("Category", cause);
-                        jsonObject1.put("PaymentMethod", payment);
+
+                        jsonObject1.put("TranAmount", et_amount.getText().toString().trim());
+                        jsonObject1.put("DonationID", DonationID);
+                        jsonObject1.put("AccountId", AccountId);
+                        jsonObject1.put("ScheduleStartDate", et_start_date.getText().toString().trim());
+                        jsonObject1.put("DonationScheduleId", DonationScheduleId);
+
                         jsonObject.put("data", jsonObject1.toString());
 
                     } catch (JSONException e) {
@@ -168,7 +232,7 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
                         .popBackStack();
                 break;
 
-            case R.id.et_next_date:
+            case R.id.et_start_date:
                 myCalendar.add(Calendar.DATE, 0);
                 Date newDate = myCalendar.getTime();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(activity, date, myCalendar
@@ -192,30 +256,12 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
 
-            et_next_date.setText(sdf.format(myCalendar.getTime()));
+            et_start_date.setText(sdf.format(myCalendar.getTime()));
         }
 
     };
 
-    //    @Override
-//    public void onFocusChange(View v, boolean hasFocus) {
-//        switch (v.getId()) {
-//            case R.id.et_amount:
-//                if (hasFocus) {
-//                    et_amount.requestFocus();
-//                    vw_amount.setBackgroundColor(Utils.setColor(activity, R.color.light_blue));
-//                } else
-//                    vw_amount.setBackgroundColor(Utils.setColor(activity, R.color.login_line_color));
-//                break;
-//            case R.id.et_next_date:
-//                if (hasFocus) {
-//                    et_next_date.requestFocus();
-//                    vw_next_date.setBackgroundColor(Utils.setColor(activity, R.color.light_blue));
-//                } else
-//                    vw_next_date.setBackgroundColor(Utils.setColor(activity, R.color.login_line_color));
-//                break;
-//        }
-//    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -256,6 +302,64 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
             } else
                 Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "AddRecurring False");
+            Utils.dismissLoading();
+        } else if (message.contains("Causes True")) {
+            Utils.dismissLoading();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            }
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getScheduleManager().getFrequency(activity, true, 1);
+            PPLog.e(TAG, "Causes True");
+        } else if (message.contains("Causes False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getScheduleManager().getFrequency(activity, true, 1);
+            PPLog.e(TAG, "Causes False");
+            Utils.dismissLoading();
+        } else if (message.contains("PaymentAccount True")) {
+            Utils.dismissLoading();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            }
+            addList();
+            PPLog.e(TAG, "PaymentAccount True");
+        } else if (message.contains("PaymentAccount False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            addList();
+            PPLog.e(TAG, "PaymentAccount False");
+            Utils.dismissLoading();
+        } else if (message.contains("Frequency True")) {
+            Utils.dismissLoading();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            }
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getScheduleManager().getPaymentAccounts(activity, true, 1);
+            PPLog.e(TAG, "Frequency True");
+        } else if (message.contains("Frequency False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getScheduleManager().getPaymentAccounts(activity, true, 1);
+            PPLog.e(TAG, "Frequency False");
             Utils.dismissLoading();
         }
 

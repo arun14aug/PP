@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,6 +33,7 @@ public class SupportActivity extends Activity {
     private Activity activity;
     private LinearLayout waterfall_layout;
     private RecyclerView ticket_list;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,9 @@ public class SupportActivity extends Activity {
         waterfall_layout = (LinearLayout) findViewById(R.id.waterfall_layout);
         ticket_list = (RecyclerView) findViewById(R.id.ticket_list);
 
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+
         ImageView img_back = (ImageView) findViewById(R.id.img_back);
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +56,7 @@ public class SupportActivity extends Activity {
             }
         });
 
-        ticket_list.setVisibility(View.GONE);
+        swipeContainer.setVisibility(View.GONE);
         waterfall_layout.setVisibility(View.VISIBLE);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -63,16 +68,38 @@ public class SupportActivity extends Activity {
             }
         });
 
-        Utils.showLoading(activity);
-        ModelManager.getInstance().getRestOfAllManager().getTickets(activity, true);
+        ticketArrayList = ModelManager.getInstance().getRestOfAllManager().getTickets(activity, false);
+        if (ticketArrayList == null) {
+            Utils.showLoading(activity);
+            ModelManager.getInstance().getRestOfAllManager().getTickets(activity, true);
+        } else
+            setData();
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                Utils.showLoading(activity);
+                ModelManager.getInstance().getRestOfAllManager().getTickets(activity, true);
+            }
+        });
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private void setData() {
-        ticket_list.setVisibility(View.VISIBLE);
+        swipeContainer.setVisibility(View.VISIBLE);
         waterfall_layout.setVisibility(View.GONE);
         SupportAdapter adapter = new SupportAdapter(activity, ticketArrayList);
         ticket_list.setAdapter(adapter);
         ticket_list.setLayoutManager(new LinearLayoutManager(this));
+        swipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -106,11 +133,11 @@ public class SupportActivity extends Activity {
                 if (ticketArrayList.size() > 0)
                     setData();
                 else {
-                    ticket_list.setVisibility(View.GONE);
+                    swipeContainer.setVisibility(View.GONE);
                     waterfall_layout.setVisibility(View.VISIBLE);
                 }
             else {
-                ticket_list.setVisibility(View.GONE);
+                swipeContainer.setVisibility(View.GONE);
                 waterfall_layout.setVisibility(View.VISIBLE);
             }
         } else if (message.contains("GetTickets False")) {
@@ -120,7 +147,7 @@ public class SupportActivity extends Activity {
                 Utils.showMessage(activity, m[1]);
             } else
                 Utils.showMessage(activity, getString(R.string.error_message));
-            ticket_list.setVisibility(View.GONE);
+            swipeContainer.setVisibility(View.GONE);
             waterfall_layout.setVisibility(View.VISIBLE);
             PPLog.e(TAG, "GetTickets False");
             Utils.dismissLoading();
