@@ -217,8 +217,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startActivity(new Intent(activity, SecurityActivity.class));
-                        finish();
-
                         dialog.cancel();
                     }
                 })

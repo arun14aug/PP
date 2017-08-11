@@ -142,4 +142,6 @@
     <string name="please_enter_text">Please enter text</string>
     <string name="start_date">Start Date</string>
     <string name="is_default">Default</string>
+    <string name="caps_confirm">CONFIRM</string>
+    <string name="schedule">Schedule</string>
 </resources>

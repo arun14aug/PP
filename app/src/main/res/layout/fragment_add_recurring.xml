@@ -130,11 +130,11 @@
                         android:spinnerMode="dropdown" />
 
 
-                    <View
-                        android:id="@+id/vw_cause_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/padding_1"
-                        android:background="@color/login_line_color" />
+                    <!--<View-->
+                        <!--android:id="@+id/vw_cause_type"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="@dimen/padding_1"-->
+                        <!--android:background="@color/login_line_color" />-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -172,10 +172,10 @@
                         android:spinnerMode="dropdown" />
 
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/padding_1"
-                        android:background="@color/login_line_color" />
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="@dimen/padding_1"-->
+                        <!--android:background="@color/login_line_color" />-->
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -260,11 +260,11 @@
                         android:spinnerMode="dropdown" />
 
 
-                    <View
-                        android:id="@+id/vw_payment_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/padding_1"
-                        android:background="@color/login_line_color" />
+                    <!--<View-->
+                        <!--android:id="@+id/vw_payment_type"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="@dimen/padding_1"-->
+                        <!--android:background="@color/login_line_color" />-->
                 </LinearLayout>
             </LinearLayout>
 

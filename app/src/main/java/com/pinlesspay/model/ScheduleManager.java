@@ -268,6 +268,11 @@ public class ScheduleManager {
         requestQueue.add(jsonObjReq);
     }
 
+    public void setArrayLists() {
+        transactionArrayList = null;
+        recurringArrayList = null;
+    }
+
     public ArrayList<Transaction> getTransactions(Activity activity, boolean shouldRefresh, int pageNumber) {
         if (shouldRefresh)
             getTransactionList(activity, pageNumber);

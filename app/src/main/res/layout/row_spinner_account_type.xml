@@ -10,8 +10,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/padding_7"
         android:padding="@dimen/padding_5"
+        android:paddingBottom="@dimen/padding_7"
         android:text="Large Text"
         android:textColor="@color/new_bank_acc_text"
         android:textSize="@dimen/text_size_large" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_1"
+        android:background="@color/login_line_color" />
 </LinearLayout>

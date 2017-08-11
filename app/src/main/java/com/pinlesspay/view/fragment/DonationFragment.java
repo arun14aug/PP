@@ -55,6 +55,8 @@ public class DonationFragment extends Fragment {
                 String url = ServiceApi.MAKE_DONATION + Preferences.readString(activity, Preferences.AUTH_TOKEN, "");
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 activity.startActivity(intent);
+                // setting array lists to null
+                ModelManager.getInstance().getScheduleManager().setArrayLists();
             }
         });
 

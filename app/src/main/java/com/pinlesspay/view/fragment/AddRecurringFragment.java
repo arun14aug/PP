@@ -93,7 +93,7 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
         // set spinner adapter
         causeType.add(activity.getString(R.string.category));
         paymentType.add(activity.getString(R.string.payment_method));
-        frequencyType.add(activity.getString(R.string.next_run));
+        frequencyType.add(activity.getString(R.string.schedule));
         setData();
 
         spinner_cause_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -196,7 +196,7 @@ public class AddRecurringFragment extends Fragment implements View.OnClickListen
                     Utils.showMessage(activity, getString(R.string.please_enter_amount));
                 } else if (cause.equalsIgnoreCase(getString(R.string.category))) {
                     Utils.showMessage(activity, getString(R.string.please_select_category));
-                } else if (frequency.equalsIgnoreCase(getString(R.string.next_run))) {
+                } else if (frequency.equalsIgnoreCase(getString(R.string.schedule))) {
                     Utils.showMessage(activity, getString(R.string.please_select_date));
                 } else if (et_start_date.getText().toString().trim().length() == 0) {
                     et_start_date.requestFocus();

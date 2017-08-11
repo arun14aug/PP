@@ -103,12 +103,14 @@ public class SecurityActivity extends Activity {
     }
 
     private void showAlert(String msg, final int type, final String id) {
-        String message;
-        if (type == 0)
+        String message, action;
+        if (type == 0) {
             message = getString(R.string.delete) + " " + msg + "?";
-        else
+            action = getString(R.string.caps_delete);
+        }else {
             message = getString(R.string.passcode_delete_alert);
-
+            action = getString(R.string.caps_confirm);
+        }
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
         alertDialogBuilder
                 .setMessage(message)
@@ -118,7 +120,7 @@ public class SecurityActivity extends Activity {
                         dialog.cancel();
                     }
                 })
-                .setPositiveButton(getString(R.string.caps_delete), new DialogInterface.OnClickListener() {
+                .setPositiveButton(action, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (type == 0) {
