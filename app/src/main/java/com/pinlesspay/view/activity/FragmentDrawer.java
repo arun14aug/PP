@@ -4,10 +4,13 @@ package com.pinlesspay.view.activity;
  * Created by Ravi on 29/07/15.
  */
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,9 +22,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.pinlesspay.R;
 import com.pinlesspay.model.NavDrawerItem;
+import com.pinlesspay.utility.PPLog;
+import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.view.adapter.NavigationDrawerAdapter;
 
 import java.util.ArrayList;
@@ -37,6 +43,7 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
+    private TextView txt_party;
 
     public FragmentDrawer() {
 
@@ -71,10 +78,19 @@ public class FragmentDrawer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflating view layout
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                mHeaderReceiver, new IntentFilter("UserName"));
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         RecyclerView recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
         RelativeLayout nav_header_container = (RelativeLayout) layout.findViewById(R.id.nav_header_container);
+
+        TextView txt_mobile = (TextView) layout.findViewById(R.id.txt_mobile);
+        txt_party = (TextView) layout.findViewById(R.id.txt_party);
+        txt_mobile.setText(Preferences.readString(getActivity(), Preferences.FORMATTED_MOBILE_NUMBER, ""));
+
+        if (Preferences.readString(getActivity(), Preferences.USER_NAME, "").length() > 0)
+            txt_party.setText(Preferences.readString(getActivity(), Preferences.USER_NAME, ""));
 
         nav_header_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,12 +127,16 @@ public class FragmentDrawer extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                if (Preferences.readString(getActivity(), Preferences.USER_NAME, "").length() > 0)
+                    txt_party.setText(Preferences.readString(getActivity(), Preferences.USER_NAME, ""));
                 getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                if (Preferences.readString(getActivity(), Preferences.USER_NAME, "").length() > 0)
+                    txt_party.setText(Preferences.readString(getActivity(), Preferences.USER_NAME, ""));
                 getActivity().invalidateOptionsMenu();
             }
 
@@ -187,6 +207,19 @@ public class FragmentDrawer extends Fragment {
 
 
     }
+    /**
+     * Header heading update method
+     **/
+    private final BroadcastReceiver mHeaderReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            txt_party.setText(message);
+            PPLog.d("receiver", "Got message: " + message);
+        }
+    };
+
 
     interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);

@@ -225,6 +225,8 @@ public class RecurringDetailFragment extends Fragment implements View.OnClickLis
                 String[] m = message.split("@#@");
                 Utils.showMessage(activity, m[1]);
             }
+            ModelManager.getInstance().getScheduleManager().setArrayLists();
+            ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
             ((FragmentActivity) activity).getSupportFragmentManager()
                     .popBackStack();
             PPLog.e(TAG, "DeleteRecurring True");

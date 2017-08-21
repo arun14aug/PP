@@ -6,7 +6,7 @@
     <string-array name="nav_drawer_labels">
         <item>Payment Methods</item>
         <item>Security</item>
-        <item>Tell your friends</item>
+        <!--<item>Tell your friends</item>-->
         <item>Support</item>
         <item>Suggestions</item>
         <item>Lock</item>

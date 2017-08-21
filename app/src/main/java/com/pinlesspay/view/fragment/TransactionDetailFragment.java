@@ -91,7 +91,7 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
 //                String format = transaction.getTranDate().replace("T", " ");
                 final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 //                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy HH:mm a");
+                SimpleDateFormat format2 = new SimpleDateFormat("MMM dd, yyyy HH:mm a");
                 Date date = null;
                 try {
                     date = sdf.parse(transaction.getTranDate());

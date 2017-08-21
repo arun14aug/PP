@@ -272,6 +272,9 @@ public class ScheduleManager {
         transactionArrayList = null;
         recurringArrayList = null;
     }
+    public void setScheduleArrayLists() {
+        scheduleArrayList = null;
+    }
 
     public ArrayList<Transaction> getTransactions(Activity activity, boolean shouldRefresh, int pageNumber) {
         if (shouldRefresh)

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyTextView;
+import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.view.fragment.DonationFragment;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private boolean backer = false;
     private MyTextView tvTitle;
     private ImageView img_donation, img_schedule, img_recurring, img_transactions;
+    private FragmentDrawer drawerFragment;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +63,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         img_transactions.setOnClickListener(this);
 
         fragmentManager = getSupportFragmentManager();
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         tvTitle = (MyTextView) findViewById(R.id.header_text);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        FragmentDrawer drawerFragment = (FragmentDrawer)
+        drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
@@ -76,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         bottomBarFragments(0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setDrawerListener(this);
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -177,22 +187,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //                title = getString(R.string.title_security);
                 startActivity(new Intent(activity, SecurityActivity.class));
                 break;
+//            case 2:
+////                fragment = new TellYourFriendsFragment();
+////                title = getString(R.string.title_tell_your);
+//                startActivity(new Intent(activity, TellFriendActivity.class));
+//                break;
             case 2:
-//                fragment = new TellYourFriendsFragment();
-//                title = getString(R.string.title_tell_your);
-                startActivity(new Intent(activity, TellFriendActivity.class));
-                break;
-            case 3:
 //                fragment = new SupportFragment();
 //                title = getString(R.string.title_support);
                 startActivity(new Intent(activity, SupportActivity.class));
                 break;
-            case 4:
+            case 3:
 //                fragment = new SuggestionsFragment();
 //                title = getString(R.string.title_suggestions);
                 startActivity(new Intent(activity, SuggestionActivity.class));
                 break;
-            case 5:
+            case 4:
+                ModelManager.getInstance().getScheduleManager().setArrayLists();
+                ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
                 if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").length() > 1) {
                     Preferences.writeString(activity, Preferences.LOGOUT, "true");
                     Preferences.writeString(activity, Preferences.LOGIN, "false");

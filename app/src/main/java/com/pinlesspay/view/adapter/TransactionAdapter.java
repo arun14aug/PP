@@ -52,7 +52,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 //        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format2 = new SimpleDateFormat("MMM dd, yyyy");
         Date date = null;
         try {
             date = sdf.parse(transaction.getTranDate());

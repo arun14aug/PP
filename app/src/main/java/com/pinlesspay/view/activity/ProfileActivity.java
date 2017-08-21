@@ -1,7 +1,9 @@
 package com.pinlesspay.view.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -126,10 +128,15 @@ public class ProfileActivity extends Activity {
     };
 
     private void setData() {
-        if (!Utils.isEmptyString(userArrayList.get(0).getFirstName()))
+        String name = "";
+        if (!Utils.isEmptyString(userArrayList.get(0).getFirstName())) {
             et_first_name.setText(userArrayList.get(0).getFirstName());
-        if (!Utils.isEmptyString(userArrayList.get(0).getLastName()))
+            name = userArrayList.get(0).getFirstName() + " ";
+        }
+        if (!Utils.isEmptyString(userArrayList.get(0).getLastName())) {
             et_last_name.setText(userArrayList.get(0).getLastName());
+            name += userArrayList.get(0).getLastName();
+        }
         if (!Utils.isEmptyString(userArrayList.get(0).getEmail()))
             et_email.setText(userArrayList.get(0).getEmail());
         if (!Utils.isEmptyString(userArrayList.get(0).getMobileNo()))
@@ -145,6 +152,11 @@ public class ProfileActivity extends Activity {
         if (!Utils.isEmptyString(userArrayList.get(0).getZip()))
             et_zip.setText(userArrayList.get(0).getZip());
 
+        Preferences.writeString(activity, Preferences.USER_NAME, name);
+
+        Intent intent = new Intent("UserName");
+        intent.putExtra("message", Preferences.readString(activity, Preferences.USER_NAME, ""));
+        LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
 
         if (!Utils.isEmptyString(userArrayList.get(0).getCountry())) {
             PPLog.e("Country Code : ", userArrayList.get(0).getCountry());
@@ -231,6 +243,11 @@ public class ProfileActivity extends Activity {
             PPLog.e(TAG, "Profile True");
             String[] m = message.split("@#@");
             Utils.showMessage(activity, m[1]);
+            Preferences.writeString(activity, Preferences.USER_NAME, et_first_name.getText().toString().trim()
+            +" " + et_last_name.getText().toString().trim());
+            Intent intent = new Intent("UserName");
+            intent.putExtra("message", Preferences.readString(activity, Preferences.USER_NAME, ""));
+            LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
             finish();
         } else if (message.contains("Profile False")) {
             // showMatchHistoryList();
