@@ -24,7 +24,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     private LayoutInflater inflater;
     //    private Context context;
     private Integer[] icons = {R.drawable.icon_payment,
-            R.drawable.icon_security, R.drawable.icon_share,
+            R.drawable.icon_security, /*R.drawable.icon_share,*/
             R.drawable.icon_support, R.drawable.icon_suggestion,
             R.drawable.icon_logout};
 

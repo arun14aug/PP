@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 4:
                 ModelManager.getInstance().getScheduleManager().setArrayLists();
                 ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
+                Preferences.writeString(activity, Preferences.USER_NAME, "");
                 if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").length() > 1) {
                     Preferences.writeString(activity, Preferences.LOGOUT, "true");
                     Preferences.writeString(activity, Preferences.LOGIN, "false");

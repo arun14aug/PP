@@ -22,7 +22,9 @@ import com.pinlesspay.view.adapter.TicketDetailAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 
@@ -138,7 +140,9 @@ public class NewTicketActivity extends Activity {
         waterfall_layout.setVisibility(View.GONE);
         TicketDetailAdapter adapter = new TicketDetailAdapter(activity, ticketDetailArrayList);
         ticket_chat_list.setAdapter(adapter);
-        ticket_chat_list.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        ticket_chat_list.setLayoutManager(mLinearLayoutManager);
+        mLinearLayoutManager.scrollToPosition(ticketDetailArrayList.size() - 1);
     }
 
     @Override
@@ -222,8 +226,16 @@ public class NewTicketActivity extends Activity {
         } else if (message.contains("TicketReply True")) {
             Utils.dismissLoading();
             PPLog.e(TAG, "TicketReply True");
+            TicketDetail ticket = new TicketDetail();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = new Date();
+            ticket.setDateCreated(sdf.format(date));
+            ticket.setTicketDesc(et_message.getText().toString().trim());
+            ticket.setIsUserComment("Y");
+            ticketDetailArrayList.add(ticket);
             et_message.setText("");
-            callDetail();
+//            callDetail();
+            setData();
         } else if (message.contains("TicketReply False")) {
             // showMatchHistoryList();
             if (message.contains("@#@")) {
