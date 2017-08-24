@@ -1,6 +1,7 @@
 package com.pinlesspay.model;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -30,6 +31,14 @@ public class AuthManager {
     private String deviceToken;
     private String userToken;
     private ArrayList<User> userArrayList;
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 
     public void logIn(final Activity activity, JSONObject post_data) {
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.LOGIN, post_data,
@@ -293,4 +302,72 @@ public class AuthManager {
         requestQueue.add(jsonObjReq);
     }
 
+    public void savePushToken(final Context context, JSONObject post_data) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.POST_PUSH_NOTIFY, post_data,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        PPLog.e("Success Response : ", "Response: " + response.toString());
+
+                        try {
+                            boolean state = false;
+                            if (response.has("Status"))
+                                state = response.getBoolean("Status");
+                            if (state) {
+                                EventBus.getDefault().postSticky("PushNotification True");
+                            } else {
+                                EventBus.getDefault().postSticky("PushNotification False");
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().postSticky("PushNotification False");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().postSticky("PushNotification False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getNewVolleyRequestQueue(context);
+        requestQueue.add(jsonObjReq);
+    }
+    public void deletePushToken(final Activity activity, JSONObject post_data) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, ServiceApi.DELETE_PUSH_NOTIFY, post_data,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        PPLog.e("Success Response : ", "Response: " + response.toString());
+
+                        try {
+                            boolean state = false;
+                            if (response.has("Status"))
+                                state = response.getBoolean("Status");
+                            if (state) {
+                                EventBus.getDefault().postSticky("DeletePushNotification True");
+                            } else {
+                                EventBus.getDefault().postSticky("DeletePushNotification False");
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().postSticky("DeletePushNotification False");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                EventBus.getDefault().postSticky("DeletePushNotification False");
+            }
+        });
+        RequestQueue requestQueue = Utils.getVolleyRequestQueue(activity);
+        requestQueue.add(jsonObjReq);
+    }
 }

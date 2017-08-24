@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "803924187253",
+    "firebase_url": "https://pinless-pay-demo.firebaseio.com",
+    "project_id": "pinless-pay-demo",
+    "storage_bucket": "pinless-pay-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803924187253:android:d3eb6bf39e95f8e1",
+        "android_client_info": {
+          "package_name": "com.pinlesspay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803924187253-pl82e8dr51fgqo0c74b1a3vj4hsdsk90.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiUnTjRMOpVWDbFjsV007Tufs-jx0uzeU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

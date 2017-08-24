@@ -170,4 +170,19 @@ public class Utils {
         }
         return Volley.newRequestQueue(activity, stack);
     }
+    public static RequestQueue getNewVolleyRequestQueue(Context activity) {
+        HurlStack stack = null;
+        try {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+// Use a socket factory that removes sslv3 and add TLS1.2
+                stack = new HurlStack(null, new TLSSocketFactory());
+            } else {
+                stack = new HurlStack();
+            }
+        } catch (Exception e) {
+            stack = new HurlStack();
+            Log.i("NetworkClient", "can no create custom socket factory");
+        }
+        return Volley.newRequestQueue(activity, stack);
+    }
 }

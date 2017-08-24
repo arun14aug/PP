@@ -35,7 +35,7 @@ public class Preferences {
     public static final String PASSCODE_VALUE = "passcode_value";
     public static final String LATER_CASE = "later_case";
     public static final String USER_NAME = "user_name";
-//    public static final String MOBILE = "mobile";
+    public static final String GCM_TOKEN = "gcm_token";
 
     //  GpPreferences.writeString(getApplicationContext(), Preferences.NAME, "dev");
     // GpPreferences.readString(getApplicationContext(), Preferences.NAME, "");

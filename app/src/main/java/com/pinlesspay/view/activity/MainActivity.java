@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,16 +17,23 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyTextView;
+import com.pinlesspay.model.AuthManager;
 import com.pinlesspay.model.ModelManager;
+import com.pinlesspay.pushnotification.QuickstartPreferences;
+import com.pinlesspay.pushnotification.RegistrationIntentService;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
+import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.fragment.DonationFragment;
 import com.pinlesspay.view.fragment.RecurringFragment;
 import com.pinlesspay.view.fragment.ScheduleFragment;
@@ -52,6 +61,36 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         LocalBroadcastManager.getInstance(activity).registerReceiver(
                 mHeaderReceiver, new IntentFilter("Header"));
 
+        /*      GCM Token getting and saving        */
+        AuthManager authManager = ModelManager.getInstance().getAuthManager();
+        String deviceId = Preferences.readString(getApplicationContext(), Preferences.GCM_TOKEN, "");
+        if (Utils.isEmptyString(deviceId)) {
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    SharedPreferences sharedPreferences =
+                            PreferenceManager.getDefaultSharedPreferences(context);
+                    boolean sentToken = sharedPreferences
+                            .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                    if (sentToken) {
+                        Toast.makeText(activity, getString(R.string.gcm_send_message), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(activity, getString(R.string.token_error_message), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            };
+
+            if (checkPlayServices()) {
+                // Start IntentService to register this application with GCM.
+                Intent intent = new Intent(this, RegistrationIntentService.class);
+                startService(intent);
+            }
+            authManager.setDeviceToken(Preferences.readString(getApplicationContext(), Preferences.GCM_TOKEN, ""));
+        } else {
+            authManager.setDeviceToken(deviceId);
+        }
+
+
         img_donation = (ImageView) findViewById(R.id.img_donation);
         img_schedule = (ImageView) findViewById(R.id.img_schedule);
         img_recurring = (ImageView) findViewById(R.id.img_recurring);
@@ -78,6 +117,28 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        displayView(0);
         bottomBarFragments(0);
     }
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     protected void onResume() {
@@ -178,28 +239,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private void displayView(int position) {
         switch (position) {
             case 0:
-//                fragment = new PaymentMethodsFragment();
-//                title = getString(R.string.title_payment_method);
                 startActivity(new Intent(activity, PaymentMethodsActivity.class));
                 break;
             case 1:
-//                fragment = new SecurityFragment();
-//                title = getString(R.string.title_security);
                 startActivity(new Intent(activity, SecurityActivity.class));
                 break;
 //            case 2:
-////                fragment = new TellYourFriendsFragment();
-////                title = getString(R.string.title_tell_your);
 //                startActivity(new Intent(activity, TellFriendActivity.class));
 //                break;
             case 2:
-//                fragment = new SupportFragment();
-//                title = getString(R.string.title_support);
                 startActivity(new Intent(activity, SupportActivity.class));
                 break;
             case 3:
-//                fragment = new SuggestionsFragment();
-//                title = getString(R.string.title_suggestions);
                 startActivity(new Intent(activity, SuggestionActivity.class));
                 break;
             case 4:
