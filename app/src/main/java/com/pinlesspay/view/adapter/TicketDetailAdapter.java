@@ -57,25 +57,37 @@ public class TicketDetailAdapter extends RecyclerView.Adapter<TicketDetailAdapte
         c.set(Calendar.MILLISECOND, 0);
 
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        final SimpleDateFormat sd = new SimpleDateFormat("MMM dd, yyyy HH:mm a");
 //        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         SimpleDateFormat format2 = new SimpleDateFormat("HH:mm a");
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd");
+        Date dt = new Date();
+        Date currentDate = null;
         Date date = null;
+        Date dts = null;
         try {
+            currentDate = date_format.parse(date_format.format(dt));
             date = sdf.parse(current.getDateCreated());
+            dts = date_format.parse(date_format.format(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println(format2.format(date));
+        String dateText = "";
+        if (currentDate.compareTo(dts) > 0)
+            dateText = sd.format(date);
+        else if (currentDate.compareTo(dts) == 0)
+            dateText = format2.format(date);
+        System.out.println(dateText);
         if (current.getIsUserComment().equalsIgnoreCase("Y")) {
             holder.user_layout.setVisibility(View.VISIBLE);
             holder.reply_layout.setVisibility(View.GONE);
             holder.txt_user_message.setText(current.getTicketDesc());
-            holder.txt_user_message_time.setText(format2.format(date));
+            holder.txt_user_message_time.setText(dateText);
         } else {
             holder.user_layout.setVisibility(View.GONE);
             holder.reply_layout.setVisibility(View.VISIBLE);
             holder.txt_response.setText(current.getTicketDesc());
-            holder.txt_response_time.setText(format2.format(date));
+            holder.txt_response_time.setText(dateText);
         }
     }
 

@@ -100,7 +100,7 @@ public class RegistrationIntentService extends IntentService {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
-            jsonObject.put("Action", "GetAllTickets");
+            jsonObject.put("Action", "PostPushNtfy");
             jsonObject.put("Token", Preferences.readString(this, Preferences.AUTH_TOKEN, ""));
             JSONObject jsonObject1 = new JSONObject();
             jsonObject1.put("ApplicationName", getString(R.string.app_name));

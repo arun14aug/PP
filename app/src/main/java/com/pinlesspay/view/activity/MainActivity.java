@@ -33,11 +33,17 @@ import com.pinlesspay.pushnotification.QuickstartPreferences;
 import com.pinlesspay.pushnotification.RegistrationIntentService;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
+import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.fragment.DonationFragment;
 import com.pinlesspay.view.fragment.RecurringFragment;
 import com.pinlesspay.view.fragment.ScheduleFragment;
 import com.pinlesspay.view.fragment.TransactionsFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,
         View.OnClickListener {
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private ImageView img_donation, img_schedule, img_recurring, img_transactions;
     private FragmentDrawer drawerFragment;
     private Toolbar mToolbar;
+    private String check = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        displayView(0);
         bottomBarFragments(0);
     }
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -254,16 +262,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(new Intent(activity, SuggestionActivity.class));
                 break;
             case 4:
-                ModelManager.getInstance().getScheduleManager().setArrayLists();
-                ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
-                Preferences.writeString(activity, Preferences.USER_NAME, "");
                 if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").length() > 1) {
                     Preferences.writeString(activity, Preferences.LOGOUT, "true");
                     Preferences.writeString(activity, Preferences.LOGIN, "false");
-                    Intent intent = new Intent(activity, LockActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    ModelManager.getInstance().getScheduleManager().setArrayLists();
+                    ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
+                    Preferences.writeString(activity, Preferences.USER_NAME, "");
+
+                    check = "Lock";
+                    deletePushCall();
                 } else
                     showAlert(activity, getString(R.string.lock_alert));
                 break;
@@ -271,6 +278,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
         }
 
+    }
+    private void deletePushCall() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+            jsonObject.put("Action", "DeletePushNtfy");
+            jsonObject.put("Token", Preferences.readString(activity, Preferences.AUTH_TOKEN, ""));
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("ApplicationName", getString(R.string.app_name));
+            jsonObject1.put("DeviceToken", Preferences.readString(this, Preferences.GCM_TOKEN, ""));
+            jsonObject1.put("Provider", "Android");
+            jsonObject.put("data", jsonObject1.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Utils.showLoading(activity);
+        ModelManager.getInstance().getAuthManager().deletePushToken(activity, jsonObject);
     }
 
     public void showAlert(final Activity activity, String msg) {
@@ -280,18 +304,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(activity, SecurityActivity.class));
+                        check = "Security";
+                        deletePushCall();
                         dialog.cancel();
                     }
                 })
                 .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        ModelManager.getInstance().getScheduleManager().setArrayLists();
+                        ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
+                        Preferences.writeString(activity, Preferences.USER_NAME, "");
                         Preferences.writeString(activity, Preferences.LATER_CASE, "true");
                         Preferences.writeString(activity, Preferences.LOGIN, "false");
-                        Intent intent = new Intent(activity, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
                         dialog.cancel();
                     }
                 });
@@ -348,10 +372,40 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    public void onEventMainThread(String message) {
+        if (message.equalsIgnoreCase("DeletePushNotification True")) {
+            Utils.dismissLoading();
+            PPLog.e(TAG, "DeletePushNotification True");
+
+            if (check.equalsIgnoreCase("Lock")) {
+                Intent intent = new Intent(activity, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } else if (check.equalsIgnoreCase("Security"))
+                startActivity(new Intent(activity, SecurityActivity.class));
+
+        } else if (message.contains("DeletePushNotification False")) {
+            // showMatchHistoryList();
+            if (message.contains("@#@")) {
+                String[] m = message.split("@#@");
+                Utils.showMessage(activity, m[1]);
+            } else
+                Utils.showMessage(activity, getString(R.string.error_message));
+
+            PPLog.e(TAG, "DeletePushNotification False");
+            Utils.dismissLoading();
+        }
+
     }
 }
