@@ -24,13 +24,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.AuthManager;
 import com.pinlesspay.model.ModelManager;
-import com.pinlesspay.pushnotification.QuickstartPreferences;
-import com.pinlesspay.pushnotification.RegistrationIntentService;
+import com.pinlesspay.utility.NotificationUtils;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.ServiceApi;
@@ -57,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
     private Toolbar mToolbar;
     private String check = "";
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,26 +72,25 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         AuthManager authManager = ModelManager.getInstance().getAuthManager();
         String deviceId = Preferences.readString(getApplicationContext(), Preferences.GCM_TOKEN, "");
         if (Utils.isEmptyString(deviceId)) {
-            new BroadcastReceiver() {
+            mRegistrationBroadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    SharedPreferences sharedPreferences =
-                            PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean sentToken = sharedPreferences
-                            .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-                    if (sentToken) {
-                        Toast.makeText(activity, getString(R.string.gcm_send_message), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(activity, getString(R.string.token_error_message), Toast.LENGTH_SHORT).show();
+
+                    // checking for type intent filter
+                    if (intent.getAction().equals(ServiceApi.REGISTRATION_COMPLETE)) {
+                        // gcm successfully registered
+                        // now subscribe to `global` topic to receive app wide notifications
+                        FirebaseMessaging.getInstance().subscribeToTopic(ServiceApi.TOPIC_GLOBAL);
+
+                    } else if (intent.getAction().equals(ServiceApi.PUSH_NOTIFICATION)) {
+                        // new push notification is received
+
+                        String message = intent.getStringExtra("message");
+
+                        Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
                     }
                 }
             };
-
-            if (checkPlayServices()) {
-                // Start IntentService to register this application with GCM.
-                Intent intent = new Intent(this, RegistrationIntentService.class);
-                startService(intent);
-            }
             authManager.setDeviceToken(Preferences.readString(getApplicationContext(), Preferences.GCM_TOKEN, ""));
         } else {
             authManager.setDeviceToken(deviceId);
@@ -125,27 +124,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         bottomBarFragments(0);
     }
 
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    private boolean checkPlayServices() {
-        int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
 
 
     @Override
@@ -154,6 +132,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
+        // register GCM registration complete receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(ServiceApi.REGISTRATION_COMPLETE));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(ServiceApi.PUSH_NOTIFICATION));
+
+        // clear the notification area when the app is opened
+        NotificationUtils.clearNotifications(getApplicationContext());
     }
 
     @Override

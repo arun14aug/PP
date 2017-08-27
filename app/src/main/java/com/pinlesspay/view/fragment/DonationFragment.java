@@ -6,9 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
@@ -19,6 +21,7 @@ import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -47,6 +50,16 @@ public class DonationFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_donation, container, false);
 
         txt_description = (MyTextView) rootView.findViewById(R.id.txt_description);
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.img_logo);
+
+        if (!Utils.isEmptyString(ServiceApi.DONATION_LOGO_URL)) {
+            String url = ServiceApi.DONATION_LOGO_URL;
+            Log.e(" URL : ", "" + url);
+            Picasso.with(getActivity()).load(url)
+                    .placeholder(R.drawable.avatar)
+                    .into(imageView);
+        } else
+            imageView.setImageResource(R.drawable.avatar);
 
         MyButton btn_make_donation = (MyButton) rootView.findViewById(R.id.btn_make_payment);
         btn_make_donation.setOnClickListener(new View.OnClickListener() {

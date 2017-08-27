@@ -43,4 +43,18 @@ public class ServiceApi {
     public static final String DELETE_PUSH_NOTIFY = baseurl + "Process"; // Action "DeletePushNtfy"
 
     public static final String MAKE_DONATION = "http://pinlesspay.edu360.guru/donate?token=";
+
+    public static final String DONATION_LOGO_URL = "http://pinlesspay.edu360.guru/Content/UploadedFiles/OrgLogo/17cb139a-341c-4d29-bc01-32ce06d445f4_a.png";
+
+
+    // global topic to receive app wide push notifications
+    public static final String TOPIC_GLOBAL = "global";
+
+    // broadcast receiver intent filters
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String PUSH_NOTIFICATION = "pushNotification";
+
+    // id to handle the notification in the notification tray
+    public static final int NOTIFICATION_ID = 100;
+    public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 }

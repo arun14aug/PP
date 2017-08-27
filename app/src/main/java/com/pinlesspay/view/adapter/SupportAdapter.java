@@ -54,16 +54,28 @@ public class SupportAdapter extends RecyclerView.Adapter<SupportAdapter.MyViewHo
         final Ticket current = data.get(position);
 
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        final SimpleDateFormat sd = new SimpleDateFormat("MMM dd, yyyy HH:mm a");
 //        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format2 = new SimpleDateFormat("HH:mm a");
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd");
+        Date dt = new Date();
+        Date currentDate = null;
         Date date = null;
+        Date dts = null;
         try {
+            currentDate = date_format.parse(date_format.format(dt));
             date = sdf.parse(current.getDateCreated());
+            dts = date_format.parse(date_format.format(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println(format2.format(date));
-        holder.txt_date.setText(format2.format(date));
+        String dateText = "";
+        if (currentDate.compareTo(dts) > 0)
+            dateText = sd.format(date);
+        else if (currentDate.compareTo(dts) == 0)
+            dateText = format2.format(date);
+        System.out.println(dateText);
+        holder.txt_date.setText(dateText);
 
 //        holder.txt_date.setText(current.getDateCreated());
         holder.txt_description.setText(current.getTicketShortDesc());

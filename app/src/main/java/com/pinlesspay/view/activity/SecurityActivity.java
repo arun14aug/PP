@@ -103,7 +103,7 @@ public class SecurityActivity extends Activity {
     }
 
     private void showAlert(String msg, final int type, final String id) {
-        String message, action;
+        final String message, action;
         if (type == 0) {
             message = getString(R.string.delete) + " " + msg + "?";
             action = getString(R.string.caps_delete);
@@ -140,11 +140,14 @@ public class SecurityActivity extends Activity {
                             Utils.showLoading(activity);
                             ModelManager.getInstance().getRestOfAllManager().deleteDevice(activity, jsonObject);
                         } else {
-                            Utils.showMessage(activity, "Passcode Turned Off");
-                            Preferences.writeString(activity, Preferences.LOGOUT, "false");
-                            Preferences.writeString(activity, Preferences.PASSCODE_VALUE, "");
-                            Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, false);
-                            txt_turn_passcode_on.setText(getString(R.string.turn_passcode_on));
+//                            Utils.showMessage(activity, "Passcode Turned Off");
+//                            Preferences.writeString(activity, Preferences.LOGOUT, "false");
+//                            Preferences.writeString(activity, Preferences.PASSCODE_VALUE, "");
+//                            Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, false);
+//                            txt_turn_passcode_on.setText(getString(R.string.turn_passcode_on));
+                            Intent intent = new Intent(activity, LockActivity.class);
+                            intent.putExtra("type", "DisableKey");
+                            startActivity(intent);
                         }
                         dialog.dismiss();
                     }

@@ -25,6 +25,7 @@ public class LockActivity extends Activity implements View.OnFocusChangeListener
     private Activity activity;
     private MyEditText et_code_1, et_code_2, et_code_3, et_code_4;
     private View vw_code_1, vw_code_2, vw_code_3, vw_code_4;
+    private String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,13 @@ public class LockActivity extends Activity implements View.OnFocusChangeListener
 
         activity = LockActivity.this;
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        try {
+            type = getIntent().getExtras().getString("type");
+        } catch (Exception e) {
+            e.printStackTrace();
+            type = "";
+        }
 
         MyTextView txt_heading = (MyTextView) findViewById(R.id.txt_heading);
 
@@ -142,7 +150,14 @@ public class LockActivity extends Activity implements View.OnFocusChangeListener
                     }
                     if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").equalsIgnoreCase(code)) {
 //                        Preferences.writeString(activity, Preferences.LOGOUT, "false");
-                        startActivity(new Intent(activity, MainActivity.class));
+                        if (!type.equalsIgnoreCase("DisableKey"))
+                            startActivity(new Intent(activity, MainActivity.class));
+                        else {
+                            Utils.showMessage(activity, "Passcode Turned Off");
+                            Preferences.writeString(activity, Preferences.LOGOUT, "false");
+                            Preferences.writeString(activity, Preferences.PASSCODE_VALUE, "");
+                            Preferences.writeBoolean(activity, Preferences.PASSCODE_TURN_ON, false);
+                        }
                         finish();
                     } else {
                         Utils.showMessage(activity, getString(R.string.passcode_does_not_match));

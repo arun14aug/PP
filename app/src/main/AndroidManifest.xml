@@ -88,45 +88,60 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
+        <!--<receiver-->
+            <!--android:name="com.google.android.gms.gcm.GcmReceiver"-->
+            <!--android:permission="com.google.android.c2dm.permission.SEND">-->
+            <!--<intent-filter>-->
+
+                <!--&lt;!&ndash; Receives the actual messages. &ndash;&gt;-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+
+                <!--&lt;!&ndash; Receives the registration id. &ndash;&gt;-->
+                <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
+
+                <!--<category android:name="com.mwallet" />-->
+
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
+        <!--<service-->
+            <!--android:name=".pushnotification.MyGCMListenerService"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+            <!--</intent-filter>-->
+        <!--</service>       &lt;!&ndash; Handles the creation and updating of registration tokens &ndash;&gt;-->
+
+        <!--<service-->
+            <!--android:name=".pushnotification.MyInstanceIDListenerService"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.gms.iid.InstanceID" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+
+        <!--&lt;!&ndash; To get the registration token &ndash;&gt;-->
+
+        <!--<service-->
+            <!--android:name=".pushnotification.RegistrationIntentService"-->
+            <!--android:exported="false">-->
+
+        <!--</service>-->
+
+
+        <!-- Firebase Notifications -->
+        <service android:name=".pushnotification.MyFirebaseMessagingService">
             <intent-filter>
-
-                <!-- Receives the actual messages. -->
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <!-- Receives the registration id. -->
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
-                <category android:name="com.mwallet" />
-
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".pushnotification.MyGCMListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>       <!-- Handles the creation and updating of registration tokens -->
-
-        <service
-            android:name=".pushnotification.MyInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <!-- To get the registration token -->
-
-        <service
-            android:name=".pushnotification.RegistrationIntentService"
-            android:exported="false">
-
+        <service android:name=".pushnotification.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
         </service>
+
     </application>
 
 </manifest>
