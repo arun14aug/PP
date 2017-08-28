@@ -36,7 +36,6 @@ dependencies {
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.mcxiaoke.volley:library:1.0.5'
-    compile 'com.pkmmte.view:circularimageview:1.1'
-    compile 'com.squareup.picasso:picasso:2.5.0'
+//    compile 'com.pkmmte.view:circularimageview:1.1'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -79,8 +79,12 @@ public class LoginActivity extends Activity {
         codePicker = (MyTextView) findViewById(R.id.txt_country_code);
         namePicker = (CountryCodePicker) findViewById(R.id.txt_country_name);
 
-        if (Preferences.readString(activity, Preferences.LATER_CASE, "").equalsIgnoreCase("true"))
+        if (Preferences.readString(activity, Preferences.LATER_CASE, "").equalsIgnoreCase("true")) {
             edt_phone_number.setText(Preferences.readString(activity, Preferences.FORMATTED_MOBILE_NUMBER, ""));
+            isBtnEnable = true;
+            btn_next.setBackgroundResource(R.drawable.button_blue_bg);
+            btn_next.setTextColor(Utils.setColor(activity, R.color.white));
+        }
 
         namePicker.setOnCountryChangeListener(countryChangeListener);
         codePicker.setText(namePicker.getSelectedCountryCodeWithPlus());

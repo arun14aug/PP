@@ -307,7 +307,7 @@ public class AuthManager {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        PPLog.e("Success Response : ", "Response: " + response.toString());
+                        PPLog.e("PushNotification Response : ", "Response: " + response.toString());
 
                         try {
                             boolean state = false;
@@ -329,7 +329,7 @@ public class AuthManager {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                PPLog.e("Error Response : ", "Error: " + error.getMessage());
+                PPLog.e("PushNotification Error Response : ", "Error: " + error.getMessage());
                 EventBus.getDefault().postSticky("PushNotification False");
             }
         });

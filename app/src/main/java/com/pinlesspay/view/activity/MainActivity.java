@@ -1,5 +1,6 @@
 package com.pinlesspay.view.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -7,9 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,7 +22,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyTextView;
@@ -57,6 +55,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private Toolbar mToolbar;
     private String check = "";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    @SuppressLint("StaticFieldLeak")
+    public static MainActivity instance;
+
+
+    public static MainActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setContentView(R.layout.activity_main);
 
         activity = MainActivity.this;
+        instance = MainActivity.this;
 
         LocalBroadcastManager.getInstance(activity).registerReceiver(
                 mHeaderReceiver, new IntentFilter("Header"));
@@ -95,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         } else {
             authManager.setDeviceToken(deviceId);
         }
+        sendRegistrationToServer();
 
 
         img_donation = (ImageView) findViewById(R.id.img_donation);
@@ -124,7 +131,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         bottomBarFragments(0);
     }
 
-
+    private void sendRegistrationToServer() {
+        // sending gcm token to server
+        PPLog.e(TAG, "sendRegistrationToServer: " + Preferences.readString(this, Preferences.GCM_TOKEN, ""));
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+            jsonObject.put("Action", "PostPushNtfy");
+            jsonObject.put("Token", Preferences.readString(this, Preferences.AUTH_TOKEN, ""));
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("ApplicationName", getString(R.string.app_name));
+            jsonObject1.put("DeviceToken", Preferences.readString(this, Preferences.GCM_TOKEN, ""));
+            jsonObject1.put("Provider", "Android");
+            jsonObject.put("data", jsonObject1.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ModelManager.getInstance().getAuthManager().savePushToken(this, jsonObject);
+    }
 
     @Override
     protected void onResume() {
@@ -253,10 +277,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 4:
                 if (Preferences.readString(activity, Preferences.PASSCODE_VALUE, "").length() > 1) {
                     Preferences.writeString(activity, Preferences.LOGOUT, "true");
-                    Preferences.writeString(activity, Preferences.LOGIN, "false");
-                    ModelManager.getInstance().getScheduleManager().setArrayLists();
-                    ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
-                    Preferences.writeString(activity, Preferences.USER_NAME, "");
 
                     check = "Lock";
                     deletePushCall();
@@ -268,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
     }
+
     private void deletePushCall() {
         JSONObject jsonObject = new JSONObject();
         try {
@@ -300,11 +321,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 })
                 .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        ModelManager.getInstance().getScheduleManager().setArrayLists();
-                        ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
-                        Preferences.writeString(activity, Preferences.USER_NAME, "");
                         Preferences.writeString(activity, Preferences.LATER_CASE, "true");
-                        Preferences.writeString(activity, Preferences.LOGIN, "false");
+                        check = "Lock";
+                        deletePushCall();
                         dialog.cancel();
                     }
                 });
@@ -377,6 +396,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             PPLog.e(TAG, "DeletePushNotification True");
 
             if (check.equalsIgnoreCase("Lock")) {
+                ModelManager.getInstance().getScheduleManager().setArrayLists();
+                ModelManager.getInstance().getScheduleManager().setScheduleArrayLists();
+                Preferences.writeString(activity, Preferences.USER_NAME, "");
+                Preferences.writeString(activity, Preferences.LOGIN, "false");
+
                 Intent intent = new Intent(activity, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

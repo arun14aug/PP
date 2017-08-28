@@ -10,18 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyButton;
 import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.Charity;
 import com.pinlesspay.model.ModelManager;
+import com.pinlesspay.utility.CustomVolleyRequestQueue;
 import com.pinlesspay.utility.PPLog;
 import com.pinlesspay.utility.Preferences;
 import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
-import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -50,14 +51,20 @@ public class DonationFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_donation, container, false);
 
         txt_description = (MyTextView) rootView.findViewById(R.id.txt_description);
-        ImageView imageView = (ImageView) rootView.findViewById(R.id.img_logo);
+        NetworkImageView imageView = (NetworkImageView) rootView.findViewById(R.id.img_logo);
 
         if (!Utils.isEmptyString(ServiceApi.DONATION_LOGO_URL)) {
             String url = ServiceApi.DONATION_LOGO_URL;
             Log.e(" URL : ", "" + url);
-            Picasso.with(getActivity()).load(url)
-                    .placeholder(R.drawable.avatar)
-                    .into(imageView);
+            ImageLoader mImageLoader;
+            mImageLoader = new CustomVolleyRequestQueue(activity)
+                    .getImageLoader();
+////        if (!imageUrl.equalsIgnoreCase("null"))
+            mImageLoader.get(url, ImageLoader.getImageListener(imageView,
+                /*R.drawable.logo*/ 0, /*R.drawable.logo*/ 0));
+            imageView.setImageUrl(url, mImageLoader);
+            imageView.setTag(url);
+
         } else
             imageView.setImageResource(R.drawable.avatar);
 

@@ -19,12 +19,21 @@
             android:background="@android:color/transparent"
             android:layout_height="@dimen/logo_hgt">
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/img_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/logo_width"
+                android:layout_height="@dimen/logo_hgt"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_margin="@dimen/padding_5"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/avatar" />
+                android:scaleType="fitXY" />
+
+            <!--<ImageView-->
+                <!--android:id="@+id/img_logo"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:contentDescription="@string/app_name"-->
+                <!--android:src="@drawable/avatar" />-->
         </LinearLayout>
     </LinearLayout>
 
