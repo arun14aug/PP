@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -120,9 +122,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
     }
 
-    private void showNotificationDialog(String msg) {
+    public static void showNotificationDialog(String msg) {
         // Toast.makeText(Main.getInstance(), msg, Toast.LENGTH_LONG).show();
-        AlertDialog.Builder altDialog = new AlertDialog.Builder(getApplicationContext());
+        final AlertDialog.Builder altDialog = new AlertDialog.Builder(MainActivity.getInstance());
         // altDialog.setTitle(R.string.Network);
         altDialog.setMessage(msg);
         altDialog.setNeutralButton(R.string.ok,
@@ -132,6 +134,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         dialog.dismiss();
                     }
                 });
-        altDialog.show();
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // this will run in the main thread
+                altDialog.show();
+            }
+        });
     }
 }

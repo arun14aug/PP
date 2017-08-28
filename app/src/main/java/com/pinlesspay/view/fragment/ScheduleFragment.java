@@ -110,12 +110,17 @@ public class ScheduleFragment extends Fragment {
 
 
     private void setData() {
-        swipeContainer.setVisibility(View.VISIBLE);
-        waterfall_layout.setVisibility(View.GONE);
-        SchedulesAdapter adapter = new SchedulesAdapter(activity, scheduleArrayList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        swipeContainer.setRefreshing(false);
+        if (scheduleArrayList.size() > 0) {
+            swipeContainer.setVisibility(View.VISIBLE);
+            waterfall_layout.setVisibility(View.GONE);
+            SchedulesAdapter adapter = new SchedulesAdapter(activity, scheduleArrayList);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            swipeContainer.setRefreshing(false);
+        } else {
+            swipeContainer.setVisibility(View.GONE);
+            waterfall_layout.setVisibility(View.VISIBLE);
+        }
     }
 
     interface ClickListener {

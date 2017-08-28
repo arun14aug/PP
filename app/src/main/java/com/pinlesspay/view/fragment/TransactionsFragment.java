@@ -161,12 +161,17 @@ public class TransactionsFragment extends Fragment {
     }
 
     private void setData() {
-        swipeContainer.setVisibility(View.VISIBLE);
-        waterfall_layout.setVisibility(View.GONE);
-        TransactionAdapter adapter = new TransactionAdapter(activity, transactionArrayList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        swipeContainer.setRefreshing(false);
+        if (transactionArrayList.size() > 0) {
+            swipeContainer.setVisibility(View.VISIBLE);
+            waterfall_layout.setVisibility(View.GONE);
+            TransactionAdapter adapter = new TransactionAdapter(activity, transactionArrayList);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            swipeContainer.setRefreshing(false);
+        } else {
+            swipeContainer.setVisibility(View.GONE);
+            waterfall_layout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

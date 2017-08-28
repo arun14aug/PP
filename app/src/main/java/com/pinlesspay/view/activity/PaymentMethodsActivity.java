@@ -279,7 +279,6 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         window.setAttributes(lp);
         //        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(true);
 
         // set the custom dialog components - text, image and button
         et_card_number = (EditText) dialog.findViewById(R.id.et_card_number);
@@ -405,7 +404,6 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         window.setAttributes(lp);
         //        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(true);
 
         // set the custom dialog components - text, image and button
         input_layout_routing_number = (TextInputLayout) dialog.findViewById(R.id.input_layout_routing_number);

@@ -5,9 +5,9 @@ package com.pinlesspay.utility;
  */
 public class ServiceApi {
 
-    private static final String baseurl = "http://pinlesspay.edu360.guru/api/DonorAuth/"; //live..
+    private static final String baseurl = "https://www.pinlesspay.com/api/DonorAuth/"; //live..
 
-    public static final String ORGANISATION_KEY = "17CB139A-341C-4D29-BC01-32CE06D445F4"; //live..
+    public static final String ORGANISATION_KEY = "34817348-479E-4DDA-8B41-7EC85DDB92A9"; //live..
     public static final String PAGE_SIZE = "50";
 
     // Users Family
@@ -42,9 +42,9 @@ public class ServiceApi {
     public static final String POST_PUSH_NOTIFY = baseurl + "Process"; // Action "PostPushNtfy"
     public static final String DELETE_PUSH_NOTIFY = baseurl + "Process"; // Action "DeletePushNtfy"
 
-    public static final String MAKE_DONATION = "http://pinlesspay.edu360.guru/donate?token=";
+    public static final String MAKE_DONATION = "https://www.pinlesspay.com/donate?token=";
 
-    public static final String DONATION_LOGO_URL = "http://pinlesspay.edu360.guru/Content/UploadedFiles/OrgLogo/17cb139a-341c-4d29-bc01-32ce06d445f4_a.png";
+    public static final String DONATION_LOGO_URL = "https://www.pinlesspay.com/Content/UploadedFiles/OrgLogo/34817348-479E-4DDA-8B41-7EC85DDB92A9_a.png";
 
 
     // global topic to receive app wide push notifications

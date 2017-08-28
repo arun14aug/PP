@@ -85,7 +85,7 @@ public class DonationFragment extends Fragment {
         if (charityArrayList == null) {
             Utils.showLoading(activity);
             ModelManager.getInstance().getScheduleManager().getCharity(activity, true, 1);
-        } else
+        } else if (charityArrayList.size() > 0)
             setData();
 
         // Inflate the layout for this fragment
