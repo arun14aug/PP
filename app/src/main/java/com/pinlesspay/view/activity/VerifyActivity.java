@@ -64,8 +64,20 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
             @Override
             public void onClick(View v) {
                 // call api for resend message
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
+                    jsonObject.put("RegisterMobile", Preferences.readString(activity, Preferences.MOBILE_NUMBER, ""));
+                    jsonObject.put("DeviceIdentifier", Preferences.readString(activity, Preferences.MAC_ADDRESS, ""));
+                    jsonObject.put("DeviceName", Preferences.readString(activity, Preferences.DEVICE_NAME, ""));
+                    jsonObject.put("DeviceType", "Android");
+                    jsonObject.put("Appkey", Preferences.readString(activity, Preferences.UUID, ""));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                PPLog.e("JSON Data : ", jsonObject.toString());
                 Utils.showLoading(activity);
-                ModelManager.getInstance().getAuthManager().resendOTP(activity);
+                ModelManager.getInstance().getAuthManager().logIn(activity, jsonObject);
             }
         });
 
@@ -326,21 +338,35 @@ public class VerifyActivity extends Activity implements View.OnFocusChangeListen
                 Utils.showMessage(activity, getString(R.string.error_message));
             PPLog.e(TAG, "Verify False");
             Utils.dismissLoading();
-        } else if (message.contains("ResendOTP True")) {
+//        } else if (message.contains("ResendOTP True")) {
+//            Utils.dismissLoading();
+//            PPLog.e(TAG, "ResendOTP True");
+//            if (message.contains("@#@")) {
+//                String[] m = message.split("@#@");
+//                Utils.showMessage(activity, m[1]);
+//            }
+//        } else if (message.contains("ResendOTP False")) {
+//            // showMatchHistoryList();
+//            if (message.contains("@#@")) {
+//                String[] m = message.split("@#@");
+//                Utils.showMessage(activity, m[1]);
+//            } else
+//                Utils.showMessage(activity, getString(R.string.error_message));
+//            PPLog.e(TAG, "ResendOTP False");
+//            Utils.dismissLoading();
+        } else if (message.equalsIgnoreCase("Login True")) {
             Utils.dismissLoading();
-            PPLog.e(TAG, "ResendOTP True");
-            if (message.contains("@#@")) {
-                String[] m = message.split("@#@");
-                Utils.showMessage(activity, m[1]);
-            }
-        } else if (message.contains("ResendOTP False")) {
+            PPLog.e(TAG, "Login True");
+            Utils.showMessage(activity, getString(R.string.resend_otp));
+        } else if (message.contains("Login False")) {
             // showMatchHistoryList();
             if (message.contains("@#@")) {
                 String[] m = message.split("@#@");
                 Utils.showMessage(activity, m[1]);
             } else
                 Utils.showMessage(activity, getString(R.string.error_message));
-            PPLog.e(TAG, "ResendOTP False");
+
+            PPLog.e(TAG, "Login False");
             Utils.dismissLoading();
         }
 
