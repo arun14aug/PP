@@ -6,6 +6,7 @@ package com.pinlesspay.utility;
 public class ServiceApi {
 
     private static final String baseurl = "https://www.pinlesspay.com/api/DonorAuth/"; //live..
+//    private static final String baseurl = "http://pinlesspay.edu360.guru/api/DonorAuth/"; //local..
 
     public static final String ORGANISATION_KEY = "34817348-479E-4DDA-8B41-7EC85DDB92A9"; //live..
     public static final String PAGE_SIZE = "50";
@@ -42,7 +43,8 @@ public class ServiceApi {
     public static final String POST_PUSH_NOTIFY = baseurl + "Process"; // Action "PostPushNtfy"
     public static final String DELETE_PUSH_NOTIFY = baseurl + "Process"; // Action "DeletePushNtfy"
 
-    public static final String MAKE_DONATION = "https://www.pinlesspay.com/donate?token=";
+    public static final String MAKE_DONATION = "https://www.pinlesspay.com/donate?token="; // live...
+//    public static final String MAKE_DONATION = "http://pinlesspay.edu360.guru/donate?token="; // local....
 
     public static final String DONATION_LOGO_URL = "https://www.pinlesspay.com/Content/UploadedFiles/OrgLogo/34817348-479E-4DDA-8B41-7EC85DDB92A9_a.png";
 

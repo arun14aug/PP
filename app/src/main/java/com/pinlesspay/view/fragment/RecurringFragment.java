@@ -3,6 +3,7 @@ package com.pinlesspay.view.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,8 @@ import com.pinlesspay.R;
 import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.model.Recurring;
 import com.pinlesspay.utility.PPLog;
+import com.pinlesspay.utility.Preferences;
+import com.pinlesspay.utility.ServiceApi;
 import com.pinlesspay.utility.Utils;
 import com.pinlesspay.view.adapter.RecurringAdapter;
 
@@ -85,13 +88,18 @@ public class RecurringFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new AddRecurringFragment();
-                FragmentManager fragmentManager = ((FragmentActivity) activity)
-                        .getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_body, fragment, "AddRecurringFragment");
-                fragmentTransaction.addToBackStack("AddRecurringFragment");
-                fragmentTransaction.commit();
+//                Fragment fragment = new AddRecurringFragment();
+//                FragmentManager fragmentManager = ((FragmentActivity) activity)
+//                        .getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container_body, fragment, "AddRecurringFragment");
+//                fragmentTransaction.addToBackStack("AddRecurringFragment");
+//                fragmentTransaction.commit();
+                String url = ServiceApi.MAKE_DONATION + Preferences.readString(activity, Preferences.AUTH_TOKEN, "");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                activity.startActivity(intent);
+                // setting array lists to null
+                ModelManager.getInstance().getScheduleManager().setArrayLists();
             }
         });
         // Setup refresh listener which triggers new data loading

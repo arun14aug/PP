@@ -87,7 +87,7 @@ public class ProfileActivity extends Activity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isValidate()) {
+//                if (isValidate()) {
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("OrganizationKey", ServiceApi.ORGANISATION_KEY);
@@ -112,7 +112,7 @@ public class ProfileActivity extends Activity {
                     PPLog.e("JSON DATA : ", jsonObject.toString());
                     Utils.showLoading(activity);
                     ModelManager.getInstance().getAuthManager().userProfile(activity, jsonObject);
-                }
+//                }
             }
         });
 

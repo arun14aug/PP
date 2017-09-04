@@ -501,6 +501,8 @@
                         app:ccp_showPhoneCode="false"
                         app:contentColor="@color/login_text_color"
                         app:hideNameCode="true"
+                        app:defaultCode="1"
+                        app:defaultNameCode="US"
                         app:showFlag="false"
                         app:showFullName="true"
                         app:textSize="@dimen/text_size_large" />
