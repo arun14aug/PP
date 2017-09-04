@@ -95,7 +95,7 @@ public class RecurringFragment extends Fragment {
 //                fragmentTransaction.replace(R.id.container_body, fragment, "AddRecurringFragment");
 //                fragmentTransaction.addToBackStack("AddRecurringFragment");
 //                fragmentTransaction.commit();
-                String url = ServiceApi.MAKE_DONATION + Preferences.readString(activity, Preferences.AUTH_TOKEN, "");
+                String url = ServiceApi.MAKE_DONATION + Preferences.readString(activity, Preferences.AUTH_TOKEN, "") + ServiceApi.ADD_RECURRING_TAG;
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 activity.startActivity(intent);
                 // setting array lists to null

@@ -320,9 +320,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 })
                 .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Preferences.writeString(activity, Preferences.LATER_CASE, "true");
-                        check = "Lock";
-                        deletePushCall();
+//                        Preferences.writeString(activity, Preferences.LATER_CASE, "true");
+//                        check = "Lock";
+//                        deletePushCall();
                         dialog.cancel();
                     }
                 });
