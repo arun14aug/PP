@@ -53,9 +53,10 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
     private ArrayList<CreditCard> creditCardArrayList = new ArrayList<>();
     private ArrayList<Bank> bankArrayList = new ArrayList<>();
     private LayoutInflater layoutInflater;
-    private TextInputLayout input_layout_routing_number, input_layout_account_number, input_layout_account_name;
+    private TextInputLayout input_layout_routing_number, input_layout_account_number, input_layout_account_name,
+            input_layout_repeat_account_number, input_layout_first_name, input_layout_last_name;
     private EditText et_routing_number, et_account_number, et_account_name, et_card_name, /*edt_cvv,*/
-            edt_yy, edt_mm, et_card_number;
+            edt_yy, edt_mm, et_card_number, et_first_name, et_last_name, et_repeat_account_number;
     //    private MyTextView txt_account_type;
     private View vw_card_number, vw_card_name, vw_mm, vw_yy/*, vw_cvv*/;
     String[] title = null;
@@ -408,9 +409,15 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
         // set the custom dialog components - text, image and button
         input_layout_routing_number = (TextInputLayout) dialog.findViewById(R.id.input_layout_routing_number);
         input_layout_account_number = (TextInputLayout) dialog.findViewById(R.id.input_layout_account_number);
+        input_layout_repeat_account_number = (TextInputLayout) dialog.findViewById(R.id.input_layout_repeat_account_number);
+        input_layout_first_name = (TextInputLayout) dialog.findViewById(R.id.input_layout_first_name);
+        input_layout_last_name = (TextInputLayout) dialog.findViewById(R.id.input_layout_last_name);
         input_layout_account_name = (TextInputLayout) dialog.findViewById(R.id.input_layout_account_name);
         et_routing_number = (EditText) dialog.findViewById(R.id.et_routing_number);
         et_account_number = (EditText) dialog.findViewById(R.id.et_account_number);
+        et_repeat_account_number = (EditText) dialog.findViewById(R.id.et_repeat_account_number);
+        et_first_name = (EditText) dialog.findViewById(R.id.et_first_name);
+        et_last_name = (EditText) dialog.findViewById(R.id.et_last_name);
         et_account_name = (EditText) dialog.findViewById(R.id.et_account_name);
         MyButton btn_add = (MyButton) dialog.findViewById(R.id.btn_add);
         MyButton btn_cancel = (MyButton) dialog.findViewById(R.id.btn_cancel);
@@ -425,6 +432,9 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
 
         et_routing_number.addTextChangedListener(new MyTextWatcher(et_routing_number));
         et_account_number.addTextChangedListener(new MyTextWatcher(et_account_number));
+        et_repeat_account_number.addTextChangedListener(new MyTextWatcher(et_repeat_account_number));
+        et_first_name.addTextChangedListener(new MyTextWatcher(et_first_name));
+        et_last_name.addTextChangedListener(new MyTextWatcher(et_last_name));
         et_account_name.addTextChangedListener(new MyTextWatcher(et_account_name));
 
         if (type == 1) {
@@ -433,7 +443,13 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 is_default.setChecked(true);
             else
                 is_default.setChecked(false);
-            et_account_name.setText(bankArrayList.get(position).getNickName());
+            if (!Utils.isEmptyString(bankArrayList.get(position).getNickName()))
+                et_account_name.setText(bankArrayList.get(position).getNickName());
+            if (!Utils.isEmptyString(bankArrayList.get(position).getFirstName()))
+                et_first_name.setText(bankArrayList.get(position).getFirstName());
+            if (!Utils.isEmptyString(bankArrayList.get(position).getLastName()))
+                et_last_name.setText(bankArrayList.get(position).getLastName());
+            et_repeat_account_number.setText(bankArrayList.get(position).getRepeatBankAccountNum());
             et_account_number.setText(bankArrayList.get(position).getMaskBankAccountNum());
             et_routing_number.setText(bankArrayList.get(position).getMaskBankRoutingNum());
 
@@ -474,11 +490,21 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                 } else if (et_account_number.getText().toString().trim().length() == 0) {
                     requestFocus(et_account_number);
                     Utils.showMessage(activity, getString(R.string.please_enter_account_number));
+                } else if (et_repeat_account_number.getText().toString().trim().length() == 0) {
+                    requestFocus(et_repeat_account_number);
+                    Utils.showMessage(activity, getString(R.string.please_enter_repeat_account_number));
+                } else if (!et_repeat_account_number.getText().toString().trim().equalsIgnoreCase(
+                        et_account_number.getText().toString().trim())) {
+                    requestFocus(et_repeat_account_number);
+                    Utils.showMessage(activity, getString(R.string.account_number_does_not_match));
                 } else if (spinner_item.equalsIgnoreCase(getString(R.string.account_type))) {
                     Utils.showMessage(activity, getString(R.string.please_select_account_type));
-                } else if (et_account_name.getText().toString().trim().length() == 0) {
-                    requestFocus(et_account_name);
-                    Utils.showMessage(activity, getString(R.string.please_enter_account_name));
+                } else if (et_first_name.getText().toString().trim().length() == 0) {
+                    requestFocus(et_first_name);
+                    Utils.showMessage(activity, getString(R.string.please_enter_first_name));
+                } else if (et_last_name.getText().toString().trim().length() == 0) {
+                    requestFocus(et_last_name);
+                    Utils.showMessage(activity, getString(R.string.please_enter_last_name));
                 } else {
                     JSONObject jsonObject = new JSONObject();
                     try {
@@ -488,6 +514,7 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                         if (type == 0) {
                             jsonObject.put("Action", "BankAccount");
                             jsonObject1.put("BankAccountNum", et_account_number.getText().toString().trim());
+                            jsonObject1.put("RepeatBankAccountNum", et_repeat_account_number.getText().toString().trim());
                             jsonObject1.put("BankRoutingNum", et_routing_number.getText().toString().trim());
                         } else {
                             jsonObject.put("Action", "UpdateBankAccount");
@@ -495,6 +522,8 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                             jsonObject1.put("AccountId", bankArrayList.get(position).getAccountId());
                         }
                         jsonObject1.put("BankAccountType", spinner_item);
+                        jsonObject1.put("FirstName", et_first_name.getText().toString().trim());
+                        jsonObject1.put("LastName", et_last_name.getText().toString().trim());
                         jsonObject1.put("NickName", et_account_name.getText().toString().trim());
                         jsonObject.put("data", jsonObject1.toString());
 
@@ -602,6 +631,15 @@ public class PaymentMethodsActivity extends Activity implements View.OnClickList
                     break;
                 case R.id.et_account_number:
                     validateName(et_account_number, input_layout_account_number, getString(R.string.account_number));
+                    break;
+                case R.id.et_repeat_account_number:
+                    validateName(et_repeat_account_number, input_layout_repeat_account_number, getString(R.string.repeat_account_number));
+                    break;
+                case R.id.et_first_name:
+                    validateName(et_first_name, input_layout_first_name, getString(R.string.first_name));
+                    break;
+                case R.id.et_last_name:
+                    validateName(et_last_name, input_layout_last_name, getString(R.string.last_name));
                     break;
                 case R.id.et_account_name:
                     validateName(et_account_name, input_layout_account_name, getString(R.string.account_name));

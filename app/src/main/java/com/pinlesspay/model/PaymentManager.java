@@ -164,6 +164,9 @@ public class PaymentManager {
                                             bank.setMaskBankAccountNum(jsonArray.getJSONObject(i).getString("MaskBankAccountNum"));
                                             bank.setNickName(jsonArray.getJSONObject(i).getString("NickName"));
                                             bank.setIsDefault(jsonArray.getJSONObject(i).getString("IsDefault"));
+                                            bank.setFirstName(jsonArray.getJSONObject(i).getString("FirstName"));
+                                            bank.setLastName(jsonArray.getJSONObject(i).getString("LastName"));
+                                            bank.setRepeatBankAccountNum(jsonArray.getJSONObject(i).getString("RepeatBankAccountNum"));
 
                                             bankArrayList.add(bank);
                                         }

@@ -7,7 +7,31 @@ package com.pinlesspay.model;
 public class Bank {
 
     private String ServiceName, EntityName, Id, DataBaseAction, AccountId, BankAccountType, MaskBankRoutingNum,
-            MaskBankAccountNum, NickName, IsDefault;
+            MaskBankAccountNum, NickName, IsDefault, FirstName, LastName, RepeatBankAccountNum;
+
+    public String getRepeatBankAccountNum() {
+        return RepeatBankAccountNum;
+    }
+
+    public void setRepeatBankAccountNum(String repeatBankAccountNum) {
+        RepeatBankAccountNum = repeatBankAccountNum;
+    }
+
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    public void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
+    }
 
     public String getServiceName() {
         return ServiceName;

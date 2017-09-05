@@ -93,7 +93,7 @@
     <string name="please_enter_account_number">Please enter account number</string>
     <string name="please_enter_account_name">Please enter account name</string>
     <string name="please_select_account_type">Please select account type</string>
-    <string name="account_name">Account Name</string>
+    <string name="account_name">Account Name(Optional)</string>
     <string name="new_card">New Card</string>
     <string name="card_number">Card Number</string>
     <string name="mm">MM</string>
@@ -149,4 +149,7 @@
     <string name="registering_message">Generating InstanceID token....</string>
     <string name="token_error_message">An error occurred while either fetching the InstanceID token, sending the fetched token to the server or subscribing to the PubSub topic. Please try running the sample again.</string>
     <string name="resend_otp">OTP resent successfully</string>
+    <string name="repeat_account_number">Repeat Account Number</string>
+    <string name="please_enter_repeat_account_number">Please enter repeat account number</string>
+    <string name="account_number_does_not_match">Repeat account number does not match with account number</string>
 </resources>
