@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/layout_transaction_status"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:layout_gravity="center"

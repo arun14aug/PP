@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.pinlesspay.R;
 import com.pinlesspay.customUi.MyTextView;
 import com.pinlesspay.model.ModelManager;
 import com.pinlesspay.model.Transaction;
+import com.pinlesspay.utility.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +34,7 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
     private ImageView icon_account;
     private MyTextView txt_amount, txt_status, txt_date, txt_transaction_heading, txt_id, txt_card_name, txt_card_number;
     private Toolbar mToolbar;
+    private RelativeLayout layout_transaction_status;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +74,8 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
         ImageView img_transaction_status = (ImageView) rootView.findViewById(R.id.img_transaction_status);
         icon_account = (ImageView) rootView.findViewById(R.id.icon_account);
 
+        layout_transaction_status = (RelativeLayout) rootView.findViewById(R.id.layout_transaction_status);
+
         img_back.setOnClickListener(this);
         img_menu.setOnClickListener(this);
 
@@ -88,6 +93,10 @@ public class TransactionDetailFragment extends Fragment implements View.OnClickL
                 txt_amount.setText(activity.getString(R.string.dollar) + transaction.getTranAmount());
                 txt_status.setText(transaction.getStatus());
 
+                if (transaction.getStatus().equalsIgnoreCase("Complete"))
+                    layout_transaction_status.setBackgroundColor(Utils.setColor(activity, R.color.transaction_detail_bg));
+                else
+                    layout_transaction_status.setBackgroundColor(Utils.setColor(activity, R.color.recurring_detail_bg));
 //                String format = transaction.getTranDate().replace("T", " ");
                 final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 //                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
