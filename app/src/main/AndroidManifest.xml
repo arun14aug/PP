@@ -44,9 +44,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <!-- 17cb139a341c4d29bc0132ce06d445f4--> <!--LOCAL-->
+                <!-- 34817348479e4dda8b417ec85ddb92a9--> <!--LIVE-->
                 <data
                     android:host="www.pinlesspay.com"
-                    android:pathPrefix="/ORG_KEY_VALUE"
+                    android:pathPrefix="/34817348479e4dda8b417ec85ddb92a9"
                     android:scheme="https" />
                 <!-- note that the leading "/" is required for pathPrefix-->
             </intent-filter>
